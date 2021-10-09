@@ -121,5 +121,6 @@ Configuration for this tool happens `~/.aws/config` ini-file, mostly in the stan
 - Document how to setup Yubikey for TOPT MFA (and additionally add to Authenticator App)
 - Document MFA QR security/backup (for example print)
 - Blog post
-- development docs
-- contribution guidelines
+- Development docs
+- Contribution guidelines
+- Add video that showcases the features (with CDK)
