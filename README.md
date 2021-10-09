@@ -55,7 +55,7 @@ This `aws-mfa-assume-credential-process` is _yet another tool_, but it plugs int
 
     ```ini
     [profile my-profile]
-    credential_process = aws-mfa-assume-credential-process --source-profile=<source-profile-name> --target-role-arn=<target-role-arn>
+    credential_process = aws-mfa-assume-credential-process --source=<source-profile-name> --assume=<target-role-arn>
     ```
 
 5. Use any AWS tooling that support ini-based configuration with `credential_process`, like AWS CLI v2:
@@ -67,8 +67,8 @@ This `aws-mfa-assume-credential-process` is _yet another tool_, but it plugs int
 
 | Command-line Option | Required | Description |
 | :----------- | :------: | :---------- |
-|`--source-profile`|✓|Which credentials are to be used as a source for assuming the target role |
-|`--target-role-arn`|✓|The target IAM Role to be assumed|
+|`--source`|✓|Which credentials are to be used as a source for assuming the target role |
+|`--assume`|✓|The target IAM Role to be assumed|
 |`--region`||Which AWS region to use, if not provided it will use your default AWS region|
 |`--yubikey`||Enable Yubikey usage by providing the Yubikey Device Serial to use. You can see the serial(s) with `ykman list` command. This enforces the use of a specific Yubikey and also enables the support for using multiple Yubikeys!|
 
@@ -77,7 +77,7 @@ This `aws-mfa-assume-credential-process` is _yet another tool_, but it plugs int
 An example with all the configuration options:
 ```ini
 [profile my-profile]
-credential_process = aws-mfa-assume-credential-process --source-profile=default --target-role-arn=arn:aws:iam::999988887777:role/MyTargetRole --region=eu-west-1 --yubikey=12345678
+credential_process = aws-mfa-assume-credential-process --source=default --assume=arn:aws:iam::999988887777:role/MyTargetRole --region=eu-west-1 --yubikey=12345678
 ```
 
 
