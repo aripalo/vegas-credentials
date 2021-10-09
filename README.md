@@ -15,9 +15,11 @@ If you're unfamiliar with `credential_process`, [this AWS re:Invent video](https
 
 ## Features
 
-- **Works out-of-the-box with most AWS tools**: AWS CDK, AWS SDKs and AWS CLI
-
 - **Supports automatic temporary session credentials refreshing**
+
+- **Works out-of-the-box with most AWS tools** such as AWS CDK, AWS SDKs and AWS CLI:
+
+    Tested with AWS CDK (TypeScript), AWS CLI v2, AWS NodeJS SDK (v3), AWS Boto3 and AWS Go SDK. Should probably work with other AWS SDKs as well.
 
 - **Supports both Yubikey Touch or Authenticator App TOPT MFA simultaneously**: 
     
@@ -115,6 +117,7 @@ If we provide (target) `role-arn` and other configuration in the `~/.aws/config`
 ## TODO
 
 - Ensure CDK & co understand the session credential expiration and do not ask for MFA all the time
+- Test manually CDK, CLI, NodeJS SDK v3, Boto3, Go ... for refresh/cache support
 - Document TTY usage https://github.com/boto/botocore/issues/1348
 - Support role chaining?
 - Add disclaimer for orgs using this tool ("software provided as is")
