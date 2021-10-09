@@ -67,7 +67,7 @@ This `aws-mfa-assume-credential-process` is _yet another tool_, but it plugs int
 
 | Command-line Option |                                                                                                                                  Description                                                                                                                                   |
 | :------------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `source`            | *Required:* Which credentials are to be used as a source for assuming the target role                                                                                                                                                                                                      |
+| `source`            | *Required:* Which credentials (profile) are to be used as a source for assuming the target role                                                                                                                                                                                                      |
 | `assume`            | *Required:* The target IAM Role to be assumed                                                                                                                                                                                                                                              |
 | `region`            | Which AWS region to use, if not provided it will use your default AWS region                                                                                                                                                                                                   |
 | `duration`          | The value can range from `900` seconds (15 minutes) up to the maximum session duration setting for the role (which can be a maximum of `43200`). This is an optional parameter and by default, the value is set to `3600` seconds.                                             |
@@ -80,9 +80,12 @@ This `aws-mfa-assume-credential-process` is _yet another tool_, but it plugs int
 An example with all the configuration options:
 ```ini
 [profile my-profile]
-credential_process = aws-mfa-assume-credential-process --source=default --assume=arn:aws:iam::999988887777:role/MyTargetRole --region=eu-west-1 --duration=900 --external-id=foobar --yubikey=12345678
+credential_process = aws-mfa-assume-credential-process --source=default --assume=arn:aws:iam::999988887777:role/MyTargetRole --region=eu-west-1 --duration=900 --session-name=mySession --external-id=foobar --yubikey=12345678
 ```
 
+### Why CLI options and not just use the default ini-configuration?
+
+If we provide (target) `role-arn` and other configuration in the `~/.aws/config` ini-file the standard way, then most AWS tools will ignore the `credential_process` and assume the role directly without using this tool.
 
 
 
@@ -91,3 +94,5 @@ credential_process = aws-mfa-assume-credential-process --source=default --assume
 - Ensure CDK & co understand the session credential expiration and do not ask for MFA all the time
 - Document TTY usage https://github.com/boto/botocore/issues/1348
 - Support role chaining?
+- Add disclaimer for orgs using this tool ("software provided as is")
+- Add PR templates (bug, feature request...)
