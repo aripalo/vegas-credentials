@@ -78,7 +78,11 @@ This `aws-mfa-assume-credential-process` is _yet another tool_, but it plugs int
 
     ```ini
     [profile my-profile]
-    credential_process = aws-mfa-assume-credential-process --source=<source-profile-name> --assume=<target-role-arn>
+    credential_process = aws-mfa-assume-credential-process --profile=my-profile
+    __source_profile=<source-profile-name>
+    __role_arn=<target-role-arn>
+    __mfa_serial=<mfa-device-arn>
+    __yubikey=<yubikey-serial>
     ```
 
 5. Use any AWS tooling that support ini-based configuration with `credential_process`, like AWS CLI v2:
@@ -90,27 +94,19 @@ This `aws-mfa-assume-credential-process` is _yet another tool_, but it plugs int
 
 ## Configuration
 
-| Command-line Option |                                                                                                                                  Description                                                                                                                                   |
-| :------------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `source`            | *Required:* Which credentials (profile) are to be used as a source for assuming the target role                                                                                                                                                                                                      |
-| `assume`            | *Required:* The target IAM Role to be assumed                                                                                                                                                                                                                                              |
-| `region`            | Which AWS region to use, if not provided it will use your default AWS region                                                                                                                                                                                                   |
-| `duration`          | The value can range from `900` seconds (15 minutes) up to the maximum session duration setting for the role (which can be a maximum of `43200`). This is an optional parameter and by default, the value is set to `3600` seconds.                                             |
-| `session-name`      | Specifies the name to attach to the role session. By default this tool will generate a session name based on your source credentials                                                                                                                                           |
-| `external-id`       | Specifies a unique identifier that is used by third parties to assume a role in their customers' accounts. This maps to the ExternalId parameter in the AssumeRole operation. This parameter is needed only if the trust policy for the role specifies a value for ExternalId. |
-| `yubikey`           | Enable Yubikey usage by providing the Yubikey Device Serial to use. You can see the serial(s) with `ykman list` command. This enforces the use of a specific Yubikey and also enables the support for using multiple Yubikeys (for different profiles)!                                                 |
+Configuration for this tool happens `~/.aws/config` ini-file, mostly in the standard way, but some options are prefixed with `__` (double underscore): Otherwise AWS tools would ignore the `credential_process` and assume the role directly without using this tool.
 
-### Example
+|       Option        |                                                                                                                                     Description                                                                                                                                      |
+| :------------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `__yubikey`         | *Required if using Yubikey:* Enable Yubikey usage by providing the Yubikey Device Serial to use. You can see the serial(s) with `ykman list` command. This enforces the use of a specific Yubikey and also enables the support for using multiple Yubikeys (for different profiles)! |
+| `__source_profile`  | *Required:* Which credentials (profile) are to be used as a source for assuming the target role                                                                                                                                                                                      |
+| `__role_arn`        | *Required:* The target IAM Role to be assumed                                                                                                                                                                                                                                        |
+| `__mfa_serial`      | *Required:*                                                                                                                                                                                                                                                                          |
+| `region`            | Which AWS region to use, if not provided it will use your default AWS region                                                                                                                                                                                                         |
+| `duration_seconds`  | The value can range from `900` seconds (15 minutes) up to the maximum session duration setting for the role (which can be a maximum of `43200`). This is an optional parameter and by default, the value is set to `3600` seconds.                                                   |
+| `role_session_name` | Specifies the name to attach to the role session. By default this tool will generate a session name based on your source credentials                                                                                                                                                 |
+| `external_id`       | Specifies a unique identifier that is used by third parties to assume a role in their customers' accounts. This maps to the ExternalId parameter in the AssumeRole operation. This parameter is needed only if the trust policy for the role specifies a value for ExternalId.       |
 
-An example with all the configuration options:
-```ini
-[profile my-profile]
-credential_process = aws-mfa-assume-credential-process --source=default --assume=arn:aws:iam::999988887777:role/MyTargetRole --region=eu-west-1 --duration=900 --session-name=mySession --external-id=foobar --yubikey=12345678
-```
-
-### Why CLI options and not just use the default ini-configuration?
-
-If we provide (target) `role-arn` and other configuration in the `~/.aws/config` ini-file the standard way, then most AWS tools will ignore the `credential_process` and assume the role directly without using this tool.
 
 <br/>
 
