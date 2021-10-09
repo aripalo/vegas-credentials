@@ -2,6 +2,8 @@
 
 A helper utility that plugs into standard [`credential_process`](https://docs.aws.amazon.com/sdkref/latest/guide/setting-global-credential_process.html) to assume AWS IAM Role with _– Yubikey Touch or Authenticator App –_ MFA to provides session credentials.
 
+If you're unfamiliar with `credential_process`, [this AWS re:Invent video](https://www.youtube.com/watch?v=W8IyScUGuGI&t=1260s) explains it very well.
+
 <br/>
 
 ![diagram](/docs/diagram.svg)
