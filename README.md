@@ -122,3 +122,5 @@ If we provide (target) `role-arn` and other configuration in the `~/.aws/config`
 - Document how to setup Yubikey for TOPT MFA (and additionally add to Authenticator App)
 - Document MFA QR security/backup (for example print)
 - Blog post
+- development docs
+- contribution guidelines
