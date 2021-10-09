@@ -1,5 +1,7 @@
 # `aws-mfa-assume-credential-process`
 
+🚧 **Work-in-Progress: Do not use just yet!**
+
 A helper utility that plugs into standard [`credential_process`](https://docs.aws.amazon.com/sdkref/latest/guide/setting-global-credential_process.html) to assume AWS IAM Role with _– Yubikey Touch and Authenticator App –_ [TOPT MFA](https://en.wikipedia.org/wiki/Time-based_One-Time_Password) to provide session credentials – with automatic refreshing.
 
 If you're unfamiliar with `credential_process`, [this AWS re:Invent video](https://www.youtube.com/watch?v=W8IyScUGuGI&t=1260s) explains it very well.
@@ -119,3 +121,4 @@ If we provide (target) `role-arn` and other configuration in the `~/.aws/config`
 - Add PR templates (bug, feature request...)
 - Document how to setup Yubikey for TOPT MFA (and additionally add to Authenticator App)
 - Document MFA QR security/backup (for example print)
+- Blog post
