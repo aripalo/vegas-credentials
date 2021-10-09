@@ -9,6 +9,22 @@ A helper utility that plugs into standard [`credential_process`](https://docs.aw
 <br/>
 
 
+## Features
+
+- **Works out-of-the-box with most AWS tools**: AWS CDK, AWS SDKs and AWS CLI
+
+- **Supports automatic temporary session credentials refreshing**
+
+- **Supports both Yubikey Touch or Authenticator App TOPT MFA simultaneously**: 
+    
+    For example you can default to using Yubikey, but if don't have the Yubikey with you all the time and also have MFA codes in an Authenticator App (such as [Authy](https://authy.com/) for example) you may just type the token code via CLI; Which ever input is given first will be used.
+
+- **Just tap your physical key**:
+
+    No need to manually type or copy-paste TOPT MFA token code from Yubikey Authenticator.
+
+<br/>
+
 ## Why yet another tool for this?
 
 There are already a bazillion ways to assume an IAM Role with MFA, but most existing open source tools in this scene either:
@@ -29,6 +45,7 @@ To recap, most existing solutions (I've seen so far) to these challenges either 
 
 This `aws-mfa-assume-credential-process` is _yet another tool_, but it plugs into the standard [`credential_process`](https://docs.aws.amazon.com/sdkref/latest/guide/setting-global-credential_process.html) AWS configuration so most of AWS tooling (CLI v2, SDKs and CDK) will work out-of-the-box with it and also support automatic temporary session credential refreshing.
 
+<br/>
 
 ## Getting Started
 
@@ -63,6 +80,8 @@ This `aws-mfa-assume-credential-process` is _yet another tool_, but it plugs int
     aws sts get-caller-identity --profile my-profile
     ```
 
+<br/>
+
 ## Configuration
 
 | Command-line Option |                                                                                                                                  Description                                                                                                                                   |
@@ -73,7 +92,7 @@ This `aws-mfa-assume-credential-process` is _yet another tool_, but it plugs int
 | `duration`          | The value can range from `900` seconds (15 minutes) up to the maximum session duration setting for the role (which can be a maximum of `43200`). This is an optional parameter and by default, the value is set to `3600` seconds.                                             |
 | `session-name`      | Specifies the name to attach to the role session. By default this tool will generate a session name based on your source credentials                                                                                                                                           |
 | `external-id`       | Specifies a unique identifier that is used by third parties to assume a role in their customers' accounts. This maps to the ExternalId parameter in the AssumeRole operation. This parameter is needed only if the trust policy for the role specifies a value for ExternalId. |
-| `yubikey`           | Enable Yubikey usage by providing the Yubikey Device Serial to use. You can see the serial(s) with `ykman list` command. This enforces the use of a specific Yubikey and also enables the support for using multiple Yubikeys!                                                 |
+| `yubikey`           | Enable Yubikey usage by providing the Yubikey Device Serial to use. You can see the serial(s) with `ykman list` command. This enforces the use of a specific Yubikey and also enables the support for using multiple Yubikeys (for different profiles)!                                                 |
 
 ### Example
 
@@ -87,7 +106,7 @@ credential_process = aws-mfa-assume-credential-process --source=default --assume
 
 If we provide (target) `role-arn` and other configuration in the `~/.aws/config` ini-file the standard way, then most AWS tools will ignore the `credential_process` and assume the role directly without using this tool.
 
-
+<br/>
 
 ## TODO
 
@@ -96,3 +115,5 @@ If we provide (target) `role-arn` and other configuration in the `~/.aws/config`
 - Support role chaining?
 - Add disclaimer for orgs using this tool ("software provided as is")
 - Add PR templates (bug, feature request...)
+- Document how to setup Yubikey for TOPT MFA (and additionally add to Authenticator App)
+- Document MFA QR security/backup (for example print)
