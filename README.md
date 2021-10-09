@@ -65,19 +65,22 @@ This `aws-mfa-assume-credential-process` is _yet another tool_, but it plugs int
 
 ## Configuration
 
-| Command-line Option | Required | Description |
-| :----------- | :------: | :---------- |
-|`--source`|✓|Which credentials are to be used as a source for assuming the target role |
-|`--assume`|✓|The target IAM Role to be assumed|
-|`--region`||Which AWS region to use, if not provided it will use your default AWS region|
-|`--yubikey`||Enable Yubikey usage by providing the Yubikey Device Serial to use. You can see the serial(s) with `ykman list` command. This enforces the use of a specific Yubikey and also enables the support for using multiple Yubikeys!|
+| Command-line Option |                                                                                                                                  Description                                                                                                                                   |
+| :------------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `source`            | *Required:* Which credentials are to be used as a source for assuming the target role                                                                                                                                                                                                      |
+| `assume`            | *Required:* The target IAM Role to be assumed                                                                                                                                                                                                                                              |
+| `region`            | Which AWS region to use, if not provided it will use your default AWS region                                                                                                                                                                                                   |
+| `duration`          | The value can range from `900` seconds (15 minutes) up to the maximum session duration setting for the role (which can be a maximum of `43200`). This is an optional parameter and by default, the value is set to `3600` seconds.                                             |
+| `session-name`      | Specifies the name to attach to the role session. By default this tool will generate a session name based on your source credentials                                                                                                                                           |
+| `external-id`       | Specifies a unique identifier that is used by third parties to assume a role in their customers' accounts. This maps to the ExternalId parameter in the AssumeRole operation. This parameter is needed only if the trust policy for the role specifies a value for ExternalId. |
+| `yubikey`           | Enable Yubikey usage by providing the Yubikey Device Serial to use. You can see the serial(s) with `ykman list` command. This enforces the use of a specific Yubikey and also enables the support for using multiple Yubikeys!                                                 |
 
 ### Example
 
 An example with all the configuration options:
 ```ini
 [profile my-profile]
-credential_process = aws-mfa-assume-credential-process --source=default --assume=arn:aws:iam::999988887777:role/MyTargetRole --region=eu-west-1 --yubikey=12345678
+credential_process = aws-mfa-assume-credential-process --source=default --assume=arn:aws:iam::999988887777:role/MyTargetRole --region=eu-west-1 --duration=900 --external-id=foobar --yubikey=12345678
 ```
 
 
