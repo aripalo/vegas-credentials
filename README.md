@@ -1,6 +1,6 @@
 # `aws-mfa-assume-credential-process`
 
-A helper utility that plugs into standard [`credential_process`](https://docs.aws.amazon.com/sdkref/latest/guide/setting-global-credential_process.html) to assume AWS IAM Role with _– Yubikey Touch and Authenticator App –_ [TOPT MFA](https://en.wikipedia.org/wiki/Time-based_One-Time_Password) to provides session credentials.
+A helper utility that plugs into standard [`credential_process`](https://docs.aws.amazon.com/sdkref/latest/guide/setting-global-credential_process.html) to assume AWS IAM Role with _– Yubikey Touch and Authenticator App –_ [TOPT MFA](https://en.wikipedia.org/wiki/Time-based_One-Time_Password) to provide session credentials – with automatic refreshing.
 
 If you're unfamiliar with `credential_process`, [this AWS re:Invent video](https://www.youtube.com/watch?v=W8IyScUGuGI&t=1260s) explains it very well.
 
