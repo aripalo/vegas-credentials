@@ -112,6 +112,7 @@ Configuration for this tool happens `~/.aws/config` ini-file, mostly in the stan
 
 ## TODO
 
+- IMPEMENT CACHING
 - Ensure CDK & co understand the session credential expiration and do not ask for MFA all the time
 - Test manually CDK, CLI, NodeJS SDK v3, Boto3, Go ... for refresh/cache support
 - Document TTY usage https://github.com/boto/botocore/issues/1348
