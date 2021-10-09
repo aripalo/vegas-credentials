@@ -15,7 +15,9 @@ If you're unfamiliar with `credential_process`, [this AWS re:Invent video](https
 
 ## Features
 
-- **Supports automatic temporary session credentials refreshing**
+- **Supports automatic temporary session credentials refreshing** for tools that understand session credential expiration
+
+- **Built-in encrypted caching of session credentials** to speed things up & to avoid having to input MFA token code for each operation
 
 - **Works out-of-the-box with most AWS tools** such as AWS CDK, AWS SDKs and AWS CLI:
 
