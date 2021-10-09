@@ -1,1 +1,72 @@
-# replace this
+# `aws-mfa-assume-credential-process`
+
+A helper utility that plugs into standard [`credential_process`](https://docs.aws.amazon.com/sdkref/latest/guide/setting-global-credential_process.html) to assume AWS IAM Role with _– Yubikey Touch or Authenticator App –_ MFA to provides session credentials.
+
+<br/>
+
+![diagram](/docs/diagram.svg)
+
+<br/>
+
+
+## Why yet another tool for this?
+
+There are already a bazillion ways to assume an IAM Role with MFA, but most existing open source tools in this scene either:
+- export the temporary session credentials to environment variables (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_SESSION_TOKEN`)
+- write new sections for “short-term” credentials into `~/.aws/credentials` (for example like [`aws-mfa`](https://github.com/broamski/aws-mfa) does)
+
+The downside with those approaches is that using most of these tools (especially the ones that export environment variables) means you lose the built-in ability to automatically refresh the temporary credentials and/or the temporary credentials are “cached” in some custom location or saved into `~/.aws/credentials`.
+
+This tool follows the concept that [you should never put temporary credentials into `~/.aws/credentials`](https://ben11kehoe.medium.com/never-put-aws-temporary-credentials-in-env-vars-or-credentials-files-theres-a-better-way-25ec45b4d73e).
+
+Most AWS provided tools & SDKs already support MFA & assuming a role out of the box, but what they lack is a nice integration with Yubikey Touch, requiring you to manually type in or copy-paste the MFA TOPT token code: This utility instead integrates with [`ykman` Yubikey CLI](https://developers.yubico.com/yubikey-manager/) so just a quick touch is enough!
+
+Also with this tool, even if you use Yubikey Touch, you still get the possibility to input MFA TOPT token code manually from an Authenticator App (for example if you don't have your Yubikey on your person).
+
+Then there's tools such as AWS CDK that [does not support caching of assumed temporary credentials](https://github.com/aws/aws-cdk/issues/10867), requiring the user to input the MFA TOPT token code for every operation with `cdk` CLI – which makes the developer experience really cumbersome.
+
+To recap, most existing solutions (I've seen so far) to these challenges either lack support for automatic temporary session credential refreshing, cache/write temporary session credentials to suboptimal locations and/or don't work that well with AWS tooling (i.e. requiring one to create “wrappers”):
+
+This `aws-mfa-assume-credential-process` is _yet another tool_, but it plugs into the standard [`credential_process`](https://docs.aws.amazon.com/sdkref/latest/guide/setting-global-credential_process.html) AWS configuration so most of AWS tooling (CLI v2, SDKs and CDK) will work out-of-the-box with it and also support automatic temporary session credential refreshing.
+
+
+## Getting Started
+
+1. NodeJS `v14` or newer required
+
+2. [Install `ykman`](https://developers.yubico.com/yubikey-manager/) (if you choose to use Yubikeys)
+
+2. Install:
+
+    ```shell
+    npm i -g aws-mfa-assume-credential-process
+    ```
+
+3. Configure you source profile and its credentials, most often it's the `default` one which you configure into `~/.aws/credentials`:
+
+    ```ini
+    [default]
+    aws_access_key_id = AKIAIOSFODNN7EXAMPLE
+    aws_secret_access_key = wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+    aws_mfa_device = arn:aws:iam::123456789012:mfa/example
+    ```
+
+4. Configure your target profile with `credential_process` into `~/.aws/config`:
+
+    ```ini
+    [profile my-profile]
+    credential_process = aws-mfa-assume-credential-process --source-profile=<source-profile-name> --target-role-arn=<target-role-arn>
+    region=eu-west-1
+    ```
+
+5. Use any AWS tooling that support ini-based configuration with `credential_process`, like AWS CLI v2:
+    ```shell
+    aws sts get-caller-identity --profile my-profile
+    ```
+
+
+
+## TODO
+
+- Ensure CDK & co understand the session credential expiration and do not ask for MFA all the time
+- Document TTY usage https://github.com/boto/botocore/issues/1348
