@@ -9,6 +9,8 @@ import (
 	"strings"
 )
 
+// See https://pkg.go.dev/crypto/cipher#NewCTR
+
 func Encrypt(plaintext []byte) ([]byte, error) {
 
 	var err error
