@@ -2,6 +2,10 @@
 
 🚧 **Work-in-Progress: Do not use just yet! The API and configurations may change without any prior notice at any version. The status of this tool is that it's under development & testing. So do not use this for anything important, but feel free to test this out and give feedback!**
 
+---
+
+<br/>
+
 Utility for [AWS `credential_process`](https://docs.aws.amazon.com/sdkref/latest/guide/setting-global-credential_process.html) to assume AWS IAM Roles with _Yubikey Touch and Authenticator App_ [TOPT MFA](https://en.wikipedia.org/wiki/Time-based_One-Time_Password) to provide temporary session credentials – with local caching to [Keyring](#keyring).
 
 If you're unfamiliar with `credential_process`, [this AWS re:Invent video](https://www.youtube.com/watch?v=W8IyScUGuGI&t=1260s) explains it very well.
@@ -196,3 +200,4 @@ In the background this tool uses [`99designs/keyring`](https://github.com/99desi
 - Document credential refresh & botocore multiple calls:
     - https://github.com/aws/aws-cli/issues/5048#issuecomment-597868383
     - https://github.com/boto/botocore/blob/221ffa67a567df99ee78d7ae308c0e12d7eeeea7/botocore/credentials.py#L350-L355
+- https://linuxtut.com/en/9fe52804610a8c4b7e41/
