@@ -1,26 +1,36 @@
 package filecache
 
 import (
-	b64 "encoding/base64"
+	"bytes"
+	"compress/gzip"
+	"crypto/sha1"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 
 	"github.com/aripalo/goawsmfa/internal/profile"
+	"github.com/aripalo/goawsmfa/internal/utils"
 )
 
 func Get(profileName string, config profile.Profile) ([]byte, error) {
 	var err error
 	filepath, err := getCachePath(profileName, config)
 	cached, err := os.ReadFile(filepath)
-	return cached, err
+	decompressed, err := decompress(cached)
+	return decompressed, err
 }
 
 func Save(profileName string, config profile.Profile, data []byte) error {
 	var err error
+	compressed, err := compress(data)
 	filepath, err := getCachePath(profileName, config)
-	err = os.WriteFile(filepath, data, os.ModePerm)
+	err = os.WriteFile(filepath, compressed, os.ModePerm)
+	if err != nil {
+		utils.SafeLog("FILE ERR: ", err)
+	}
 	return err
 }
 
@@ -51,19 +61,53 @@ func getCachePath(profileName string, config profile.Profile) (string, error) {
 }
 
 const (
-	toolDirName  string = ".awstool-todo"
+	toolDirName  string = ".awstool-todo" // TODO
 	cacheDirName string = "cache"
 )
 
 func formatFileName(profileName string, config profile.Profile) (string, error) {
 	configString, err := configToString(config)
 	combination := fmt.Sprintf("%s%s", profileName, configString)
-	filename := b64.StdEncoding.EncodeToString([]byte(combination))
-	shortened := filename[:200]
-	return shortened, err
+	hash := generateSha1Hash([]byte(combination))
+	return hash, err
+}
+
+func generateSha1Hash(data []byte) string {
+	s := string(data)
+	h := sha1.New()
+	h.Write([]byte(s))
+	sha1_hash := hex.EncodeToString(h.Sum(nil))
+	return sha1_hash
 }
 
 func configToString(config profile.Profile) (string, error) {
 	result, err := json.Marshal(config)
 	return string(result), err
+}
+
+func compress(data []byte) ([]byte, error) {
+	var b bytes.Buffer
+	gz := gzip.NewWriter(&b)
+	if _, err := gz.Write(data); err != nil {
+		return nil, err
+	}
+	if err := gz.Close(); err != nil {
+		return nil, err
+	}
+	return b.Bytes(), nil
+}
+
+func decompress(compressed []byte) ([]byte, error) {
+	reader := bytes.NewReader(compressed)
+	gz, err := gzip.NewReader(reader)
+	if err != nil {
+		return nil, err
+	}
+
+	data, err := ioutil.ReadAll(gz)
+	if err != nil {
+		return nil, err
+	}
+
+	return data, nil
 }

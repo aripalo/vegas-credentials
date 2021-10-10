@@ -3,65 +3,41 @@ package credentialprocess
 import (
 	"encoding/json"
 	"errors"
-	"time"
 
 	"github.com/aripalo/goawsmfa/internal/cache"
 	"github.com/aripalo/goawsmfa/internal/profile"
 	"github.com/aripalo/goawsmfa/internal/utils"
 )
 
-func GetOutput(profileName string, config profile.Profile) (json.RawMessage, error) {
+func GetOutput(verboseOutput bool, profileName string, hideArns bool, config profile.Profile) (json.RawMessage, error) {
 	var err error
 
-	cached, cacheErr := getCachedTemporaryCredentials(profileName, config)
+	cached, cacheErr := getCachedTemporaryCredentials(verboseOutput, profileName, config)
 
 	if cacheErr == nil {
 		return cached, nil
 	}
 
-	fresh, err := getFreshTemporaryCredentials(config)
+	fresh, err := getFreshTemporaryCredentials(config, hideArns)
 	if err == nil {
-		utils.SafeLog("Fetched new session credentials")
-		err = cache.Save(profileName, config, fresh)
-		validationErr := validate(fresh)
+		if verboseOutput {
+			utils.SafeLog(utils.TextGreen("✅ [Session Credential] Fetched new session credentials"))
+		}
+
+		parsed, err := parseCredentials(fresh)
+		if err != nil {
+			// TODO better error
+			return nil, errors.New("Fresh data could not be converted to valid credential_process response")
+		}
+
+		validationErr := validate(parsed)
 		if validationErr != nil {
 			return nil, validationErr
 		}
+		err = cache.Save(profileName, config, fresh)
 		return fresh, nil
 	}
 
 	return nil, err
 
-}
-
-func validate(data json.RawMessage) error {
-
-	var r CredentialProcessResponse
-
-	invalidErr := errors.New("Invalid session credentials")
-
-	err := json.Unmarshal(data, &r)
-	if err != nil {
-		return invalidErr
-	}
-
-	if r.AccessKeyID == "" {
-		return invalidErr
-	}
-
-	if r.SecretAccessKey == "" {
-		return invalidErr
-	}
-
-	if r.SessionToken == "" {
-		return invalidErr
-	}
-
-	now := time.Now()
-
-	if r.Expiration.Before(now) {
-		return invalidErr
-	}
-
-	return nil
 }

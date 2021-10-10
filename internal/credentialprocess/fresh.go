@@ -12,7 +12,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 )
 
-func getFreshTemporaryCredentials(config profile.Profile) (json.RawMessage, error) {
+func getFreshTemporaryCredentials(config profile.Profile, hideArns bool) (json.RawMessage, error) {
 	var err error
 
 	sess, err := session.NewSession(&aws.Config{
@@ -24,7 +24,7 @@ func getFreshTemporaryCredentials(config profile.Profile) (json.RawMessage, erro
 	// referenced by the "myRoleARN" ARN. Prompt for MFA token from stdin.
 	creds := stscreds.NewCredentials(sess, config.AssumeRoleArn, func(p *stscreds.AssumeRoleProvider) {
 		p.SerialNumber = aws.String(config.MfaSerial)
-		p.TokenProvider = func() (string, error) { return tokenProvider(config) }
+		p.TokenProvider = func() (string, error) { return tokenProvider(config, hideArns) }
 
 		if config.DurationSeconds != 0 {
 			p.Duration = time.Duration(config.DurationSeconds * int(time.Second))
@@ -59,8 +59,8 @@ func getFreshTemporaryCredentials(config profile.Profile) (json.RawMessage, erro
 	return pretty, err
 }
 
-func tokenProvider(config profile.Profile) (string, error) {
-	result, err := mfa.GetTokenResult(config.YubikeySerial, config.YubikeyLabel)
+func tokenProvider(config profile.Profile, hideArns bool) (string, error) {
+	result, err := mfa.GetTokenResult(config, hideArns)
 	return result.Value, err
 }
 

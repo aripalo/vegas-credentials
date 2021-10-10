@@ -16,15 +16,22 @@ func OutputToAwsCredentialProcess(output string) {
 
 // SafeLog logs directly to tty (with stderr fallback), since aws credential_process reads stdout
 func SafeLog(a ...interface{}) {
+
+	out := GetSafeWriter()
+
+	fmt.Fprintln(out, a...)
+}
+
+func GetSafeWriter() io.Writer {
 	var out io.Writer
 
 	tty, err := tty.Open()
+	defer tty.Close()
 	if err != nil {
 		out = os.Stderr
 	} else {
 		out = colorable.NewColorable(tty.Output())
 	}
-	defer tty.Close()
 
-	fmt.Fprintln(out, a...)
+	return out
 }

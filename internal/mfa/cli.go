@@ -15,8 +15,6 @@ func getCliToken(ctx context.Context, out chan *Result, errors chan *error) {
 
 	defer getTokenErrorHandler(ctx, err, errors)
 
-	//utils.SafeLog("Input:")
-
 	reader := bufio.NewReader(os.Stdin)
 
 	text, err := reader.ReadString('\n')
