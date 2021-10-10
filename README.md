@@ -161,7 +161,7 @@ You can see all the possible configuration options in [AWS documentation](https:
 - Document how to setup Yubikey for TOPT MFA (and additionally add to Authenticator App)
 - Document MFA QR security/backup (for example print)
 - Blog post
-- Development docs
+- Development docs (maybe separate site?)
 - Contribution guidelines
 - Add video that showcases the features (with CDK)
 - Document TTY usage https://github.com/boto/botocore/issues/1348
