@@ -87,7 +87,10 @@ This `aws-mfa-credential-process` is _yet another tool_, but it plugs into the s
         3. Save the binary to your preferred location
         4. In some directory that is in your `$PATH`, create a symlink of `aws-mfa-credential-process` pointing into the downloaded binary
 
-    3. more installation methods to be implemented later (maybe pypi?)
+    3. more installation methods maybe implemented later:
+        - `go install github.com/aripalo/aws-mfa-credential-process` ?
+        - `pipx install aws-mfa-credential-process` ? Convenient as there's lot of AWS CLI, Boto3 and Botocore users...
+        - `npm install -g @aripalo/aws-mfa-credential-process` ? Convenient as there's a lot of AWS CDK & AWS NodeJS SDK users...
 
 3. Configure you source profile and its credentials, most often it's the `default` one which you configure into `~/.aws/credentials`:
 
