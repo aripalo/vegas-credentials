@@ -27,7 +27,7 @@ func getFreshTemporaryCredentials(config profile.Profile) (json.RawMessage, erro
 		p.TokenProvider = func() (string, error) { return tokenProvider(config) }
 
 		if config.DurationSeconds != 0 {
-			p.Duration = time.Duration(*aws.Int(config.DurationSeconds))
+			p.Duration = time.Duration(config.DurationSeconds * int(time.Second))
 		}
 
 		if config.RoleSessionName != "" {
