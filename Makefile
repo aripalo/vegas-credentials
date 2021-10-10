@@ -4,28 +4,9 @@
 
 EXECUTABLE=aws-mfa-assume-credential-process
 BIN_FOLDER="bin"
-WINDOWS=$(BIN_FOLDER)/$(EXECUTABLE)-windows-amd64.exe
-LINUX=$(BIN_FOLDER)/$(EXECUTABLE)-linux-amd64
-DARWIN=$(BIN_FOLDER)/$(EXECUTABLE)-darwin-amd64
-VERSION=$(shell git describe --tags --always --long --dirty)
 
-windows: $(WINDOWS) ## Build for Windows
-
-linux: $(LINUX) ## Build for Linux
-
-darwin: $(DARWIN) ## Build for Darwin (macOS)
-
-$(WINDOWS):
-	env GOOS=windows GOARCH=amd64 go build -i -v -o $(WINDOWS) -ldflags="-s -w -X main.version=$(VERSION)"  ./cmd/main.go
-
-$(LINUX):
-	env GOOS=linux GOARCH=amd64 go build -i -v -o $(LINUX) -ldflags="-s -w -X main.version=$(VERSION)"  ./cmd/main.go
-
-$(DARWIN):
-	env GOOS=darwin GOARCH=amd64 go build -i -v -o $(DARWIN) -ldflags="-s -w -X main.version=$(VERSION)"  ./cmd/main.go
-
-build: windows linux darwin ## Build binaries
-	@echo version: $(VERSION)
+build: clean ## Build binaries
+	@(cd cmd && gox -output="../$(BIN_FOLDER)/$(EXECUTABLE)_{{.OS}}_{{.Arch}}" -osarch="darwin/amd64 darwin/arm64 linux/amd64 linux/arm64 windows/amd64")
 
 all: test build ## Build and run tests
 
@@ -34,7 +15,7 @@ test: clean ## Run unit tests
 
 clean: ## Remove previous build
 	@(go clean)
-	rm -f $(WINDOWS) $(LINUX) $(DARWIN)
+	@(rm -rf $(BIN_FOLDER))
 
 help: ## Display available commands
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
