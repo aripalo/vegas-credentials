@@ -57,6 +57,18 @@ This `aws-mfa-assume-credential-process` is _yet another tool_, but it plugs int
 
 <br/>
 
+## Caveats
+
+- Does not work with [AWS SSO](https://aws.amazon.com/single-sign-on/): 
+
+    This is by design, for AWS SSO you should use the [native SSO features](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html) and fallback to using [`benkehoe/aws-sso-util`](https://github.com/benkehoe/aws-sso-util/) via `credential_process` for tooling that don't support native AWS SSO
+
+- May work with Windows, but not tested (at least yet)
+
+- May not output debug/info messages on some systems if `/dev/tty` not available
+
+<br/>
+
 ## Getting Started
 
 1. [Install `ykman`](https://developers.yubico.com/yubikey-manager/) (if you choose to use Yubikeys)
@@ -127,11 +139,10 @@ You can see all the possible configuration options in [AWS documentation](https:
 
 ## TODO
 
-- IMPEMENT CACHING
-- Ensure CDK & co understand the session credential expiration and do not ask for MFA all the time
-- Test manually CDK, CLI, NodeJS SDK v3, Boto3, Go ... for refresh/cache support
-- Document TTY usage https://github.com/boto/botocore/issues/1348
-- Support role chaining?
+
+
+- Ensure Role Chaining Works!
+- Test manually CDK, CLI, NodeJS SDK v3, Boto3, Go ... for refresh/cache support!
 - Add disclaimer for orgs using this tool ("software provided as is")
 - Add PR templates (bug, feature request...)
 - Document how to setup Yubikey for TOPT MFA (and additionally add to Authenticator App)
@@ -140,7 +151,7 @@ You can see all the possible configuration options in [AWS documentation](https:
 - Development docs
 - Contribution guidelines
 - Add video that showcases the features (with CDK)
-
+- Document TTY usage https://github.com/boto/botocore/issues/1348
 
 
 
