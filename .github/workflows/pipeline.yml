@@ -17,22 +17,11 @@ jobs:
         run: make test
       - name: Build
         run: make build
-      - uses: actions/upload-artifact@v2
-        with:
-          name: binaries
-          path: bin
-          retention-days: 1
-
-  release:
-    name: Release
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/download-artifact@v2
-        with:
-          name: binaries
-      - name: Display structure of downloaded files
-        run: ls -R
-      - name: Release
-        uses: softprops/action-gh-release@v1
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v2
         if: startsWith(github.ref, 'refs/tags/')
+        with:
+          version: latest
+          args: release --rm-dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
