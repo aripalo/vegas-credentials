@@ -12,7 +12,6 @@ import (
 func Encrypt(plaintext []byte) ([]byte, error) {
 
 	var err error
-	//var encrypted []byte
 
 	ciphertext := make([]byte, aes.BlockSize+len(plaintext))
 
