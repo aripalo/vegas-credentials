@@ -15,7 +15,7 @@ const thinBorder string = "-----------------------------------------------------
 
 func main() {
 	app := &cli.App{
-		Name:  "aws-mfa-assume-credential-process",
+		Name:  "aws-mfa-credential-process",
 		Usage: "Caching AWS Credential Process to manage assuming an IAM Role with MFA token from Yubikey and Authenticator App",
 		Flags: []cli.Flag{
 			&cli.StringFlag{

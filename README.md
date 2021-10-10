@@ -1,4 +1,4 @@
-# `aws-mfa-assume-credential-process`
+# `aws-mfa-credential-process`
 
 🚧 **Work-in-Progress: Do not use just yet! The API and configurations may change without any prior notice at any version. The status of this tool is that it's under development & testing. So do not use this for anything important, but feel free to test this out and give feedback!**
 
@@ -53,7 +53,7 @@ Then there's tools such as AWS CDK that [does not support caching of assumed tem
 
 To recap, most existing solutions (I've seen so far) to these challenges either lack support for automatic temporary session credential refreshing, cache/write temporary session credentials to suboptimal locations and/or don't work that well with AWS tooling (i.e. requiring one to create “wrappers”):
 
-This `aws-mfa-assume-credential-process` is _yet another tool_, but it plugs into the standard [`credential_process`](https://docs.aws.amazon.com/sdkref/latest/guide/setting-global-credential_process.html) AWS configuration so most of AWS tooling (CLI v2, SDKs and CDK) will work out-of-the-box with it and also support automatic temporary session credential refreshing.
+This `aws-mfa-credential-process` is _yet another tool_, but it plugs into the standard [`credential_process`](https://docs.aws.amazon.com/sdkref/latest/guide/setting-global-credential_process.html) AWS configuration so most of AWS tooling (CLI v2, SDKs and CDK) will work out-of-the-box with it and also support automatic temporary session credential refreshing.
 
 <br/>
 
@@ -77,7 +77,7 @@ This `aws-mfa-assume-credential-process` is _yet another tool_, but it plugs int
 
     1. via [Homebrew](https://brew.sh/):
         ```shell
-        brew install aripalo/aws-mfa-assume-credential-process/todo
+        brew install aripalo/aws-mfa-credential-process/todo
         ```
 
     2. or download via Github releases:
@@ -100,7 +100,7 @@ This `aws-mfa-assume-credential-process` is _yet another tool_, but it plugs int
     ```ini
     [profile my-profile]
     assume_role_arn=<target-role-arn>
-    credential_process = aws-mfa-assume-credential-process --profile=my-profile
+    credential_process = aws-mfa-credential-process --profile=my-profile
     source_profile=<source-profile-name>
     mfa_serial=<mfa-device-arn>
     yubikey_serial=<yubikey-serial>
@@ -151,6 +151,7 @@ You can see all the possible configuration options in [AWS documentation](https:
 
 - Configuration file
 - Cache Password!!! (ENVIRONMENT or Yubikey slot)
+
 - Ensure Role Chaining Works!
 - Test manually CDK, CLI, NodeJS SDK v3, Boto3, Go ... for refresh/cache support!
 - Add Unit tests
