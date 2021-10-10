@@ -1,6 +1,6 @@
 # `aws-mfa-assume-credential-process`
 
-🚧 **Work-in-Progress: Do not use just yet!** The API and configurations may change without any prior notice at any version. The status of this tool is that it's under development & testing. So do not use this for anything important, but feel free to test this out and give feedback!
+🚧 **Work-in-Progress: Do not use just yet! The API and configurations may change without any prior notice at any version. The status of this tool is that it's under development & testing. So do not use this for anything important, but feel free to test this out and give feedback!**
 
 A helper utility that plugs into standard [`credential_process`](https://docs.aws.amazon.com/sdkref/latest/guide/setting-global-credential_process.html) to assume AWS IAM Role with _– Yubikey Touch and Authenticator App –_ [TOPT MFA](https://en.wikipedia.org/wiki/Time-based_One-Time_Password) to provide session credentials – with automatic refreshing.
 
@@ -57,15 +57,11 @@ This `aws-mfa-assume-credential-process` is _yet another tool_, but it plugs int
 
 ## Getting Started
 
-1. NodeJS `v14` or newer required
-
-2. [Install `ykman`](https://developers.yubico.com/yubikey-manager/) (if you choose to use Yubikeys)
+1. [Install `ykman`](https://developers.yubico.com/yubikey-manager/) (if you choose to use Yubikeys)
 
 2. Install:
 
-    ```shell
-    npm i -g aws-mfa-assume-credential-process
-    ```
+    **TODO**
 
 3. Configure you source profile and its credentials, most often it's the `default` one which you configure into `~/.aws/credentials`:
 
@@ -80,11 +76,12 @@ This `aws-mfa-assume-credential-process` is _yet another tool_, but it plugs int
 
     ```ini
     [profile my-profile]
+    assume_role_arn=<target-role-arn>
     credential_process = aws-mfa-assume-credential-process --profile=my-profile
-    __source_profile=<source-profile-name>
-    __role_arn=<target-role-arn>
-    __mfa_serial=<mfa-device-arn>
-    __yubikey=<yubikey-serial>
+    source_profile=<source-profile-name>
+    mfa_serial=<mfa-device-arn>
+    yubikey_serial=<yubikey-serial>
+    yubikey_label=<yubikey-label>
     ```
 
 5. Use any AWS tooling that support ini-based configuration with `credential_process`, like AWS CLI v2:
@@ -96,18 +93,32 @@ This `aws-mfa-assume-credential-process` is _yet another tool_, but it plugs int
 
 ## Configuration
 
-Configuration for this tool happens `~/.aws/config` ini-file, mostly in the standard way, but some options are prefixed with `__` (double underscore): Otherwise AWS tools would ignore the `credential_process` and assume the role directly without using this tool.
+Configuration for this tool happens `~/.aws/config` ini-file, mostly in the standard way, but do not configure `role_arn`, instead provide `assume_role_arn`: Otherwise AWS tools would ignore the `credential_process` and assume the role directly without using this tool.
+
+
+### Required default AWS configuration
 
 |       Option        |                                                                                                                                     Description                                                                                                                                      |
 | :------------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `__yubikey`         | *Required if using Yubikey:* Enable Yubikey usage by providing the Yubikey Device Serial to use. You can see the serial(s) with `ykman list` command. This enforces the use of a specific Yubikey and also enables the support for using multiple Yubikeys (for different profiles)! |
-| `__source_profile`  | *Required:* Which credentials (profile) are to be used as a source for assuming the target role                                                                                                                                                                                      |
-| `__role_arn`        | *Required:* The target IAM Role to be assumed                                                                                                                                                                                                                                        |
-| `__mfa_serial`      | *Required:*                                                                                                                                                                                                                                                                          |
-| `region`            | Which AWS region to use, if not provided it will use your default AWS region                                                                                                                                                                                                         |
-| `duration_seconds`  | The value can range from `900` seconds (15 minutes) up to the maximum session duration setting for the role (which can be a maximum of `43200`). This is an optional parameter and by default, the value is set to `3600` seconds.                                                   |
-| `role_session_name` | Specifies the name to attach to the role session. By default this tool will generate a session name based on your source credentials                                                                                                                                                 |
-| `external_id`       | Specifies a unique identifier that is used by third parties to assume a role in their customers' accounts. This maps to the ExternalId parameter in the AssumeRole operation. This parameter is needed only if the trust policy for the role specifies a value for ExternalId.       |
+| `source_profile`  | **Required:** Which credentials (profile) are to be used as a source for assuming the target role                                                                                                                                                                                      |
+| `mfa_serial`      | **Required:**                                                                                                                                                                                               
+
+
+### Custom configuration
+
+|       Option        |                                                                                                                                     Description                                                                                                                                      |
+| :------------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `assume_role_arn`        | **Required:** The target IAM Role ARN to be assumed.                                                                                                                                                                                                                                         |
+| `yubikey_serial`         | **Required if using Yubikey:** Yubikey Device Serial to use. You can see the serial(s) with `ykman list` command. This enforces the use of a specific Yubikey and also enables the support for using multiple Yubikeys (for different profiles)! |
+| `yubikey_label`         | **Required if using Yubikey:** Yubikey `oath` Account Label to use. You can see the available accounts with `ykman oath accounts list` command. Set the account label which you have configured your AWS TOPT MFA! |
+
+### Optional default AWS configuration
+
+You can see all the possible configuration options in [AWS documentation](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html#cli-configure-files-global), but mainly you should be interested in:
+- `region`
+- `duration_seconds`
+- `role_session_name`
+- `external_id`
 
 
 <br/>
