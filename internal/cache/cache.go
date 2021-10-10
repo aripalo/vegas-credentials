@@ -3,9 +3,9 @@ package cache
 import (
 	"encoding/json"
 
-	"github.com/aripalo/goawsmfa/internal/cache/encryption"
-	"github.com/aripalo/goawsmfa/internal/cache/filecache"
-	"github.com/aripalo/goawsmfa/internal/profile"
+	"github.com/aripalo/aws-mfa-credential-process/internal/cache/encryption"
+	"github.com/aripalo/aws-mfa-credential-process/internal/cache/filecache"
+	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
 )
 
 func Get(profileName string, config profile.Profile) (json.RawMessage, error) {

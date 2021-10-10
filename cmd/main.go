@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"os"
 
-	"github.com/aripalo/goawsmfa/internal/credentialprocess"
-	"github.com/aripalo/goawsmfa/internal/profile"
-	"github.com/aripalo/goawsmfa/internal/utils"
+	"github.com/aripalo/aws-mfa-credential-process/internal/credentialprocess"
+	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
+	"github.com/aripalo/aws-mfa-credential-process/internal/utils"
 	"github.com/urfave/cli/v2"
 )
 

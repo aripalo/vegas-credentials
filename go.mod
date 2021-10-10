@@ -1,4 +1,4 @@
-module github.com/aripalo/goawsmfa
+module github.com/aripalo/aws-mfa-credential-process
 
 go 1.16
 

@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"errors"
 
-	"github.com/aripalo/goawsmfa/internal/cache"
-	"github.com/aripalo/goawsmfa/internal/profile"
-	"github.com/aripalo/goawsmfa/internal/utils"
+	"github.com/aripalo/aws-mfa-credential-process/internal/cache"
+	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
+	"github.com/aripalo/aws-mfa-credential-process/internal/utils"
 )
 
 func GetOutput(verboseOutput bool, profileName string, hideArns bool, config profile.Profile) (json.RawMessage, error) {

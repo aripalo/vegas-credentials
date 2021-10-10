@@ -11,8 +11,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/aripalo/goawsmfa/internal/profile"
-	"github.com/aripalo/goawsmfa/internal/utils"
+	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
+	"github.com/aripalo/aws-mfa-credential-process/internal/utils"
 )
 
 func Get(profileName string, config profile.Profile) ([]byte, error) {

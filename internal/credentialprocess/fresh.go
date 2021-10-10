@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/aripalo/goawsmfa/internal/mfa"
-	"github.com/aripalo/goawsmfa/internal/profile"
+	"github.com/aripalo/aws-mfa-credential-process/internal/mfa"
+	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/credentials/stscreds"

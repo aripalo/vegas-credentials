@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/aripalo/goawsmfa/internal/profile"
-	"github.com/aripalo/goawsmfa/internal/utils"
+	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
+	"github.com/aripalo/aws-mfa-credential-process/internal/utils"
 )
 
 // The default timeout of Yubikey operations
