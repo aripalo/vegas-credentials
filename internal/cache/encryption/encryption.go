@@ -24,8 +24,6 @@ func Encrypt(plaintext []byte) ([]byte, error) {
 		panic(err)
 	}
 
-	fmt.Println("IV length: ", len(iv))
-
 	blockCipher, err := createCipher()
 	if err != nil {
 		return nil, err
@@ -59,8 +57,6 @@ func getSecretKey() ([]byte, error) {
 	passphrase := "password" // TODO
 
 	encKey := strings.ReplaceAll(fmt.Sprintf("%-64x\n", passphrase), " ", "0")[:AES_256_KEYSIZE]
-
-	fmt.Println("SECRET KEY ", encKey)
 
 	return []byte(encKey), nil
 }

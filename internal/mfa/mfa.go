@@ -3,8 +3,9 @@ package mfa
 import (
 	"context"
 	"errors"
-	"fmt"
 	"time"
+
+	"github.com/aripalo/goawsmfa/internal/utils"
 )
 
 func GetTokenResult(yubikeySerial string, yubikeyLabel string) (Result, error) {
@@ -22,9 +23,9 @@ func GetTokenResult(yubikeySerial string, yubikeyLabel string) (Result, error) {
 	go getCliToken(ctx, resultChan, errorChan)
 
 	if hasYubikey {
-		fmt.Println("Touch Yubikey or enter TOPT MFA Token Code:")
+		utils.SafeLogger.Println("Touch Yubikey or enter TOPT MFA Token Code:")
 	} else {
-		fmt.Println("Enter TOPT MFA Token Code:")
+		utils.SafeLogger.Println("Enter TOPT MFA Token Code:")
 	}
 
 	select {

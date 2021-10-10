@@ -2,13 +2,12 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"os"
 
-	"github.com/aripalo/goawsmfa/internal/cache"
 	"github.com/aripalo/goawsmfa/internal/credentialprocess"
 	"github.com/aripalo/goawsmfa/internal/profile"
+	"github.com/aripalo/goawsmfa/internal/utils"
 	"github.com/urfave/cli/v2"
 )
 
@@ -39,20 +38,11 @@ func mainAction(c *cli.Context) error {
 
 	profileName := c.String("profile")
 	config, err := profile.GetProfile(profileName)
-	fmt.Println(config)
+	utils.SafeLogger.Println(config)
 
-	cached, cacheErr := cache.Get(profileName, config)
-	if cacheErr != nil {
-		fmt.Println("NOT found from cache")
-		output, err := credentialprocess.GetOutput(config)
-		err = cache.Save(profileName, config, output)
-		fmt.Println(string(output))
-		return err
-	} else {
-		// TODO verify expiration
-		fmt.Println("FOUND from cache")
-		fmt.Println(string(cached))
-	}
+	output, err := credentialprocess.GetOutput(profileName, config)
+
+	utils.OutputToAwsCredentialProcess(string(output))
 
 	return err
 }
