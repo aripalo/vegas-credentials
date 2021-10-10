@@ -2,7 +2,7 @@
 
 🚧 **Work-in-Progress: Do not use just yet! The API and configurations may change without any prior notice at any version. The status of this tool is that it's under development & testing. So do not use this for anything important, but feel free to test this out and give feedback!**
 
-A helper utility that plugs into standard [`credential_process`](https://docs.aws.amazon.com/sdkref/latest/guide/setting-global-credential_process.html) to assume AWS IAM Role with _– Yubikey Touch and Authenticator App –_ [TOPT MFA](https://en.wikipedia.org/wiki/Time-based_One-Time_Password) to provide session credentials – with automatic refreshing.
+Utility for [AWS `credential_process`](https://docs.aws.amazon.com/sdkref/latest/guide/setting-global-credential_process.html) to assume AWS IAM Roles with _Yubikey Touch and Authenticator App_ [TOPT MFA](https://en.wikipedia.org/wiki/Time-based_One-Time_Password) to provide temporary session credentials – with local caching to [Keyring](#keyring).
 
 If you're unfamiliar with `credential_process`, [this AWS re:Invent video](https://www.youtube.com/watch?v=W8IyScUGuGI&t=1260s) explains it very well.
 
@@ -19,7 +19,7 @@ If you're unfamiliar with `credential_process`, [this AWS re:Invent video](https
 
 - **Supports automatic temporary session credentials refreshing** for tools that understand session credential expiration
 
-- **Built-in encrypted caching of session credentials** to speed things up & to avoid having to input MFA token code for each operation
+- **Caching of session credentials into [Keyring](#keyring)** to speed things up & to avoid having to input MFA token code for each operation
 
 - **Works out-of-the-box with most AWS tools** such as AWS CDK, AWS SDKs and AWS CLI:
 
@@ -143,6 +143,19 @@ You can see all the possible configuration options in [AWS documentation](https:
 - `role_session_name`
 - `external_id`
 
+<br/>
+
+## Keyring
+
+In the background this tool uses [`99designs/keyring`](https://github.com/99designs/keyring) to integrate with:
+- macOS/OSX Keychain
+- Windows credential store
+- Pass
+- Secret Service
+- KDE Wallet
+- Encrypted File
+
+🚧 **TODO**: Document keyring usage
 
 <br/>
 
@@ -166,7 +179,7 @@ You can see all the possible configuration options in [AWS documentation](https:
 - Add video that showcases the features (with CDK)
 - Document TTY usage https://github.com/boto/botocore/issues/1348
 - Consider https://github.com/99designs/keyring
-
+- Comments to code
 
 
 Build

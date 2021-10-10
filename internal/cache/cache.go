@@ -3,29 +3,28 @@ package cache
 import (
 	"encoding/json"
 
-	"github.com/aripalo/aws-mfa-credential-process/internal/cache/encryption"
-	"github.com/aripalo/aws-mfa-credential-process/internal/cache/filecache"
+	"github.com/aripalo/aws-mfa-credential-process/internal/cachekey"
 	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
+	"github.com/aripalo/aws-mfa-credential-process/internal/securestorage"
 )
 
 func Get(profileName string, config profile.Profile) (json.RawMessage, error) {
-	cached, err := filecache.Get(profileName, config)
+	cacheKey, err := cachekey.Get(profileName, config)
 	if err != nil {
 		return nil, err
 	}
-	decrypted, err := encryption.Decrypt(cached)
-	return decrypted, err
+	cached, err := securestorage.Get(cacheKey)
+	return cached, err
 }
 
 func Save(profileName string, config profile.Profile, data json.RawMessage) error {
-	encrypted, err := encryption.Encrypt(data)
-	if err != nil {
-		return err
-	}
-	err = filecache.Save(profileName, config, encrypted)
+	cacheKey, err := cachekey.Get(profileName, config)
+	err = securestorage.Set(cacheKey, data)
 	return err
 }
 
 func Remove(profileName string, config profile.Profile) error {
-	return filecache.Remove(profileName, config)
+	cacheKey, err := cachekey.Get(profileName, config)
+	err = securestorage.Remove(cacheKey)
+	return err
 }
