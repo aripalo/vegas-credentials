@@ -23,8 +23,10 @@ func GetTokenResult(config profile.Profile, hideArns bool) (Result, error) {
 	defer cancel()
 
 	if hideArns == false {
-		utils.SafeLog(utils.TextBold(utils.TextGrayDark(fmt.Sprintf("👷 Role: %s", config.AssumeRoleArn))))
-		utils.SafeLog(utils.TextBold(utils.TextGrayDark(fmt.Sprintf("🔒 MFA: %s", config.MfaSerial))))
+
+		utils.SafeLog(utils.FormatMessage(utils.COLOR_DEBUG, "👷 ", "Role", config.AssumeRoleArn))
+		utils.SafeLog(utils.FormatMessage(utils.COLOR_DEBUG, "🔒 ", "MFA", config.MfaSerial))
+
 	}
 
 	hasYubikey := (config.YubikeySerial != "" && config.YubikeyLabel != "")
@@ -35,9 +37,9 @@ func GetTokenResult(config profile.Profile, hideArns bool) (Result, error) {
 	go getCliToken(ctx, resultChan, errorChan)
 
 	if hasYubikey {
-		utils.SafeLog(utils.TextBold(utils.TextYellow("🔑 Touch Yubikey or enter TOPT MFA Token Code:")))
+		utils.SafeLog(utils.FormatMessage(utils.COLOR_IMPORTANT, "🔑 ", "MFA", "Touch Yubikey or enter TOPT MFA Token Code..."))
 	} else {
-		utils.SafeLog(utils.TextBold(utils.TextYellow("🔑 Enter TOPT MFA Token Code:")))
+		utils.SafeLog(utils.FormatMessage(utils.COLOR_IMPORTANT, "🔑 ", "MFA", "Enter TOPT MFA Token Code..."))
 	}
 
 	w := wow.New(utils.GetSafeWriter(), spin.Get(spin.Dots3), "  ")
@@ -51,7 +53,8 @@ func GetTokenResult(config profile.Profile, hideArns bool) (Result, error) {
 			w.Stop()
 			return result, err
 		}
-		w.PersistWith(spin.Spinner{Frames: []string{"✅ "}}, utils.TextGreen(fmt.Sprintf("Token %s received via %s", printMaskedToken(result.Value), result.Provider)))
+
+		w.PersistWith(spin.Spinner{Frames: []string{"🔓 "}}, utils.FormatMessage(utils.COLOR_IMPORTANT, "", "MFA", fmt.Sprintf("Token Code %s received via %s", printMaskedToken(result.Value), result.Provider)))
 		return result, nil
 	case <-ctx.Done():
 		w.Stop()

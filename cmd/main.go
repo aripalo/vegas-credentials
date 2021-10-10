@@ -59,9 +59,14 @@ func mainAction(c *cli.Context) error {
 	hideArns := c.Bool("hide-arns")
 
 	if verboseOutput {
-		utils.SafeLog(utils.TextBold(utils.TextGray(border)))
-		utils.SafeLog(utils.TextBold(utils.TextMagenta("🚀  credential_process starting")))
-		utils.SafeLog(utils.TextBold(utils.TextGray(border)))
+		utils.SafeLog(utils.TextGrayDark(utils.CreateRuler("=")))
+		utils.SafeLog()
+		utils.SafeLog(utils.FormatMessage(utils.COLOR_TITLE, "", "credential_process", "AWS MFA Assume Credential Process"))
+		utils.SafeLog()
+		utils.SafeLog(utils.FormatMessage(utils.COLOR_DEBUG, "📝 ", "Author", "@aripalo"))
+		utils.SafeLog(utils.FormatMessage(utils.COLOR_DEBUG, "🖥  ", "Repository", "https://github.com/aripalo/aws-mfa-assume-credential-process"))
+		utils.SafeLog()
+		utils.SafeLog(utils.TextGrayDark(utils.CreateRuler("-")))
 	}
 
 	var err error
@@ -72,27 +77,13 @@ func mainAction(c *cli.Context) error {
 		return err
 	}
 
-	//utils.SafeLog(config)
-
 	output, err := credentialprocess.GetOutput(verboseOutput, profileName, hideArns, config)
 	if err != nil {
 		utils.SafeLog(err)
 		return err
 	}
 
-	if verboseOutput {
-
-		utils.SafeLog(utils.TextBold(utils.TextGray(thinBorder)))
-	}
-
 	utils.OutputToAwsCredentialProcess(string(output))
-
-	if verboseOutput {
-		utils.SafeLog()
-		utils.SafeLog(utils.TextBold(utils.TextGray(thinBorder)))
-		utils.SafeLog(utils.TextBold(utils.TextGreen("✅  credential_process success")))
-		utils.SafeLog(utils.TextBold(utils.TextGray(thinBorder)))
-	}
 
 	return err
 }

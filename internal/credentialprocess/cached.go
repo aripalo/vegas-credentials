@@ -3,21 +3,23 @@ package credentialprocess
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/aripalo/goawsmfa/internal/cache"
 	"github.com/aripalo/goawsmfa/internal/profile"
 	"github.com/aripalo/goawsmfa/internal/utils"
+	"github.com/dustin/go-humanize"
 )
 
 func getCachedTemporaryCredentials(verboseOutput bool, profileName string, config profile.Profile) (json.RawMessage, error) {
 	cached, cacheErr := cache.Get(profileName, config)
 	if cacheErr != nil {
-		if verboseOutput {
-			utils.SafeLog(utils.TextGray("ℹ️  [Session Credential] NOT found from cache"))
-		}
+
+		msg := utils.FormatMessage(utils.COLOR_DEBUG, "ℹ️  ", "Session Credentials", "NOT found from cache")
+		utils.SafeLog(msg)
+
 		cache.Remove(profileName, config)
-		//utils.SafeLog("Cached does not contain valid Temporary Credentials")
 		return nil, cacheErr
 	}
 
@@ -28,33 +30,37 @@ func getCachedTemporaryCredentials(verboseOutput bool, profileName string, confi
 
 	expirationErr := ensureNotExpired(parsed)
 	if expirationErr != nil {
-		if verboseOutput {
-			utils.SafeLog(utils.TextGray("ℹ️  [Session Credential] Found from cache, but expired, ignoring..."))
-		}
+
+		msg := utils.FormatMessage(utils.COLOR_DEBUG, "ℹ️  ", "Session Credentials", fmt.Sprintf("Found from cache, but expired at %s", humanize.Time(parsed.Expiration)))
+		utils.SafeLog(msg)
+
 		cache.Remove(profileName, config)
 		return nil, expirationErr
 	}
 
 	advisoryRefreshErr := ensureAdvisoryRefreshNotNeeded(parsed)
 	if advisoryRefreshErr != nil {
-		if verboseOutput {
-			utils.SafeLog(utils.TextGray("ℹ️  [Session Credential] Found from cache, but advisory refresh required, ignoring..."))
-		}
+
+		msg := utils.FormatMessage(utils.COLOR_DEBUG, "ℹ️  ", "Session Credentials", fmt.Sprintf("Found from cache, but expiring in %s so advisory refresh required", humanize.Time(parsed.Expiration)))
+		utils.SafeLog(msg)
+
 		cache.Remove(profileName, config)
 		return nil, advisoryRefreshErr
 	}
 
 	validationErr := validate(parsed)
 	if validationErr != nil {
-		if verboseOutput {
-			utils.SafeLog(utils.TextGray("ℹ️  [Session Credential] Found from cache, but invalid, ignoring..."))
-		}
+		msg := utils.FormatMessage(utils.COLOR_DEBUG, "ℹ️  ", "Session Credentials", "Found from cache, but invalid")
+		utils.SafeLog(msg)
+
 		cache.Remove(profileName, config)
 		return nil, validationErr
 	}
 
 	if verboseOutput {
-		utils.SafeLog(utils.TextGreen("✅  [Session Credential] FOUND from cache!"))
+		utils.SafeLog(utils.FormatMessage(utils.COLOR_SUCCESS, "✅ ", "Session Credentials", "FOUND from cache"))
+		utils.SafeLog(utils.FormatMessage(utils.COLOR_DEBUG, "ℹ️  ", "Session Credentials", utils.FormatExpirationMessage(parsed.Expiration)))
+		utils.SafeLog(utils.TextGrayDark(utils.CreateRuler("=")))
 	}
 
 	return cached, nil
