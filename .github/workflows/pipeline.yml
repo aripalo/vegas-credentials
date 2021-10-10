@@ -4,8 +4,8 @@ on: push
 
 jobs:
 
-  build:
-    name: Build
+  pipeline:
+    name: Pipeline
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
