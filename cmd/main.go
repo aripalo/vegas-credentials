@@ -1,11 +1,12 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
 
-	"github.com/aripalo/goawsmfa/internal/mfa"
+	"github.com/aripalo/goawsmfa/internal/credentialprocess"
 	"github.com/aripalo/goawsmfa/internal/profile"
 	"github.com/urfave/cli/v2"
 )
@@ -35,10 +36,17 @@ func mainAction(c *cli.Context) error {
 
 	var err error
 
-	config, err := profile.GetProfile(c.String("profile"))
+	profileName := c.String("profile")
+	config, err := profile.GetProfile(profileName)
 	fmt.Println(config)
-	result, err := mfa.GetTokenResult(config.YubikeySerial, config.YubikeyLabel)
-	fmt.Println(fmt.Sprintf("Received Token %s via %s", result.Value, result.Provider))
+
+	output, err := credentialprocess.GetOutput(config)
+	fmt.Println(string(output))
 
 	return err
+}
+
+func toPrettyJson(data interface{}) (string, error) {
+	pretty, err := json.MarshalIndent(data, "", "    ")
+	return string(pretty), err
 }
