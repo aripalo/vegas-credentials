@@ -38,7 +38,7 @@ func mainAction(c *cli.Context) error {
 
 	profileName := c.String("profile")
 	config, err := profile.GetProfile(profileName)
-	utils.SafeLogger.Println(config)
+	//utils.SafeLog(config)
 
 	output, err := credentialprocess.GetOutput(profileName, config)
 

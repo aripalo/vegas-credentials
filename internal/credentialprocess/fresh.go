@@ -40,6 +40,9 @@ func getFreshTemporaryCredentials(config profile.Profile) (json.RawMessage, erro
 	})
 
 	credentials, err := creds.Get()
+	if err != nil {
+		return nil, err
+	}
 
 	expiration, err := creds.ExpiresAt()
 

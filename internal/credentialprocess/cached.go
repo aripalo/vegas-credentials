@@ -13,20 +13,20 @@ import (
 func getCachedTemporaryCredentials(profileName string, config profile.Profile) (json.RawMessage, error) {
 	cached, cacheErr := cache.Get(profileName, config)
 	if cacheErr != nil {
-		utils.SafeLogger.Println("NOT found from cache")
+		utils.SafeLog("NOT found from cache")
 		cache.Remove(profileName, config)
-		//utils.SafeLogger.Println("Cached does not contain valid Temporary Credentials")
+		//utils.SafeLog("Cached does not contain valid Temporary Credentials")
 		return nil, cacheErr
 	}
 
 	expirationErr := ensureNotExpired(cached)
 	if expirationErr != nil {
-		utils.SafeLogger.Println("Found from cache, but expired, ignoring...")
+		utils.SafeLog("Found from cache, but expired, ignoring...")
 		cache.Remove(profileName, config)
 		return nil, expirationErr
 	}
 
-	utils.SafeLogger.Println("FOUND from cache")
+	utils.SafeLog("FOUND from cache")
 
 	return cached, nil
 }

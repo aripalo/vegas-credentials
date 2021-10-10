@@ -23,9 +23,9 @@ func GetTokenResult(yubikeySerial string, yubikeyLabel string) (Result, error) {
 	go getCliToken(ctx, resultChan, errorChan)
 
 	if hasYubikey {
-		utils.SafeLogger.Println("Touch Yubikey or enter TOPT MFA Token Code:")
+		utils.SafeLog("Touch Yubikey or enter TOPT MFA Token Code:")
 	} else {
-		utils.SafeLogger.Println("Enter TOPT MFA Token Code:")
+		utils.SafeLog("Enter TOPT MFA Token Code:")
 	}
 
 	select {
