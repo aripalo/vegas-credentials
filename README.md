@@ -77,14 +77,17 @@ This `aws-mfa-credential-process` is _yet another tool_, but it plugs into the s
 
     1. via [Homebrew](https://brew.sh/):
         ```shell
-        brew install aripalo/aws-mfa-credential-process/todo
+        brew tap aripalo/tap
+        brew install aws-mfa-credential-process
         ```
 
-    2. or download via Github releases:
-        ```shell
-        curl -O TODO
-        ```
-        ... add to path etc etc
+    2. or manual download via Github releases:
+        1. Go to https://github.com/aripalo/aws-mfa-credential-process/releases
+        2. Download the latest binary for your platform & operating system
+        3. Save the binary to your preferred location
+        4. In some directory that is in your `$PATH`, create a symlink of `aws-mfa-credential-process` pointing into the downloaded binary
+
+    3. more installation methods to be implemented later (maybe pypi?)
 
 3. Configure you source profile and its credentials, most often it's the `default` one which you configure into `~/.aws/credentials`:
 
@@ -162,9 +165,7 @@ In the background this tool uses [`99designs/keyring`](https://github.com/99desi
 ## TODO
 
 
-- Configuration file
-- Cache Password!!! (ENVIRONMENT or Yubikey slot)
-
+- Configuration file???
 - Ensure Role Chaining Works!
 - Test manually CDK, CLI, NodeJS SDK v3, Boto3, Go ... for refresh/cache support!
 - Add Unit tests
