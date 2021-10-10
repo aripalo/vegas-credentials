@@ -3,6 +3,7 @@ package profile
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"gopkg.in/ini.v1"
 )
@@ -12,7 +13,7 @@ func GetProfile(profileName string) (Profile, error) {
 	var err error
 
 	homedir, err := os.UserHomeDir()
-	configPath := fmt.Sprintf("%s/.aws/config", homedir)
+	configPath := filepath.Join(homedir, ".aws/config")
 
 	cfg, err := ini.Load(configPath)
 
