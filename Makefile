@@ -5,7 +5,7 @@
 BIN_FOLDER="bin"
 
 build: clean ## Build binaries
-	@(go build -o bin cmd/main.go)
+	@(go build -o bin/main cmd/main.go)
 
 all: test build ## Build and run tests
 
