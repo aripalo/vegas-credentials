@@ -16,3 +16,6 @@
 
 # Distributed binaries
 bin
+
+# macOS metadata files
+.DS_Store
