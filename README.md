@@ -164,7 +164,7 @@ You can see all the possible configuration options in [AWS documentation](https:
 - Contribution guidelines
 - Add video that showcases the features (with CDK)
 - Document TTY usage https://github.com/boto/botocore/issues/1348
-
+- Consider https://github.com/99designs/keyring
 
 
 
