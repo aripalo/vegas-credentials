@@ -65,7 +65,7 @@ This `aws-mfa-credential-process` is _yet another tool_, but it plugs into the s
 
 - May work with Windows, but not tested (at least yet)
 
-- May not output debug/info messages on some systems if `/dev/tty` not available
+- May not output debug/info messages on some systems if `/dev/tty` not available due to [`botocore` not connecting to subprocess `stderr` on `credential_process `](https://github.com/boto/botocore/issues/1348)
 
 <br/>
 
@@ -146,6 +146,16 @@ You can see all the possible configuration options in [AWS documentation](https:
 - `role_session_name`
 - `external_id`
 
+
+### CLI configuratiopn
+
+TODO
+
+--profile
+--hide-arns
+--verbose
+
+
 <br/>
 
 ## Keyring
@@ -178,38 +188,8 @@ In the background this tool uses [`99designs/keyring`](https://github.com/99desi
 - Development docs (maybe separate site?)
 - Contribution guidelines
 - Add video that showcases the features (with CDK)
-- Document TTY usage https://github.com/boto/botocore/issues/1348
-- Consider https://github.com/99designs/keyring
 - Comments to code
 - TODO log file
-
-
-Build
-```shell
-go build -o bin cmd/main.go
-```
-
---hide-arns
-
---verbose
-
-
-
-
-
-
-
-
-
-https://github.com/boto/botocore/issues/1348
-https://github.com/boto/botocore/pull/2091
-https://github.com/boto/botocore/pull/1835
-
-
-
-
-
-
-Multiple calls:
-- https://github.com/aws/aws-cli/issues/5048#issuecomment-597868383
-- https://github.com/boto/botocore/blob/221ffa67a567df99ee78d7ae308c0e12d7eeeea7/botocore/credentials.py#L350-L355
+- Document credential refresh & botocore multiple calls:
+    - https://github.com/aws/aws-cli/issues/5048#issuecomment-597868383
+    - https://github.com/boto/botocore/blob/221ffa67a567df99ee78d7ae308c0e12d7eeeea7/botocore/credentials.py#L350-L355
