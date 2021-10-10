@@ -156,6 +156,7 @@ You can see all the possible configuration options in [AWS documentation](https:
 - Test manually CDK, CLI, NodeJS SDK v3, Boto3, Go ... for refresh/cache support!
 - Add Unit tests
 - Add disclaimer for orgs using this tool ("software provided as is")
+- Add links to alternatives
 - Add PR templates (bug, feature request...)
 - Document how to setup Yubikey for TOPT MFA (and additionally add to Authenticator App)
 - Document MFA QR security/backup (for example print)
