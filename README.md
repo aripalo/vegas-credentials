@@ -80,7 +80,7 @@ This `aws-mfa-assume-credential-process` is _yet another tool_, but it plugs int
         brew install aripalo/aws-mfa-assume-credential-process/todo
         ```
 
-    2. download via Github releases:
+    2. or download via Github releases:
         ```shell
         curl -O TODO
         ```
@@ -153,6 +153,7 @@ You can see all the possible configuration options in [AWS documentation](https:
 - Cache Password!!! (ENVIRONMENT or Yubikey slot)
 - Ensure Role Chaining Works!
 - Test manually CDK, CLI, NodeJS SDK v3, Boto3, Go ... for refresh/cache support!
+- Add Unit tests
 - Add disclaimer for orgs using this tool ("software provided as is")
 - Add PR templates (bug, feature request...)
 - Document how to setup Yubikey for TOPT MFA (and additionally add to Authenticator App)
