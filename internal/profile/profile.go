@@ -19,7 +19,9 @@ func GetProfile(profileName string) (Profile, error) {
 
 	sectionName := fmt.Sprintf("profile %s", profileName)
 
-	profile := new(Profile)
+	profile := &Profile{
+		DurationSeconds: 3600, // default to 1 hour as AWS does
+	}
 
 	err = cfg.Section(sectionName).MapTo(profile)
 
