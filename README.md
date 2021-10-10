@@ -1,10 +1,12 @@
 # `aws-mfa-credential-process`
 
-🚧 **Work-in-Progress: Do not use just yet! The API and configurations may change without any prior notice at any version. The status of this tool is that it's under development & testing. So do not use this for anything important, but feel free to test this out and give feedback!**
+| 🚧 🚧 🚧 <br/> **Work-in-Progress** |
+| :---------------------: |
+| _**Do not use just yet!** The API and configurations may change without any prior notice at any given version. This tool is currently under development & testing. So do not use this for anything important, but feel free to test this out and give feedback!_ |
 
----
 
-<br/>
+
+<br/><br/>
 
 Utility for [AWS `credential_process`](https://docs.aws.amazon.com/sdkref/latest/guide/setting-global-credential_process.html) to assume AWS IAM Roles with _Yubikey Touch and Authenticator App_ [TOPT MFA](https://en.wikipedia.org/wiki/Time-based_One-Time_Password) to provide temporary session credentials – with local caching to [Keyring](#keyring).
 
