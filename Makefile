@@ -2,7 +2,6 @@
 # http://www.codershaven.com/multi-platform-makefile-for-go/
 .PHONY: all test clean
 
-EXECUTABLE=aws-mfa-assume-credential-process
 BIN_FOLDER="bin"
 
 build: clean ## Build binaries
