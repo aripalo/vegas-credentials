@@ -14,12 +14,16 @@ func OutputToAwsCredentialProcess(output string) {
 	fmt.Fprintf(os.Stdout, output)
 }
 
-// SafeLog logs directly to tty (with stderr fallback), since aws credential_process reads stdout
-func SafeLog(a ...interface{}) {
-
+// SafeLogLn logs with newline directly to tty (with stderr fallback), since aws credential_process reads stdout
+func SafeLogLn(a ...interface{}) {
 	out := GetSafeWriter()
-
 	fmt.Fprintln(out, a...)
+}
+
+// SafeLog logs without newline directly to tty (with stderr fallback), since aws credential_process reads stdout
+func SafeLog(a ...interface{}) {
+	out := GetSafeWriter()
+	fmt.Fprint(out, a...)
 }
 
 func GetSafeWriter() io.Writer {

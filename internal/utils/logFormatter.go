@@ -13,14 +13,19 @@ func FormatMessage(messageColor color.Color, emoji string, prefix string, messag
 }
 
 const (
-	COLOR_DEBUG     = color.FgDarkGray
-	COLOR_INFO      = color.FgGray
-	COLOR_IMPORTANT = color.FgYellow
-	COLOR_ERROR     = color.FgRed
-	COLOR_SUCCESS   = color.FgGreen
-	COLOR_TITLE     = color.FgLightMagenta
+	COLOR_DEBUG          = color.FgDarkGray
+	COLOR_INFO           = color.FgGray
+	COLOR_IMPORTANT      = color.FgYellow
+	COLOR_ERROR          = color.FgRed
+	COLOR_SUCCESS        = color.FgGreen
+	COLOR_TITLE          = color.FgLightMagenta
+	COLOR_INPUT_EXPECTED = color.FgCyan
 )
 
-func FormatExpirationMessage(expiration time.Time) string {
-	return fmt.Sprintf("Valid for ~%s (until %s)", humanize.Time(expiration), expiration.Local().Format("2006-01-02 15:04:05 MST"))
+func FormatExpirationInMessage(expiration time.Time) string {
+	return fmt.Sprintf("Valid for ~%s", humanize.Time(expiration))
+}
+
+func FormatExpirationAtMessage(expiration time.Time) string {
+	return fmt.Sprintf("Valid until %s", expiration.Local().Format("2006-01-02 15:04:05 MST"))
 }

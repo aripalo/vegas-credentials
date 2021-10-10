@@ -27,17 +27,18 @@ func GetOutput(verboseOutput bool, profileName string, hideArns bool, config pro
 			return nil, errors.New("Fresh data could not be converted to valid credential_process response")
 		}
 
-		utils.SafeLog(utils.FormatMessage(utils.COLOR_SUCCESS, "✅ ", "Session Credentials", "Received from STS"))
-		utils.SafeLog(utils.FormatMessage(utils.COLOR_DEBUG, "ℹ️  ", "Session Credentials", utils.FormatExpirationMessage(parsed.Expiration)))
+		utils.SafeLogLn(utils.FormatMessage(utils.COLOR_SUCCESS, "✅ ", "Session Credentials", "Received from STS"))
+		utils.SafeLogLn(utils.FormatMessage(utils.COLOR_DEBUG, "ℹ️  ", "Session Credentials", utils.FormatExpirationInMessage(parsed.Expiration)))
+		utils.SafeLogLn(utils.FormatMessage(utils.COLOR_DEBUG, "ℹ️  ", "Session Credentials", utils.FormatExpirationAtMessage(parsed.Expiration)))
 
 		validationErr := validate(parsed)
 		if validationErr != nil {
 			return nil, validationErr
 		}
 		err = cache.Save(profileName, config, fresh)
-		utils.SafeLog(utils.FormatMessage(utils.COLOR_DEBUG, "ℹ️  ", "Session Credentials", "Saved to cache"))
+		utils.SafeLogLn(utils.FormatMessage(utils.COLOR_DEBUG, "ℹ️  ", "Session Credentials", "Saved to cache"))
 
-		utils.SafeLog(utils.TextGrayDark(utils.CreateRuler("=")))
+		utils.SafeLogLn(utils.TextGrayDark(utils.CreateRuler("=")))
 
 		return fresh, nil
 	}

@@ -21,7 +21,6 @@ func getCliToken(ctx context.Context, out chan *Result, errors chan *error) {
 
 	text = strings.TrimSpace(text)
 
-	result.Value = text
-
+	result.Value = strings.TrimSpace(text)
 	out <- &result
 }

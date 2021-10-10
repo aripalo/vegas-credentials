@@ -41,12 +41,7 @@ func main() {
 
 	err := app.Run(os.Args)
 	if err != nil {
-		//log.Fatal(err)
-		utils.SafeLog(utils.TextRed(err))
-		utils.SafeLog()
-		utils.SafeLog(utils.TextBold(utils.TextGray(border)))
-		utils.SafeLog(utils.TextBold(utils.TextRed("❌  credential_process failed")))
-		utils.SafeLog(utils.TextBold(utils.TextGray(border)))
+		utils.PrintError(err)
 		os.Exit(1)
 	}
 
@@ -59,27 +54,20 @@ func mainAction(c *cli.Context) error {
 	hideArns := c.Bool("hide-arns")
 
 	if verboseOutput {
-		utils.SafeLog(utils.TextGrayDark(utils.CreateRuler("=")))
-		utils.SafeLog()
-		utils.SafeLog(utils.FormatMessage(utils.COLOR_TITLE, "", "credential_process", "AWS MFA Assume Credential Process"))
-		utils.SafeLog()
-		utils.SafeLog(utils.FormatMessage(utils.COLOR_DEBUG, "📝 ", "Author", "@aripalo"))
-		utils.SafeLog(utils.FormatMessage(utils.COLOR_DEBUG, "🖥  ", "Repository", "https://github.com/aripalo/aws-mfa-assume-credential-process"))
-		utils.SafeLog()
-		utils.SafeLog(utils.TextGrayDark(utils.CreateRuler("-")))
+		utils.PrintBanner()
 	}
 
 	var err error
 
 	config, err := profile.GetProfile(profileName)
 	if err != nil {
-		utils.SafeLog(err)
+		//utils.SafeLog(err)
 		return err
 	}
 
 	output, err := credentialprocess.GetOutput(verboseOutput, profileName, hideArns, config)
 	if err != nil {
-		utils.SafeLog(err)
+		//utils.SafeLog(err)
 		return err
 	}
 

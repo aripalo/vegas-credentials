@@ -17,7 +17,7 @@ func getCachedTemporaryCredentials(verboseOutput bool, profileName string, confi
 	if cacheErr != nil {
 
 		msg := utils.FormatMessage(utils.COLOR_DEBUG, "ℹ️  ", "Session Credentials", "NOT found from cache")
-		utils.SafeLog(msg)
+		utils.SafeLogLn(msg)
 
 		cache.Remove(profileName, config)
 		return nil, cacheErr
@@ -32,7 +32,7 @@ func getCachedTemporaryCredentials(verboseOutput bool, profileName string, confi
 	if expirationErr != nil {
 
 		msg := utils.FormatMessage(utils.COLOR_DEBUG, "ℹ️  ", "Session Credentials", fmt.Sprintf("Found from cache, but expired at %s", humanize.Time(parsed.Expiration)))
-		utils.SafeLog(msg)
+		utils.SafeLogLn(msg)
 
 		cache.Remove(profileName, config)
 		return nil, expirationErr
@@ -42,7 +42,7 @@ func getCachedTemporaryCredentials(verboseOutput bool, profileName string, confi
 	if advisoryRefreshErr != nil {
 
 		msg := utils.FormatMessage(utils.COLOR_DEBUG, "ℹ️  ", "Session Credentials", fmt.Sprintf("Found from cache, but expiring in %s so advisory refresh required", humanize.Time(parsed.Expiration)))
-		utils.SafeLog(msg)
+		utils.SafeLogLn(msg)
 
 		cache.Remove(profileName, config)
 		return nil, advisoryRefreshErr
@@ -51,16 +51,17 @@ func getCachedTemporaryCredentials(verboseOutput bool, profileName string, confi
 	validationErr := validate(parsed)
 	if validationErr != nil {
 		msg := utils.FormatMessage(utils.COLOR_DEBUG, "ℹ️  ", "Session Credentials", "Found from cache, but invalid")
-		utils.SafeLog(msg)
+		utils.SafeLogLn(msg)
 
 		cache.Remove(profileName, config)
 		return nil, validationErr
 	}
 
 	if verboseOutput {
-		utils.SafeLog(utils.FormatMessage(utils.COLOR_SUCCESS, "✅ ", "Session Credentials", "FOUND from cache"))
-		utils.SafeLog(utils.FormatMessage(utils.COLOR_DEBUG, "ℹ️  ", "Session Credentials", utils.FormatExpirationMessage(parsed.Expiration)))
-		utils.SafeLog(utils.TextGrayDark(utils.CreateRuler("=")))
+		utils.SafeLogLn(utils.FormatMessage(utils.COLOR_SUCCESS, "✅ ", "Session Credentials", "FOUND from cache"))
+		utils.SafeLogLn(utils.FormatMessage(utils.COLOR_DEBUG, "ℹ️  ", "Session Credentials", utils.FormatExpirationInMessage(parsed.Expiration)))
+		utils.SafeLogLn(utils.FormatMessage(utils.COLOR_DEBUG, "ℹ️  ", "Session Credentials", utils.FormatExpirationAtMessage(parsed.Expiration)))
+		utils.SafeLogLn(utils.TextGrayDark(utils.CreateRuler("=")))
 	}
 
 	return cached, nil

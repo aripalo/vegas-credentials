@@ -29,7 +29,7 @@ func Save(profileName string, config profile.Profile, data []byte) error {
 	filepath, err := getCachePath(profileName, config)
 	err = os.WriteFile(filepath, compressed, os.ModePerm)
 	if err != nil {
-		utils.SafeLog("FILE ERR: ", err)
+		utils.SafeLogLn("FILE ERR: ", err)
 	}
 	return err
 }

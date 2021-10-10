@@ -8,8 +8,6 @@ import (
 
 	"github.com/aripalo/goawsmfa/internal/profile"
 	"github.com/aripalo/goawsmfa/internal/utils"
-	"github.com/gernest/wow"
-	"github.com/gernest/wow/spin"
 )
 
 // The default timeout of Yubikey operations
@@ -24,8 +22,8 @@ func GetTokenResult(config profile.Profile, hideArns bool) (Result, error) {
 
 	if hideArns == false {
 
-		utils.SafeLog(utils.FormatMessage(utils.COLOR_DEBUG, "👷 ", "Role", config.AssumeRoleArn))
-		utils.SafeLog(utils.FormatMessage(utils.COLOR_DEBUG, "🔒 ", "MFA", config.MfaSerial))
+		utils.SafeLogLn(utils.FormatMessage(utils.COLOR_DEBUG, "👷 ", "Role", config.AssumeRoleArn))
+		utils.SafeLogLn(utils.FormatMessage(utils.COLOR_DEBUG, "🔒 ", "MFA", config.MfaSerial))
 
 	}
 
@@ -37,41 +35,37 @@ func GetTokenResult(config profile.Profile, hideArns bool) (Result, error) {
 	go getCliToken(ctx, resultChan, errorChan)
 
 	if hasYubikey {
-		utils.SafeLog(utils.FormatMessage(utils.COLOR_IMPORTANT, "🔑 ", "MFA", "Touch Yubikey or enter TOPT MFA Token Code..."))
+		utils.SafeLogLn(utils.FormatMessage(utils.COLOR_IMPORTANT, "🔑 ", "MFA", "Touch Yubikey or enter TOPT MFA Token Code..."))
 	} else {
-		utils.SafeLog(utils.FormatMessage(utils.COLOR_IMPORTANT, "🔑 ", "MFA", "Enter TOPT MFA Token Code..."))
+		utils.SafeLogLn(utils.FormatMessage(utils.COLOR_IMPORTANT, "🔑 ", "MFA", "Enter TOPT MFA Token Code..."))
 	}
 
-	w := wow.New(utils.GetSafeWriter(), spin.Get(spin.Dots3), "  ")
-	w.Start()
+	utils.SafeLog(utils.FormatMessage(utils.COLOR_INPUT_EXPECTED, "🔑 ", "MFA", "> "))
 
 	select {
 	case i := <-resultChan:
 		result := *i
+
 		err := validateToken(result.Value)
 		if err != nil {
-			w.Stop()
+			utils.SafeLogLn()
+			utils.SafeLogLn(utils.FormatMessage(utils.COLOR_ERROR, "❌ ", "MFA", fmt.Sprintf("Invalid Token Code \"%s\" received via %s", result.Value, result.Provider)))
 			return result, err
 		}
 
-		w.PersistWith(spin.Spinner{Frames: []string{"🔓 "}}, utils.FormatMessage(utils.COLOR_IMPORTANT, "", "MFA", fmt.Sprintf("Token Code %s received via %s", printMaskedToken(result.Value), result.Provider)))
+		if result.Provider == TOKEN_PROVIDER_YUBIKEY {
+			utils.SafeLogLn(result.Value)
+		}
+		utils.SafeLogLn(utils.FormatMessage(utils.COLOR_IMPORTANT, "🔓 ", "MFA", fmt.Sprintf("Token Code \"%s\" received via %s", result.Value, result.Provider)))
 		return result, nil
 	case <-ctx.Done():
-		w.Stop()
+		utils.SafeLogLn()
 		if ctx.Err() == context.DeadlineExceeded {
+			utils.SafeLogLn(utils.FormatMessage(utils.COLOR_ERROR, "❌ ", "MFA", "Operation Timeout"))
 			return Result{}, errors.New("MFA Operation Timeout")
 		}
+
+		utils.SafeLogLn(utils.FormatMessage(utils.COLOR_ERROR, "❌ ", "MFA", ctx.Err().Error()))
 		return Result{}, ctx.Err()
 	}
-}
-
-func printMaskedToken(token string) string {
-	tokenLength := len(token)
-	masked := ""
-
-	for i := 0; i < tokenLength-2; i++ {
-		masked += "*"
-	}
-
-	return fmt.Sprintf("%s%s%s", token[:1], masked, token[tokenLength-1:])
 }
