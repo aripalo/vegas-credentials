@@ -16,11 +16,11 @@ clean: ## Remove previous build
 	@(go clean)
 	@(rm -rf $(BIN_FOLDER))
 
-help: ## Display available commands
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
-
 bump: ## Do a version bump
 	@(npx standard-version --skip.changelog)
 
 bump-check: ## Check which would be the next version
 	@(npx standard-version --skip.changelog --dry-run)
+
+help: ## Display available commands
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
