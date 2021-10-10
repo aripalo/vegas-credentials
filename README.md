@@ -181,6 +181,7 @@ In the background this tool uses [`99designs/keyring`](https://github.com/99desi
 - Document TTY usage https://github.com/boto/botocore/issues/1348
 - Consider https://github.com/99designs/keyring
 - Comments to code
+- TODO log file
 
 
 Build
@@ -205,7 +206,6 @@ https://github.com/boto/botocore/pull/2091
 https://github.com/boto/botocore/pull/1835
 
 
-TODO log file
 
 
 
