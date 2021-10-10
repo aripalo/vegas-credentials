@@ -73,9 +73,18 @@ This `aws-mfa-assume-credential-process` is _yet another tool_, but it plugs int
 
 1. [Install `ykman`](https://developers.yubico.com/yubikey-manager/) (if you choose to use Yubikeys)
 
-2. Install:
+2. **TODO** Install:
 
-    **TODO**
+    1. via [Homebrew](https://brew.sh/):
+        ```shell
+        brew install aripalo/aws-mfa-assume-credential-process/todo
+        ```
+
+    2. download via Github releases:
+        ```shell
+        curl -O TODO
+        ```
+        ... add to path etc etc
 
 3. Configure you source profile and its credentials, most often it's the `default` one which you configure into `~/.aws/credentials`:
 
@@ -140,7 +149,8 @@ You can see all the possible configuration options in [AWS documentation](https:
 ## TODO
 
 
-
+- Configuration file
+- Cache Password!!! (ENVIRONMENT or Yubikey slot)
 - Ensure Role Chaining Works!
 - Test manually CDK, CLI, NodeJS SDK v3, Boto3, Go ... for refresh/cache support!
 - Add disclaimer for orgs using this tool ("software provided as is")
@@ -152,7 +162,6 @@ You can see all the possible configuration options in [AWS documentation](https:
 - Contribution guidelines
 - Add video that showcases the features (with CDK)
 - Document TTY usage https://github.com/boto/botocore/issues/1348
-
 
 
 
