@@ -6,7 +6,7 @@ EXECUTABLE=aws-mfa-assume-credential-process
 BIN_FOLDER="bin"
 
 build: clean ## Build binaries
-	@(cd cmd && gox -output="../$(BIN_FOLDER)/$(EXECUTABLE)_{{.OS}}_{{.Arch}}" -osarch="darwin/amd64 darwin/arm64 linux/amd64 linux/arm64 windows/amd64")
+	@(go build -o bin cmd/main.go)
 
 all: test build ## Build and run tests
 
