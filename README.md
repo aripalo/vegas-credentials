@@ -21,7 +21,7 @@ If you're unfamiliar with `credential_process`, [this AWS re:Invent video](https
 
 ## Features
 
-- **Fast & Cross-Platform**: Built with [Go](https://golang.org) and supports `amd64`&`arm64` for macOS, Linux and Windows
+- **Fast & Cross-Platform**: Built with [Go](https://golang.org) and supports `amd64` & `arm64` for macOS, Linux and Windows
 
 - **Supports automatic temporary session credentials refreshing** for tools that understand session credential expiration
 
