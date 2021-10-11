@@ -206,5 +206,3 @@ In the background this tool uses [`99designs/keyring`](https://github.com/99desi
     - https://github.com/aws/aws-cli/issues/5048#issuecomment-597868383
     - https://github.com/boto/botocore/blob/221ffa67a567df99ee78d7ae308c0e12d7eeeea7/botocore/credentials.py#L350-L355
 - https://linuxtut.com/en/9fe52804610a8c4b7e41/
-- Add lisense
-- Fix CLI input not somehow attached to cred process? CDK+VSCode
