@@ -193,17 +193,27 @@ In the background this tool uses [`99designs/keyring`](https://github.com/99desi
 - Test manually CDK, CLI, NodeJS SDK v3, Boto3, Go ... for refresh/cache support!
 - Add Unit tests
 - Add disclaimer for orgs using this tool ("software provided as is")
-- Add links to alternatives
 - Add PR templates (bug, feature request...)
-- Document how to setup Yubikey for TOPT MFA (and additionally add to Authenticator App)
-- Document MFA QR security/backup (for example print)
 - Blog post
 - Development docs (maybe separate site?)
 - Contribution guidelines
 - Add video that showcases the features (with CDK)
 - Comments to code
 - TODO log file
-- Document credential refresh & botocore multiple calls:
-    - https://github.com/aws/aws-cli/issues/5048#issuecomment-597868383
-    - https://github.com/boto/botocore/blob/221ffa67a567df99ee78d7ae308c0e12d7eeeea7/botocore/credentials.py#L350-L355
-- https://linuxtut.com/en/9fe52804610a8c4b7e41/
+- Documentation pages (docusaurus to Github Pages)
+    - Custom domain?
+    - Most of the stuff from README
+    - Examples
+    - Video
+    - Logging/Debugging
+    - Session Credential Refresh
+    - Role Chaining
+    - Getting Started
+    - Configuration
+    - Keyring
+    - Recommended Yubikeys
+    - How to setup Yubikey for TOPT MFA (and additionally add to Authenticator App)
+    - MFA QR security/backup (for example print)
+    - Alternatives 
+    - Comparison to other solutions
+    - Development Docs???
