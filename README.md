@@ -8,7 +8,7 @@
 
 <br/><br/>
 
-Utility for [AWS `credential_process`](https://docs.aws.amazon.com/sdkref/latest/guide/setting-global-credential_process.html) to assume AWS IAM Roles with _Yubikey Touch and Authenticator App_ [TOPT MFA](https://en.wikipedia.org/wiki/Time-based_One-Time_Password) to provide temporary session credentials – with local caching to [Keyring](#keyring).
+Utility for [AWS `credential_process`](https://docs.aws.amazon.com/sdkref/latest/guide/setting-global-credential_process.html) to assume AWS IAM Roles with _[Yubikey Touch](https://www.yubico.com/products/yubikey-5-overview/) and Authenticator App_ [TOPT MFA](https://en.wikipedia.org/wiki/Time-based_One-Time_Password) to provide temporary session credentials – with local caching to [Keyring](#keyring).
 
 If you're unfamiliar with `credential_process`, [this AWS re:Invent video](https://www.youtube.com/watch?v=W8IyScUGuGI&t=1260s) explains it very well.
 
@@ -114,7 +114,7 @@ This `aws-mfa-credential-process` is _yet another tool_, but it plugs into the s
     credential_process = aws-mfa-credential-process --profile=my-profile
     yubikey_serial=<yubikey-serial>        # which Yubikey Device you're using
     yubikey_label=<yubikey-label>          # which Yubikey Slot you're using
-    assume_role_arn=<target-role-arn>      # IMPORTANT: Note "assume_" prefix (vs. the default "role_arn")
+    assume_role_arn=<target-role-arn>      # IMPORTANT: Note[ "assume_" pr](https://www.yubico.com/products/yubikey-5-overview/)efix (vs. the default "role_arn")
     source_profile=<source-profile-name>   # often "default"
     mfa_serial=<mfa-device-arn>            # your AWS MFA Device ARN serial
     # ... other AWS standard options
