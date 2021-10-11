@@ -111,12 +111,13 @@ This `aws-mfa-credential-process` is _yet another tool_, but it plugs into the s
 
     ```ini
     [profile my-profile]
-    assume_role_arn=<target-role-arn>
     credential_process = aws-mfa-credential-process --profile=my-profile
-    source_profile=<source-profile-name>
-    mfa_serial=<mfa-device-arn>
-    yubikey_serial=<yubikey-serial>
-    yubikey_label=<yubikey-label>
+    yubikey_serial=<yubikey-serial>        # which Yubikey Device you're using
+    yubikey_label=<yubikey-label>          # which Yubikey Slot you're using
+    assume_role_arn=<target-role-arn>      # IMPORTANT: Note "assume_" prefix (vs. the default "role_arn")
+    source_profile=<source-profile-name>   # often "default"
+    mfa_serial=<mfa-device-arn>            # your AWS MFA Device ARN serial
+    # ... other AWS standard options
     ```
 
 5. Use any AWS tooling that support ini-based configuration with `credential_process`, like AWS CLI v2:
