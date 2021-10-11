@@ -4,14 +4,12 @@ import (
 	"encoding/json"
 	"os"
 
+	"github.com/aripalo/aws-mfa-credential-process/internal/config"
 	"github.com/aripalo/aws-mfa-credential-process/internal/credentialprocess"
 	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
 	"github.com/aripalo/aws-mfa-credential-process/internal/utils"
 	"github.com/urfave/cli/v2"
 )
-
-const border string = "======================================================"
-const thinBorder string = "------------------------------------------------------"
 
 func main() {
 	app := &cli.App{
@@ -20,20 +18,26 @@ func main() {
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Required: true,
-				Name:     "profile",
+				Name:     config.FLAG_PROFILE_NAME,
 				Usage:    "profile configuration from .aws/config to use for assuming a role",
 			},
 			&cli.BoolFlag{
 				Required: false,
 				Value:    false,
-				Name:     "verbose",
+				Name:     config.FLAG_VERBOSE,
 				Usage:    "enable verbose output",
 			},
 			&cli.BoolFlag{
 				Required: false,
 				Value:    false,
-				Name:     "hide-arns",
-				Usage:    "Set to true to disable printing Role ARN & MFA Device ARN to console",
+				Name:     config.FLAG_HIDE_ARNS,
+				Usage:    "Disable printing Role ARN & MFA Device ARN to console (even on verbose-mode)",
+			},
+			&cli.BoolFlag{
+				Required: false,
+				Value:    false,
+				Name:     config.FLAG_DISABLE_DIALOG,
+				Usage:    "Disable GUI-prompt and enter MFA Token Code via CLI standard input",
 			},
 		},
 		Action: mainAction,
@@ -49,23 +53,26 @@ func main() {
 
 func mainAction(c *cli.Context) error {
 
-	profileName := c.String("profile")
-	verboseOutput := c.Bool("verbose")
-	hideArns := c.Bool("hide-arns")
+	flags := config.Flags{
+		ProfileName:   c.String(config.FLAG_PROFILE_NAME),
+		Verbose:       c.Bool(config.FLAG_VERBOSE),
+		HideArns:      c.Bool(config.FLAG_HIDE_ARNS),
+		DisableDialog: c.Bool(config.FLAG_DISABLE_DIALOG),
+	}
 
-	if verboseOutput {
+	if flags.Verbose {
 		utils.PrintBanner()
 	}
 
 	var err error
 
-	config, err := profile.GetProfile(profileName)
+	profileConfig, err := profile.GetProfile(flags.ProfileName)
 	if err != nil {
 		//utils.SafeLog(err)
 		return err
 	}
 
-	output, err := credentialprocess.GetOutput(verboseOutput, profileName, hideArns, config)
+	output, err := credentialprocess.GetOutput(flags, profileConfig)
 	if err != nil {
 		//utils.SafeLog(err)
 		return err

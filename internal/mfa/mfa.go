@@ -6,33 +6,35 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/aripalo/aws-mfa-credential-process/internal/config"
 	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
 	"github.com/aripalo/aws-mfa-credential-process/internal/utils"
 )
 
 // The default timeout of Yubikey operations
 const YUBIKEY_TIMEOUT_SECONDS = 15
+const MFA_TIMEOUT_SECONDS = 60
 
-func GetTokenResult(config profile.Profile, hideArns bool) (Result, error) {
+func GetTokenResult(flags config.Flags, profileConfig profile.Profile) (Result, error) {
 	resultChan := make(chan *Result, 1)
 	errorChan := make(chan *error, 1)
 
-	ctx, cancel := context.WithTimeout(context.Background(), YUBIKEY_TIMEOUT_SECONDS*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), MFA_TIMEOUT_SECONDS*time.Second)
 	defer cancel()
 
-	if hideArns == false {
+	if flags.HideArns == false {
 
-		utils.SafeLogLn(utils.FormatMessage(utils.COLOR_DEBUG, "👷 ", "Role", config.AssumeRoleArn))
-		utils.SafeLogLn(utils.FormatMessage(utils.COLOR_DEBUG, "🔒 ", "MFA", config.MfaSerial))
+		utils.SafeLogLn(utils.FormatMessage(utils.COLOR_DEBUG, "👷 ", "Role", profileConfig.AssumeRoleArn))
+		utils.SafeLogLn(utils.FormatMessage(utils.COLOR_DEBUG, "🔒 ", "MFA", profileConfig.MfaSerial))
 
 	}
 
-	hasYubikey := (config.YubikeySerial != "" && config.YubikeyLabel != "")
+	hasYubikey := (profileConfig.YubikeySerial != "" && profileConfig.YubikeyLabel != "")
 
 	if hasYubikey {
-		go getYubikeyToken(ctx, config.YubikeySerial, config.YubikeyLabel, resultChan, errorChan)
+		go getYubikeyToken(ctx, flags, profileConfig, resultChan, errorChan)
 	}
-	go getCliToken(ctx, resultChan, errorChan)
+	go getCliToken(ctx, flags, profileConfig, resultChan, errorChan)
 
 	if hasYubikey {
 		utils.SafeLogLn(utils.FormatMessage(utils.COLOR_IMPORTANT, "🔑 ", "MFA", "Touch Yubikey or enter TOPT MFA Token Code..."))

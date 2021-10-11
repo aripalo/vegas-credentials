@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"time"
 
+	"github.com/aripalo/aws-mfa-credential-process/internal/config"
 	"github.com/aripalo/aws-mfa-credential-process/internal/mfa"
 	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
 	"github.com/aws/aws-sdk-go/aws"
@@ -12,30 +13,30 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 )
 
-func getFreshTemporaryCredentials(config profile.Profile, hideArns bool) (json.RawMessage, error) {
+func getFreshTemporaryCredentials(flags config.Flags, profileConfig profile.Profile) (json.RawMessage, error) {
 	var err error
 
 	sess, err := session.NewSession(&aws.Config{
-		Region:      aws.String(config.Region),
-		Credentials: credentials.NewSharedCredentials("", config.SourceProfile),
+		Region:      aws.String(profileConfig.Region),
+		Credentials: credentials.NewSharedCredentials("", profileConfig.SourceProfile),
 	})
 
 	// Create the credentials from AssumeRoleProvider to assume the role
 	// referenced by the "myRoleARN" ARN. Prompt for MFA token from stdin.
-	creds := stscreds.NewCredentials(sess, config.AssumeRoleArn, func(p *stscreds.AssumeRoleProvider) {
-		p.SerialNumber = aws.String(config.MfaSerial)
-		p.TokenProvider = func() (string, error) { return tokenProvider(config, hideArns) }
+	creds := stscreds.NewCredentials(sess, profileConfig.AssumeRoleArn, func(p *stscreds.AssumeRoleProvider) {
+		p.SerialNumber = aws.String(profileConfig.MfaSerial)
+		p.TokenProvider = func() (string, error) { return tokenProvider(flags, profileConfig) }
 
-		if config.DurationSeconds != 0 {
-			p.Duration = time.Duration(config.DurationSeconds * int(time.Second))
+		if profileConfig.DurationSeconds != 0 {
+			p.Duration = time.Duration(profileConfig.DurationSeconds * int(time.Second))
 		}
 
-		if config.RoleSessionName != "" {
-			p.RoleSessionName = config.RoleSessionName
+		if profileConfig.RoleSessionName != "" {
+			p.RoleSessionName = profileConfig.RoleSessionName
 		}
 
-		if config.ExternalID != "" {
-			p.ExternalID = aws.String(config.ExternalID)
+		if profileConfig.ExternalID != "" {
+			p.ExternalID = aws.String(profileConfig.ExternalID)
 		}
 	})
 
@@ -59,8 +60,8 @@ func getFreshTemporaryCredentials(config profile.Profile, hideArns bool) (json.R
 	return pretty, err
 }
 
-func tokenProvider(config profile.Profile, hideArns bool) (string, error) {
-	result, err := mfa.GetTokenResult(config, hideArns)
+func tokenProvider(flags config.Flags, profileConfig profile.Profile) (string, error) {
+	result, err := mfa.GetTokenResult(flags, profileConfig)
 	return result.Value, err
 }
 
