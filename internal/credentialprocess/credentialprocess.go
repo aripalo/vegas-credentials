@@ -5,20 +5,21 @@ import (
 	"errors"
 
 	"github.com/aripalo/aws-mfa-credential-process/internal/cache"
+	"github.com/aripalo/aws-mfa-credential-process/internal/config"
 	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
 	"github.com/aripalo/aws-mfa-credential-process/internal/utils"
 )
 
-func GetOutput(verboseOutput bool, profileName string, hideArns bool, config profile.Profile) (json.RawMessage, error) {
+func GetOutput(flags config.Flags, profileConfig profile.Profile) (json.RawMessage, error) {
 	var err error
 
-	cached, cacheErr := getCachedTemporaryCredentials(verboseOutput, profileName, config)
+	cached, cacheErr := getCachedTemporaryCredentials(flags, profileConfig)
 
 	if cacheErr == nil {
 		return cached, nil
 	}
 
-	fresh, err := getFreshTemporaryCredentials(config, hideArns)
+	fresh, err := getFreshTemporaryCredentials(flags, profileConfig)
 	if err == nil {
 
 		parsed, err := parseCredentials(fresh)
@@ -35,7 +36,7 @@ func GetOutput(verboseOutput bool, profileName string, hideArns bool, config pro
 		if validationErr != nil {
 			return nil, validationErr
 		}
-		err = cache.Save(profileName, config, fresh)
+		err = cache.Save(flags.ProfileName, profileConfig, fresh)
 		utils.SafeLogLn(utils.FormatMessage(utils.COLOR_DEBUG, "ℹ️  ", "Session Credentials", "Saved to cache"))
 
 		utils.SafeLogLn(utils.TextGrayDark(utils.CreateRuler("=")))

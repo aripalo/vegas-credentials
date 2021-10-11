@@ -21,7 +21,7 @@ If you're unfamiliar with `credential_process`, [this AWS re:Invent video](https
 
 ## Features
 
-- **Fast & Cross-Platform**: Built with [Go](https://golang.org) and supports **macOS, Linux and Windows** operating systems and `amd64` (i.e. `x86_64`) & `arm64` (for example Apple Silicon such as M1) architectures
+- **Fast & Cross-Platform**: Built with [Go](https://golang.org) and supports **macOS, Linux and Windows** operating systems with `amd64` (i.e. `x86_64`) & `arm64` (for example Apple Silicon such as M1) architectures
 
 - **Supports automatic temporary session credentials refreshing** for tools that understand session credential expiration
 
@@ -160,9 +160,12 @@ You can see all the possible configuration options in [AWS documentation](https:
 
 TODO
 
---profile
---hide-arns
---verbose
+|       Option        |                                                                                                           Description                                                                                                           |
+| :------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `--profile <value>` | **Required:** Tells which profile to use. Should almost always be the same profile (name) as the `ini`-section title you configured this tool                                                                                   |
+| `--verbose`         | Print verbose output                                                                                                                                                                                                            |
+| `--hide-arns`       | Hide MFA ARN serial and target Role ARNs even on verbose-mode                                                                                                                                                                   |
+| `--disable-dialog`  | By default this tool prompts a GUI dialog for manual MFA Token Code entry (to circumvent some tools like CDK not attaching `stdin` into `credential_process`); Provide this flag if you wish to enter MFA token via CLI instead |
 
 
 <br/>
@@ -204,3 +207,4 @@ In the background this tool uses [`99designs/keyring`](https://github.com/99desi
     - https://github.com/boto/botocore/blob/221ffa67a567df99ee78d7ae308c0e12d7eeeea7/botocore/credentials.py#L350-L355
 - https://linuxtut.com/en/9fe52804610a8c4b7e41/
 - Add lisense
+- Fix CLI input not somehow attached to cred process? CDK+VSCode
