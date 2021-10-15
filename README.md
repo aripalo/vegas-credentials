@@ -167,7 +167,7 @@ TODO
 | `--verbose`         | Print verbose output                                                                                                                                                                                                            |
 | `--hide-arns`       | Hide MFA ARN serial and target Role ARNs even on verbose-mode                                                                                                                                                                   |
 | `--disable-dialog`  | By default this tool prompts a GUI dialog for manual MFA Token Code entry (to circumvent some tools like CDK not attaching `stdin` into `credential_process`); Provide this flag if you wish to enter MFA token via CLI instead |
-
+| `--disable-refresh`  | By default this tool automatically refreshes session credentials if they're going to expire within 10 minutes [to match the Botocore implementation](https://github.com/boto/botocore/blob/221ffa67a567df99ee78d7ae308c0e12d7eeeea7/botocore/credentials.py#L353-L355); Provide this flag to disable this functionality |
 
 <br/>
 
@@ -217,3 +217,10 @@ In the background this tool uses [`99designs/keyring`](https://github.com/99desi
     - Alternatives 
     - Comparison to other solutions
     - Development Docs???
+- Security notes about "always allow" keyring
+- Keyring requires password input multiple times? wtf?
+- Linux & Windows support is essential
+- Document auto refresh with supporting aws tools (improvement over broamski)
+- Document advisory & mandatory refresh (that matches botocore)
+- Vagrant testing / debugging for Linux & Windows
+- Feature comparison chart?

@@ -39,14 +39,17 @@ func getCachedTemporaryCredentials(flags config.Flags, profileConfig profile.Pro
 		return nil, expirationErr
 	}
 
-	advisoryRefreshErr := ensureAdvisoryRefreshNotNeeded(parsed)
-	if advisoryRefreshErr != nil {
+	if flags.DisableRefresh != true {
 
-		msg := utils.FormatMessage(utils.COLOR_DEBUG, "ℹ️  ", "Session Credentials", fmt.Sprintf("Found from cache, but expiring in %s so advisory refresh required", humanize.Time(parsed.Expiration)))
-		utils.SafeLogLn(msg)
+		mandatoryRefreshErr := ensureMandatoryRefreshNotNeeded(parsed)
+		if mandatoryRefreshErr != nil {
 
-		cache.Remove(flags.ProfileName, profileConfig)
-		return nil, advisoryRefreshErr
+			msg := utils.FormatMessage(utils.COLOR_DEBUG, "ℹ️  ", "Session Credentials", fmt.Sprintf("Found from cache, but expiring in %s so mandatory refresh required", humanize.Time(parsed.Expiration)))
+			utils.SafeLogLn(msg)
+
+			cache.Remove(flags.ProfileName, profileConfig)
+			return nil, mandatoryRefreshErr
+		}
 	}
 
 	validationErr := validate(parsed)
@@ -84,15 +87,15 @@ func ensureNotExpired(cached CredentialProcessResponse) error {
 	return nil
 }
 
-func ensureAdvisoryRefreshNotNeeded(cached CredentialProcessResponse) error {
-	// Match botocore advisory timeout
+func ensureMandatoryRefreshNotNeeded(cached CredentialProcessResponse) error {
+	// Match botocore mandatory timeout
 	// https://github.com/boto/botocore/blob/221ffa67a567df99ee78d7ae308c0e12d7eeeea7/botocore/credentials.py#L350-L355
 	now := time.Now()
-	count := 15 * 60
+	count := 10 * 60
 	limit := now.Add(time.Duration(-count) * time.Second)
 
 	if cached.Expiration.Before(limit) {
-		return errors.New("Cached credentials expired")
+		return errors.New("Mandatory cached credentials expiration")
 	}
 
 	return nil

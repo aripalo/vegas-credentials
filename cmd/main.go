@@ -39,6 +39,12 @@ func main() {
 				Name:     config.FLAG_DISABLE_DIALOG,
 				Usage:    "Disable GUI-prompt and enter MFA Token Code via CLI standard input",
 			},
+			&cli.BoolFlag{
+				Required: false,
+				Value:    false,
+				Name:     config.FLAG_DISABLE_REFRESH,
+				Usage:    "Disable automatic session credentials mandatory refresh (600s), as defined by botocore",
+			},
 		},
 		Action: mainAction,
 	}
@@ -54,10 +60,11 @@ func main() {
 func mainAction(c *cli.Context) error {
 
 	flags := config.Flags{
-		ProfileName:   c.String(config.FLAG_PROFILE_NAME),
-		Verbose:       c.Bool(config.FLAG_VERBOSE),
-		HideArns:      c.Bool(config.FLAG_HIDE_ARNS),
-		DisableDialog: c.Bool(config.FLAG_DISABLE_DIALOG),
+		ProfileName:    c.String(config.FLAG_PROFILE_NAME),
+		Verbose:        c.Bool(config.FLAG_VERBOSE),
+		HideArns:       c.Bool(config.FLAG_HIDE_ARNS),
+		DisableDialog:  c.Bool(config.FLAG_DISABLE_DIALOG),
+		DisableRefresh: c.Bool(config.FLAG_DISABLE_REFRESH),
 	}
 
 	if flags.Verbose {
