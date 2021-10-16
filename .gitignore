@@ -15,8 +15,11 @@
 # vendor/
 
 # Distributed binaries
-bin
+bin/
+dist/
 
 # macOS metadata files
 .DS_Store
-dist/
+
+# Ignore Vagrant related files
+.vagrant/
