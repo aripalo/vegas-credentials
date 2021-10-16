@@ -112,7 +112,7 @@ This `aws-mfa-credential-process` is _yet another tool_, but it plugs into the s
 
     ```ini
     [profile my-profile]
-    credential_process = aws-mfa-credential-process --profile=my-profile   # in 99% cases the profile should match what's in the ini-section title
+    credential_process = aws-mfa-credential-process assume --profile=my-profile   # in 99% cases the profile should match what's in the ini-section title
     yubikey_serial=<yubikey-serial>        # which Yubikey Device you're using
     yubikey_label=<yubikey-label>          # which Yubikey Slot you're using
     assume_role_arn=<target-role-arn>      # IMPORTANT: Note "assume_" prefix (vs. the default "role_arn")
@@ -189,7 +189,7 @@ In the background this tool uses [`99designs/keyring`](https://github.com/99desi
 ## TODO
 
 
-- Configuration file???
+- Configuration file! For defaults (could be json/yaml/toml)
 - Ensure Role Chaining Works!
 - Test manually CDK, CLI, NodeJS SDK v3, Boto3, Go ... for refresh/cache support!
 - Add Unit tests
@@ -225,3 +225,4 @@ In the background this tool uses [`99designs/keyring`](https://github.com/99desi
 - Document advisory & mandatory refresh (that matches botocore)
 - Vagrant testing / debugging for Linux & Windows
 - Feature comparison chart?
+- Docs to https://pkg.go.dev/
