@@ -1,6 +1,7 @@
 package profile
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -8,14 +9,44 @@ import (
 	"gopkg.in/ini.v1"
 )
 
+const awsConfigFileLocation string = ".aws/config"
+
 func GetProfile(profileName string) (Profile, error) {
 
+	var path string
+	var config *ini.File
+	var profile Profile
 	var err error
 
-	homedir, err := os.UserHomeDir()
-	configPath := filepath.Join(homedir, ".aws/config")
+	path, err = resolveConfigPath()
+	config, err = loadConfig(path)
+	profile, err = loadProfile(config, profileName)
 
-	cfg, err := ini.Load(configPath)
+	return profile, err
+}
+
+// resolveConfigPath provides the absolute path to AWS config file
+func resolveConfigPath() (string, error) {
+	homedir, err := os.UserHomeDir()
+	if err != nil {
+		return "", err
+	}
+	configPath := filepath.Join(homedir, awsConfigFileLocation)
+
+	return configPath, nil
+
+}
+
+// loadConfig loads an ini-file based configuration from given path
+func loadConfig(configPath string) (*ini.File, error) {
+	config, err := ini.Load(configPath)
+	if err != nil {
+		return nil, err
+	}
+	return config, nil
+}
+
+func loadProfile(config *ini.File, profileName string) (Profile, error) {
 
 	sectionName := fmt.Sprintf("profile %s", profileName)
 
@@ -23,11 +54,28 @@ func GetProfile(profileName string) (Profile, error) {
 		DurationSeconds: 3600, // default to 1 hour as AWS does
 	}
 
-	err = cfg.Section(sectionName).MapTo(profile)
+	section, err := config.GetSection(sectionName)
+	if err != nil {
+		return *profile, err
+	}
 
-	return *profile, err
+	err = section.MapTo(profile)
+	if err != nil {
+		return *profile, err
+	}
 
+	if profile.AssumeRoleArn == "" {
+		return *profile, errors.New(fmt.Sprintf("Missing assume_role_arn from profile %s config", profileName))
+	}
+
+	if profile.MfaSerial == "" {
+		return *profile, errors.New(fmt.Sprintf("Missing mfa_serial from profile %s config", profileName))
+	}
+
+	return *profile, nil
 }
+
+// TODO validate ARNs
 
 type Profile struct {
 	YubikeySerial   string `ini:"yubikey_serial"`
