@@ -1,6 +1,8 @@
 package config
 
-import "github.com/urfave/cli/v2"
+import (
+	"github.com/urfave/cli/v2"
+)
 
 // Flags is a simplified struct for accessing the provided CLI flags within the program
 type Flags struct {
@@ -70,6 +72,7 @@ var FlagsConfiguration = []cli.Flag{
 
 // ParseFlags reads CLI flag values provided in runtime and returns a simplified Flags struct containing the parsed values
 func ParseFlags(c *cli.Context) Flags {
+
 	flags := Flags{
 		ProfileName:    c.String(flagProfileName.Name),
 		Verbose:        c.Bool(flagVerbose.Name),
