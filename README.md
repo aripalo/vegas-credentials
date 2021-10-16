@@ -21,9 +21,8 @@ If you're unfamiliar with `credential_process`, [this AWS re:Invent video](https
 
 ## Features
 
-- **Fast & Cross-Platform**: Built with [Go](https://golang.org) and supports **macOS, Linux and Windows** operating systems with `amd64` (i.e. `x86_64`) & `arm64` (for example Apple Silicon such as M1) architectures
 
-- **Supports automatic temporary session credentials refreshing** for tools that understand session credential expiration
+- **Supports _automatic_ temporary session credentials refreshing** for tools that understand session credential expiration
 
 - **Caching of session credentials into [Keyring](#keyring)** to speed things up & to avoid having to input MFA token code for each operation
 
@@ -38,6 +37,8 @@ If you're unfamiliar with `credential_process`, [this AWS re:Invent video](https
 - **Just tap your physical key**:
 
     No need to manually type or copy-paste TOPT MFA token code from Yubikey Authenticator.
+
+- **Fast & Cross-Platform**: Built with [Go](https://golang.org) and supports **macOS, Linux and Windows** operating systems with `amd64` (i.e. `x86_64`) & `arm64` (for example Apple Silicon such as M1) architectures
 
 <br/>
 
