@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"os"
 
 	"github.com/aripalo/aws-mfa-credential-process/internal/config"
@@ -52,9 +51,4 @@ func mainAction(c *cli.Context) error {
 	utils.OutputToAwsCredentialProcess(string(output))
 
 	return err
-}
-
-func toPrettyJson(data interface{}) (string, error) {
-	pretty, err := json.MarshalIndent(data, "", "    ")
-	return string(pretty), err
 }
