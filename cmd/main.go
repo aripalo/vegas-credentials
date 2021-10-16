@@ -13,39 +13,9 @@ import (
 
 func main() {
 	app := &cli.App{
-		Name:  "aws-mfa-credential-process",
-		Usage: "Caching AWS Credential Process to manage assuming an IAM Role with MFA token from Yubikey and Authenticator App",
-		Flags: []cli.Flag{
-			&cli.StringFlag{
-				Required: true,
-				Name:     config.FLAG_PROFILE_NAME,
-				Usage:    "profile configuration from .aws/config to use for assuming a role",
-			},
-			&cli.BoolFlag{
-				Required: false,
-				Value:    false,
-				Name:     config.FLAG_VERBOSE,
-				Usage:    "enable verbose output",
-			},
-			&cli.BoolFlag{
-				Required: false,
-				Value:    false,
-				Name:     config.FLAG_HIDE_ARNS,
-				Usage:    "Disable printing Role ARN & MFA Device ARN to console (even on verbose-mode)",
-			},
-			&cli.BoolFlag{
-				Required: false,
-				Value:    false,
-				Name:     config.FLAG_DISABLE_DIALOG,
-				Usage:    "Disable GUI-prompt and enter MFA Token Code via CLI standard input",
-			},
-			&cli.BoolFlag{
-				Required: false,
-				Value:    false,
-				Name:     config.FLAG_DISABLE_REFRESH,
-				Usage:    "Disable automatic session credentials mandatory refresh (600s), as defined by botocore",
-			},
-		},
+		Name:   "aws-mfa-credential-process",
+		Usage:  "Caching AWS Credential Process to manage assuming an IAM Role with MFA token from Yubikey and Authenticator App",
+		Flags:  config.FlagsConfiguration,
 		Action: mainAction,
 	}
 
@@ -59,13 +29,7 @@ func main() {
 
 func mainAction(c *cli.Context) error {
 
-	flags := config.Flags{
-		ProfileName:    c.String(config.FLAG_PROFILE_NAME),
-		Verbose:        c.Bool(config.FLAG_VERBOSE),
-		HideArns:       c.Bool(config.FLAG_HIDE_ARNS),
-		DisableDialog:  c.Bool(config.FLAG_DISABLE_DIALOG),
-		DisableRefresh: c.Bool(config.FLAG_DISABLE_REFRESH),
-	}
+	flags := config.ParseFlags(c)
 
 	if flags.Verbose {
 		utils.PrintBanner()
