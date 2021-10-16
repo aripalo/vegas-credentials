@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"os"
@@ -10,8 +11,9 @@ import (
 )
 
 // OutputToAwsCredentialProcess prints to stdout so aws credential_process can read it
-func OutputToAwsCredentialProcess(output string) {
-	fmt.Fprintf(os.Stdout, output)
+// https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sourcing-external.html
+func OutputToAwsCredentialProcess(output json.RawMessage) {
+	fmt.Fprintf(os.Stdout, string(output))
 }
 
 // SafeLogLn logs with newline directly to tty (with stderr fallback), since aws credential_process reads stdout

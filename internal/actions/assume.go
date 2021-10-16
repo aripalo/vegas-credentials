@@ -15,17 +15,22 @@ func Assume(c *cli.Context) error {
 
 	var err error
 
+	// profileConfig holds the configuration data read from ~/.aws/config for given profile
 	profileConfig, err := profile.GetProfile(flags.ProfileName)
 	if err != nil {
 		return err
 	}
 
-	output, err := credentialprocess.GetOutput(flags, profileConfig)
+	// sessionCredentials is a JSON representation of AWS Temporary Session Credentials for the assumed role
+	// matches https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sourcing-external.html
+	sessionCredentials, err := credentialprocess.GetOutput(flags, profileConfig)
 	if err != nil {
 		return err
 	}
 
-	utils.OutputToAwsCredentialProcess(string(output))
+	// Print Temporary Session Credentials into stdout as AWS tools expect for credential_process
+	// https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sourcing-external.html
+	utils.OutputToAwsCredentialProcess(sessionCredentials)
 
 	return err
 }
