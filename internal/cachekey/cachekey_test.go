@@ -21,22 +21,24 @@ func TestGenerateSha1Hash(t *testing.T) {
 
 func TestCombineStringsWithSimpleInput(t *testing.T) {
 	input1 := "foo"
-	input2 := "bar"
-	want := "foobar"
-	output := combineStrings(input1, input2)
+	input2 := "__"
+	input3 := "bar"
+	want := "foo__bar"
+	output := combineStrings(input1, input2, input3)
 	if output != want {
-		t.Fatalf(`combineStrings("%s", "%s) = %q, want match for %#q, nil`, input1, input2, output, want)
+		t.Fatalf(`combineStrings("%s", "%s, "%s) = %q, want match for %#q, nil`, input1, input2, input3, output, want)
 	}
 }
 
 func TestCombineStringsWithRealInput(t *testing.T) {
 	input1 := "my-profile"
-	input2 := "{\"YubikeySerial\":\"123456\",\"YubikeyLabel\":\"foobar\",\"SourceProfile\":\"default\",\"AssumeRoleArn\":\"arn:aws:iam::123456789012:role/ExampleRole\",\"MfaSerial\":\"arn:aws:iam::123456789012:mfa/example\",\"DurationSeconds\":0,\"Region\":\"\",\"RoleSessionName\":\"\",\"ExternalID\":\"\"}"
-	want := "my-profile{\"YubikeySerial\":\"123456\",\"YubikeyLabel\":\"foobar\",\"SourceProfile\":\"default\",\"AssumeRoleArn\":\"arn:aws:iam::123456789012:role/ExampleRole\",\"MfaSerial\":\"arn:aws:iam::123456789012:mfa/example\",\"DurationSeconds\":0,\"Region\":\"\",\"RoleSessionName\":\"\",\"ExternalID\":\"\"}"
-	output := combineStrings(input1, input2)
+	input2 := "__"
+	input3 := "8843d7f92416211de9ebb963ff4ce28125932878"
+	want := "my-profile__8843d7f92416211de9ebb963ff4ce28125932878"
+	output := combineStrings(input1, input2, input3)
 	fmt.Println("COMBINATION=====", output)
 	if output != want {
-		t.Fatalf(`combineStrings("%s", "%s) = %q, want match for %#q, nil`, input1, input2, output, want)
+		t.Fatalf(`combineStrings("%s", "%s, "%s) = %q, want match for %#q, nil`, input1, input2, input3, output, want)
 	}
 }
 
@@ -69,8 +71,8 @@ func TestGet(t *testing.T) {
 	}
 
 	// want generated with https://passwordsgenerator.net/sha1-hash-generator/
-	// with data: my-profile{"YubikeySerial":"123456","YubikeyLabel":"foobar","SourceProfile":"default","AssumeRoleArn":"arn:aws:iam::123456789012:role/ExampleRole","MfaSerial":"arn:aws:iam::123456789012:mfa/example","DurationSeconds":0,"Region":"","RoleSessionName":"","ExternalID":""}
-	want := "cf1635f6d6e5e5a54dc3439924868c6a440f4a21"
+	// with data: {"YubikeySerial":"123456","YubikeyLabel":"foobar","SourceProfile":"default","AssumeRoleArn":"arn:aws:iam::123456789012:role/ExampleRole","MfaSerial":"arn:aws:iam::123456789012:mfa/example","DurationSeconds":0,"Region":"","RoleSessionName":"","ExternalID":""}
+	want := "my-profile__dc2b092b2d5670a14eaaef384668ee57dfa092f3"
 
 	output, err := Get(input1, input2)
 

@@ -3,7 +3,6 @@ package securestorage
 import (
 	"context"
 	"errors"
-	"fmt"
 	"os"
 	"path/filepath"
 	"time"
@@ -88,7 +87,7 @@ func Init(flags config.Flags) {
 func Set(key string, data []byte) error {
 	ensureRing()
 	err := ring.Set(keyring.Item{
-		Key:  prefixKey(key),
+		Key:  key,
 		Data: data,
 	})
 	return err
@@ -96,18 +95,14 @@ func Set(key string, data []byte) error {
 
 func Get(key string) ([]byte, error) {
 	ensureRing()
-	i, err := ring.Get(prefixKey(key))
+	i, err := ring.Get(key)
 	return i.Data, err
 }
 
 func Remove(key string) error {
 	ensureRing()
-	err := ring.Remove(prefixKey(key))
+	err := ring.Remove(key)
 	return err
-}
-
-func prefixKey(key string) string {
-	return fmt.Sprintf("%s%s", KEYPREFIX, key)
 }
 
 func ensureRing() {

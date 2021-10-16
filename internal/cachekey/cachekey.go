@@ -4,17 +4,19 @@ import (
 	"crypto/sha1"
 	"encoding/hex"
 	"encoding/json"
-	"fmt"
+	"strings"
 
 	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
 )
 
+const separator = "__"
+
 // Get is responsible for creating a unique cache key for given profile configuration, therefore ensuring mutated profile configuration will not use previous cached data
 func Get(profileName string, config profile.Profile) (string, error) {
 	configString, err := configToString(config)
-	combination := combineStrings(profileName, configString)
-	hash := generateSha1Hash(combination)
-	return hash, err
+	hash := generateSha1Hash(configString)
+	key := combineStrings(profileName, separator, hash)
+	return key, err
 }
 
 // generateSha1Hash reads byte array of data and creates a SHA1 hash string from it
@@ -26,8 +28,8 @@ func generateSha1Hash(data string) string {
 }
 
 // combineStrings combines two strings
-func combineStrings(a string, b string) string {
-	return fmt.Sprintf("%s%s", a, b)
+func combineStrings(items ...string) string {
+	return strings.Join(items, "")
 }
 
 // configToString convertts profile config into stringified JSON
