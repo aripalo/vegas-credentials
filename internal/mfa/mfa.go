@@ -34,7 +34,7 @@ func GetTokenResult(flags config.Flags, profileConfig profile.Profile) (Result, 
 	if hasYubikey {
 		go getYubikeyToken(ctx, flags, profileConfig, resultChan, errorChan)
 	}
-	go getCliToken(ctx, flags, profileConfig, resultChan, errorChan)
+	go getAppToken(ctx, flags, profileConfig, resultChan, errorChan)
 
 	if hasYubikey {
 		utils.SafeLogLn(utils.FormatMessage(utils.COLOR_IMPORTANT, "🔑 ", "MFA", "Touch Yubikey or enter TOPT MFA Token Code..."))

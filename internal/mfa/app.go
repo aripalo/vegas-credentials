@@ -1,17 +1,15 @@
 package mfa
 
 import (
-	"bufio"
 	"context"
-	"os"
 	"strings"
 
 	"github.com/aripalo/aws-mfa-credential-process/internal/config"
 	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
-	"github.com/ncruces/zenity"
+	"github.com/aripalo/aws-mfa-credential-process/internal/prompt"
 )
 
-func getCliToken(ctx context.Context, flags config.Flags, profileConfig profile.Profile, out chan *Result, errors chan *error) {
+func getAppToken(ctx context.Context, flags config.Flags, profileConfig profile.Profile, out chan *Result, errors chan *error) {
 
 	var err error
 	var result Result
@@ -32,13 +30,12 @@ func cliIpunt(ctx context.Context) (Result, error) {
 	var result Result
 	result.Provider = TOKEN_PROVIDER_CLI
 
-	reader := bufio.NewReader(os.Stdin)
-	value, err := reader.ReadString('\n')
+	value, err := prompt.Cli(ctx, "")
 	if err != nil {
 		return result, err
 	}
 
-	result.Value = strings.TrimSpace(value)
+	result.Value = value
 
 	return result, err
 
@@ -49,10 +46,10 @@ func dialogInput(ctx context.Context) (Result, error) {
 	var result Result
 	result.Provider = TOKEN_PROVIDER_DIALOG
 
-	value, err := zenity.Entry(
+	value, err := prompt.Dialog(
+		ctx,
+		"Multifactor Authentication",
 		"Enter TOPT MFA Token Code:",
-		zenity.Title("Multifactor Authentication"),
-		zenity.Context(ctx),
 	)
 
 	if err != nil {
