@@ -15,7 +15,7 @@ import (
 const YUBIKEY_TIMEOUT_SECONDS = 15
 const MFA_TIMEOUT_SECONDS = 60
 
-func GetTokenResult(flags config.Flags, profileConfig profile.Profile) (Result, error) {
+func GetTokenResult(flags config.CredentialProcessFlags, profileConfig profile.Profile) (Result, error) {
 	resultChan := make(chan *Result, 1)
 	errorChan := make(chan *error, 1)
 

@@ -9,13 +9,13 @@ import (
 	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
 )
 
-const separator = "__"
+const Separator = "__"
 
 // Get is responsible for creating a unique cache key for given profile configuration, therefore ensuring mutated profile configuration will not use previous cached data
 func Get(profileName string, config profile.Profile) (string, error) {
 	configString, err := configToString(config)
 	hash := generateSha1Hash(configString)
-	key := combineStrings(profileName, separator, hash)
+	key := combineStrings(profileName, Separator, hash)
 	return key, err
 }
 

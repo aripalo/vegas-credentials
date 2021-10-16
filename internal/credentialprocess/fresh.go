@@ -13,7 +13,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 )
 
-func getFreshTemporaryCredentials(flags config.Flags, profileConfig profile.Profile) (json.RawMessage, error) {
+func getFreshTemporaryCredentials(flags config.CredentialProcessFlags, profileConfig profile.Profile) (json.RawMessage, error) {
 	var err error
 
 	sess, err := session.NewSession(&aws.Config{
@@ -60,7 +60,7 @@ func getFreshTemporaryCredentials(flags config.Flags, profileConfig profile.Prof
 	return pretty, err
 }
 
-func tokenProvider(flags config.Flags, profileConfig profile.Profile) (string, error) {
+func tokenProvider(flags config.CredentialProcessFlags, profileConfig profile.Profile) (string, error) {
 	result, err := mfa.GetTokenResult(flags, profileConfig)
 	return result.Value, err
 }

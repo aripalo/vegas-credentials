@@ -79,7 +79,7 @@ type foo struct {
 
 func TestParseFlagsWithDefaults(t *testing.T) {
 
-	want := Flags{
+	want := CredentialProcessFlags{
 		ProfileName:    "my-profile",
 		Verbose:        false,
 		HideArns:       false,
@@ -89,9 +89,9 @@ func TestParseFlagsWithDefaults(t *testing.T) {
 
 	app := &cli.App{
 		Name:  "testing",
-		Flags: FlagsConfiguration,
+		Flags: CredentialProcessFlagsConfiguration,
 		Action: func(c *cli.Context) error {
-			output := ParseFlags(c)
+			output := ParseCredentialProcessFlags(c)
 			if output != want {
 				t.Fatalf(`Unexpected output`)
 			}
@@ -110,7 +110,7 @@ func TestParseFlagsWithDefaults(t *testing.T) {
 
 func TestParseFlagsWithUserProvided(t *testing.T) {
 
-	want := Flags{
+	want := CredentialProcessFlags{
 		ProfileName:    "my-profile",
 		Verbose:        true,
 		HideArns:       true,
@@ -120,9 +120,9 @@ func TestParseFlagsWithUserProvided(t *testing.T) {
 
 	app := &cli.App{
 		Name:  "testing",
-		Flags: FlagsConfiguration,
+		Flags: CredentialProcessFlagsConfiguration,
 		Action: func(c *cli.Context) error {
-			output := ParseFlags(c)
+			output := ParseCredentialProcessFlags(c)
 			if output != want {
 				t.Fatalf(`Unexpected output`)
 			}

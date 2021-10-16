@@ -13,7 +13,7 @@ import (
 	"github.com/dustin/go-humanize"
 )
 
-func getCachedTemporaryCredentials(flags config.Flags, profileConfig profile.Profile) (json.RawMessage, error) {
+func getCachedTemporaryCredentials(flags config.CredentialProcessFlags, profileConfig profile.Profile) (json.RawMessage, error) {
 	cached, cacheErr := cache.Get(flags.ProfileName, profileConfig)
 	if cacheErr != nil {
 

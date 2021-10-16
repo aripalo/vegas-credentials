@@ -3,11 +3,14 @@ package securestorage
 import (
 	"context"
 	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/99designs/keyring"
+	"github.com/aripalo/aws-mfa-credential-process/internal/cachekey"
 	"github.com/aripalo/aws-mfa-credential-process/internal/config"
 	"github.com/aripalo/aws-mfa-credential-process/internal/prompt"
 	"github.com/aripalo/aws-mfa-credential-process/internal/utils"
@@ -19,7 +22,7 @@ const KEYPREFIX string = KEYRING_LABEL + "__"
 var ring keyring.Keyring
 
 // Init initializes a keyring
-func Init(flags config.Flags) {
+func Init(disableDialog bool) {
 
 	var err error
 
@@ -71,7 +74,7 @@ func Init(flags config.Flags) {
 			ctx, cancel := context.WithTimeout(nil, 5*time.Minute)
 			defer cancel()
 
-			if flags.DisableDialog {
+			if disableDialog {
 				return prompt.Cli(ctx, message)
 			} else {
 				return prompt.Dialog(ctx, "Keyring Unlock", message)
@@ -102,6 +105,27 @@ func Get(key string) ([]byte, error) {
 func Remove(key string) error {
 	ensureRing()
 	err := ring.Remove(key)
+	return err
+}
+
+func RemoveAll(profileName string) error {
+	ensureRing()
+	var err error
+
+	keys, err := ring.Keys()
+
+	for _, v := range keys {
+		if profileName == "" {
+			err = Remove(v)
+			return err
+		} else {
+			if strings.HasPrefix(v, fmt.Sprintf("%s%s", profileName, cachekey.Separator)) {
+				err = Remove(v)
+				return err
+			}
+		}
+	}
+
 	return err
 }
 

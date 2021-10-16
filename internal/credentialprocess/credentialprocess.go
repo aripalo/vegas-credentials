@@ -10,7 +10,7 @@ import (
 	"github.com/aripalo/aws-mfa-credential-process/internal/utils"
 )
 
-func GetOutput(flags config.Flags, profileConfig profile.Profile) (json.RawMessage, error) {
+func GetOutput(flags config.CredentialProcessFlags, profileConfig profile.Profile) (json.RawMessage, error) {
 	var err error
 
 	cached, cacheErr := getCachedTemporaryCredentials(flags, profileConfig)

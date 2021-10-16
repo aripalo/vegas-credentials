@@ -1,61 +1,55 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
+	"github.com/aripalo/aws-mfa-credential-process/internal/actions"
 	"github.com/aripalo/aws-mfa-credential-process/internal/config"
-	"github.com/aripalo/aws-mfa-credential-process/internal/credentialprocess"
-	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
-	"github.com/aripalo/aws-mfa-credential-process/internal/securestorage"
 	"github.com/aripalo/aws-mfa-credential-process/internal/utils"
 	"github.com/urfave/cli/v2"
 )
 
-var Debug = true
+// version information used as output for --version, overwritten by goreleaser with real version value
+// https://goreleaser.com/customization/build/
+var version = "development"
 
+// Application Entrypoint
 func main() {
 
-	app := &cli.App{
-		Name:   "aws-mfa-credential-process",
-		Usage:  "Caching AWS Credential Process to manage assuming an IAM Role with MFA token from Yubikey and Authenticator App",
-		Flags:  config.FlagsConfiguration,
-		Action: mainAction,
+	// Just print the version string, nothing else
+	// https://github.com/urfave/cli/blob/master/docs/v2/manual.md#version-flag
+	cli.VersionPrinter = func(c *cli.Context) {
+		fmt.Println(c.App.Version)
 	}
 
+	// Configure application
+	app := &cli.App{
+		Name:    "aws-mfa-credential-process",
+		Version: version,
+		Usage:   "Caching AWS Credential Process to manage assuming an IAM Role with MFA token from Yubikey and Authenticator App",
+		Commands: []*cli.Command{
+			{
+				Name:   "assume",
+				Usage:  "Perform AWS credential_process",
+				Flags:  config.CredentialProcessFlagsConfiguration,
+				Action: actions.Assume,
+			},
+			{
+				Name:   "delete-cache",
+				Usage:  "Deletes all temporary session credentials from cache",
+				Flags:  config.DeleteCacheFlagsConfiguration,
+				Action: actions.DeleteCache,
+			},
+		},
+	}
+
+	// Run the application
 	err := app.Run(os.Args)
+
+	// Handle errors
 	if err != nil {
 		utils.PrintError(err)
 		os.Exit(1)
 	}
-
-}
-
-func mainAction(c *cli.Context) error {
-
-	flags := config.ParseFlags(c)
-
-	if flags.Verbose {
-		utils.PrintBanner()
-	}
-
-	config.Init()
-	securestorage.Init(flags)
-
-	var err error
-
-	profileConfig, err := profile.GetProfile(flags.ProfileName)
-	if err != nil {
-		//utils.SafeLog(err)
-		return err
-	}
-
-	output, err := credentialprocess.GetOutput(flags, profileConfig)
-	if err != nil {
-		//utils.SafeLog(err)
-		return err
-	}
-
-	utils.OutputToAwsCredentialProcess(string(output))
-
-	return err
 }

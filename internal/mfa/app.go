@@ -9,7 +9,7 @@ import (
 	"github.com/aripalo/aws-mfa-credential-process/internal/prompt"
 )
 
-func getAppToken(ctx context.Context, flags config.Flags, profileConfig profile.Profile, out chan *Result, errors chan *error) {
+func getAppToken(ctx context.Context, flags config.CredentialProcessFlags, profileConfig profile.Profile, out chan *Result, errors chan *error) {
 
 	var err error
 	var result Result
