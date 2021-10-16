@@ -24,11 +24,11 @@ If you're unfamiliar with `credential_process`, [this AWS re:Invent video](https
 
 - **Supports _automatic_ temporary session credentials refreshing** for tools that understand session credential expiration
 
-- **Caching of session credentials into [Keyring](#keyring)** to speed things up & to avoid having to input MFA token code for each operation
-
 - **Works out-of-the-box with most AWS tools** such as AWS CDK, AWS SDKs and AWS CLI:
 
     Tested with AWS CDK (TypeScript), AWS CLI v2, AWS NodeJS SDK (v3), AWS Boto3 and AWS Go SDK. Should probably work with other AWS SDKs as well.
+
+- **Caching of session credentials into [Keyring](#keyring)** to speed things up & to avoid having to input MFA token code for each operation
 
 - **Supports both Yubikey Touch or Authenticator App TOPT MFA simultaneously**: 
     
