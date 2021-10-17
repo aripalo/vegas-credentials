@@ -17,6 +17,7 @@ type Config struct {
 	HideArns        bool   `mapstructure:"hide_arns"`
 	DisableDialog   bool   `mapstructure:"disable_dialog"`
 	DisableRefresh  bool   `mapstructure:"disable_refresh"`
+	DisableColor    bool   `mapstructure:"disable_color"`
 }
 
 func (c *Config) Load(cmd *cobra.Command) error {
@@ -43,6 +44,13 @@ func (c *Config) Load(cmd *cobra.Command) error {
 	v.SetDefault("HideArns", false)       // by default, do not hide ARNs in verbose output
 	v.SetDefault("DisableDialog", false)  // by default, use GUI dialog prompt
 	v.SetDefault("DisableRefresh", false) // by default, refresh credentials like botocore does
+	v.SetDefault("DisableColor", false)   // by default, allow colored output
+
+	// TODO
+	// NO_COLOR https://no-color.org/
+	// $TERM=dumb
+	// --no-color
+	// --disable-color
 
 	err = v.ReadInConfig()
 	if err != nil && err != err.(viper.ConfigFileNotFoundError) {
