@@ -32,5 +32,15 @@ func (a *App) Debug() {
 
 	fmt.Println(string(result))
 
-	profile.Read(a.Config)
+	p, err := profile.Read(a.Config)
+	if err != nil {
+		panic(err)
+	}
+
+	pretty, err := json.MarshalIndent(p, "", "    ")
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(string(pretty))
 }

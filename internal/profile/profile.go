@@ -1,7 +1,7 @@
 package profile
 
 import (
-	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -42,13 +42,9 @@ func Read(config *config.Config) (Profile, error) {
 	}
 
 	profile = configurations[section]
-
-	pretty, err := json.MarshalIndent(profile, "", "    ")
-	if err != nil {
-		return profile, err
+	if profile.AssumeRoleArn == "" || profile.SourceProfile == "" {
+		return profile, errors.New("Invalid profile")
 	}
-
-	fmt.Println(string(pretty))
 
 	return profile, nil
 }
