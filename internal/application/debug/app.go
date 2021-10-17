@@ -32,7 +32,7 @@ func (a *App) Debug() {
 
 	fmt.Println(string(result))
 
-	p, err := profile.Read(a.Config)
+	p, err := profile.Get(a.Config)
 	if err != nil {
 		panic(err)
 	}
