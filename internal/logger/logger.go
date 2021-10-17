@@ -32,20 +32,20 @@ func format(d data.Provider, colorize color.Color, emoji string, prefix string, 
 	if prefix != "" {
 		var p string
 		if c.NoColor {
-			p = prefix
+			p = fmt.Sprintf("%s:", prefix)
 		} else {
-			p = textBold.Render(prefix)
+			p = colorize.Render(textBold.Render(fmt.Sprintf("%s:", prefix)))
 		}
 		output = fmt.Sprintf("%s %s", output, p)
 	}
 
-	output = fmt.Sprintf("%s %s", output, message)
-
 	if c.NoColor {
-		return output
+		output = fmt.Sprintf("%s %s", output, message)
 	} else {
-		return colorize.Render(output)
+		output = fmt.Sprintf("%s %s", output, colorize.Render(message))
 	}
+
+	return output
 }
 
 // Debugln prints a message with newline if verbose mode enabled (in dark gray if colors enabled).
