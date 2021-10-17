@@ -85,7 +85,6 @@ func (c *CredentialProcess) Get() error {
 	if c.credentials.IsExpired() {
 		c.credentials.Expire()
 	}
-	// TODO mandatory refresh (if not disabled)
 
 	expiration, err := c.credentials.ExpiresAt()
 	value, err := c.credentials.Get()
