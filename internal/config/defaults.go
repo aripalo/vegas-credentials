@@ -45,7 +45,6 @@ var Defaults = DefaultOptions{
 
 func resolveNoColorDefaultValue() bool {
 	// Check if NO_COLOR set https://no-color.org/
-
 	_, noColorSet := os.LookupEnv("NO_COLOR")
 	if noColorSet {
 		fmt.Println("SET no-color TRUE because ENV NO_COLOR")
