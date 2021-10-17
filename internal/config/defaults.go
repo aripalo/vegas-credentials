@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"os"
 )
 
@@ -47,20 +46,17 @@ func resolveNoColorDefaultValue() bool {
 	// Check if NO_COLOR set https://no-color.org/
 	_, noColorSet := os.LookupEnv("NO_COLOR")
 	if noColorSet {
-		fmt.Println("SET no-color TRUE because ENV NO_COLOR")
 		return true
 	}
 
 	// Check if app-specific _NO_COLOR set https://medium.com/@jdxcode/12-factor-cli-apps-dd3c227a0e46
 	_, appNoColorSet := os.LookupEnv("AWS_MFA_CREDENTIAL_PROCESS_NO_COLOR")
 	if appNoColorSet {
-		fmt.Println("SET no-color TRUE because ENV AWS_MFA_CREDENTIAL_PROCESS_NO_COLOR")
 		return true
 	}
 
 	// Check if $TERM=dumb https://unix.stackexchange.com/a/43951
 	if os.Getenv("TERM") == "dumb" {
-		fmt.Println("SET no-color TRUE because ENV TERM=dumb")
 		return true
 	}
 
