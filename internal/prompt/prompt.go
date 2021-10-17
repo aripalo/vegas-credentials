@@ -6,7 +6,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/aripalo/aws-mfa-credential-process/internal/utils"
 	"github.com/ncruces/zenity"
 )
 
@@ -28,7 +27,7 @@ func Cli(ctx context.Context, text string) (string, error) {
 	reader := bufio.NewReader(os.Stdin)
 
 	if text != "" {
-		utils.SafeLogLn(text)
+		//utils.SafeLogLn(text)
 	}
 
 	value, err := reader.ReadString('\n')
