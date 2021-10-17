@@ -2,10 +2,10 @@ package assume
 
 import (
 	"io"
-	"os"
 
 	"github.com/aripalo/aws-mfa-credential-process/internal/application/assume/awscreds"
 	"github.com/aripalo/aws-mfa-credential-process/internal/config"
+	"github.com/aripalo/aws-mfa-credential-process/internal/logger"
 	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
 )
 
@@ -34,7 +34,7 @@ func (a *App) GetProfile() *profile.Profile {
 // New instantiates the App
 func New() (*App, error) {
 	a := &App{
-		WriteStream: os.Stdout,
+		WriteStream: logger.GetSafeWriter(),
 		Config:      &config.Config{},
 		Profile:     &profile.Profile{},
 	}
