@@ -52,12 +52,12 @@ func (a *App) Assume() {
 
 	fmt.Println("ASSUME")
 
-	token, err := mfa.GetToken(a)
+	_, err = mfa.GetToken(a)
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println(fmt.Sprintf("Got token %s via %s", token.Value, token.Provider))
+	//fmt.Println(fmt.Sprintf("Got token %s via %s", token.Value, token.Provider))
 
 	/*
 		creds, err := awscreds.Get(a)

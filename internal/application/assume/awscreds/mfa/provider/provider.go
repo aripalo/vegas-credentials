@@ -63,6 +63,7 @@ func (t *TokenProvider) Provide(d data.Provider) (Token, error) {
 	select {
 	case i := <-t.tokenChan:
 		token = *i
+		err = validateToken(token.Value)
 		return token, err
 	case <-ctx.Done():
 		return token, ctx.Err()

@@ -48,6 +48,12 @@ func format(d data.Provider, colorize color.Color, emoji string, prefix string, 
 	return output
 }
 
+// Newline prints a newline character
+func Newline(d data.Provider) {
+	s := d.GetWriteStream()
+	fmt.Fprintln(s)
+}
+
 // Debugln prints a message with newline if verbose mode enabled (in dark gray if colors enabled).
 func Debugln(d data.Provider, emoji string, prefix string, message string) {
 	s := d.GetWriteStream()
