@@ -2,6 +2,7 @@ package provider
 
 import (
 	"context"
+	"regexp"
 	"time"
 
 	"github.com/aripalo/aws-mfa-credential-process/internal/data"
@@ -50,13 +51,13 @@ func (t *TokenProvider) Provide(d data.Provider) (Token, error) {
 	defer cancel()
 
 	if UseGui(d) {
-		go t.FromGui(ctx, d)
+		go t.QueryGUI(ctx, d)
 	} else {
-		go t.FromCli(ctx, d)
+		go t.QueryCLI(ctx, d)
 	}
 
 	if HasYubikey(d) {
-		go t.FromYubikey(ctx, d)
+		go t.QueryYubikey(ctx, d)
 	}
 
 	select {
@@ -79,3 +80,6 @@ func HasYubikey(d data.Provider) bool {
 	p := d.GetProfile()
 	return p.YubikeySerial != "" && p.YubikeyLabel != ""
 }
+
+// tokenPattern describes the regexp that will match OATH TOPT MFA token code
+var tokenPattern = regexp.MustCompile("\\d{6}\\d*")
