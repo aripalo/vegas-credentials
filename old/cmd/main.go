@@ -17,6 +17,9 @@ var version = "development"
 // Application Entrypoint
 func main() {
 
+	// Do some global configuration initialization
+	config.Init()
+
 	// Just print the version string, nothing else
 	// https://github.com/urfave/cli/blob/master/docs/v2/manual.md#version-flag
 	cli.VersionPrinter = func(c *cli.Context) {

@@ -5,6 +5,8 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/aripalo/aws-mfa-credential-process/internal/config"
 )
 
 func TestResolveConfigPath(t *testing.T) {
@@ -22,7 +24,6 @@ func TestResolveConfigPath(t *testing.T) {
 }
 
 func TestLoadConfig(t *testing.T) {
-
 	configPath := getTestdataFilePath("valid-minimal-config.ini")
 	config, err := loadConfig(configPath)
 
@@ -39,6 +40,7 @@ func TestLoadConfig(t *testing.T) {
 }
 
 func TestLoadProfileMinimal(t *testing.T) {
+	config.Init()
 	configPath := getTestdataFilePath("valid-minimal-config.ini")
 	config, err := loadConfig(configPath)
 
@@ -66,6 +68,7 @@ func TestLoadProfileMinimal(t *testing.T) {
 }
 
 func TestLoadProfileFull(t *testing.T) {
+	config.Init()
 	configPath := getTestdataFilePath("valid-full-config.ini")
 	config, err := loadConfig(configPath)
 
@@ -98,6 +101,7 @@ func TestLoadProfileFull(t *testing.T) {
 }
 
 func TestLoadProfileInvalid(t *testing.T) {
+	config.Init()
 	configPath := getTestdataFilePath("invalid-config.ini")
 	config, err := loadConfig(configPath)
 
@@ -121,6 +125,7 @@ func TestLoadProfileInvalid(t *testing.T) {
 }
 
 func TestLoadProfileMissing(t *testing.T) {
+	config.Init()
 	configPath := getTestdataFilePath("missing-profile.ini")
 	config, err := loadConfig(configPath)
 

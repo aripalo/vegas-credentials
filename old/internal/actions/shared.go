@@ -1,7 +1,6 @@
 package actions
 
 import (
-	"github.com/aripalo/aws-mfa-credential-process/internal/config"
 	"github.com/aripalo/aws-mfa-credential-process/internal/securestorage"
 	"github.com/aripalo/aws-mfa-credential-process/internal/utils"
 )
@@ -11,6 +10,5 @@ func sharedInitialization(commandName string, verbose bool, disableDialog bool) 
 	if verbose {
 		utils.PrintBanner(commandName)
 	}
-	config.Init()
 	securestorage.Init(disableDialog)
 }

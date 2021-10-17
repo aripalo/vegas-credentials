@@ -52,7 +52,7 @@ var flagProfileNameOptional *cli.StringFlag = &cli.StringFlag{
 // flagVerbose defines a CLI flag configuration
 var flagVerbose *cli.BoolFlag = &cli.BoolFlag{
 	Required: false,
-	Value:    false,
+	Value:    Config.Verbose,
 	Name:     "verbose",
 	Usage:    "enable verbose output",
 }
@@ -60,7 +60,7 @@ var flagVerbose *cli.BoolFlag = &cli.BoolFlag{
 // flagHideArns defines a CLI flag configuration
 var flagHideArns *cli.BoolFlag = &cli.BoolFlag{
 	Required: false,
-	Value:    false,
+	Value:    Config.HideArns,
 	Name:     "hide-arns",
 	Usage:    "Disable printing Role ARN & MFA Device ARN to console (even on verbose-mode)",
 }
@@ -68,7 +68,7 @@ var flagHideArns *cli.BoolFlag = &cli.BoolFlag{
 // flagDisableDialog defines a CLI flag configuration
 var flagDisableDialog *cli.BoolFlag = &cli.BoolFlag{
 	Required: false,
-	Value:    false,
+	Value:    Config.DisableDialog,
 	Name:     "disable-dialog",
 	Usage:    "Disable GUI-prompt and enter MFA Token Code via CLI standard input",
 }
@@ -76,7 +76,7 @@ var flagDisableDialog *cli.BoolFlag = &cli.BoolFlag{
 // flagDisableRefresh defines a CLI flag configuration
 var flagDisableRefresh *cli.BoolFlag = &cli.BoolFlag{
 	Required: false,
-	Value:    false,
+	Value:    Config.DisableRefresh,
 	Name:     "disable-refresh",
 	Usage:    "Disable automatic session credentials mandatory refresh (600s), as defined by botocore",
 }

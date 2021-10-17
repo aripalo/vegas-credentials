@@ -13,6 +13,8 @@ func Assume(c *cli.Context) error {
 	flags := config.ParseCredentialProcessFlags(c)
 	sharedInitialization(c.Command.Name, flags.Verbose, flags.DisableDialog)
 
+	utils.SafeLogLn("VERBOSE", flags.Verbose)
+
 	var err error
 
 	// profileConfig holds the configuration data read from ~/.aws/config for given profile
