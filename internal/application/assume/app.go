@@ -1,11 +1,11 @@
 package assume
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"os"
 
-	"github.com/aripalo/aws-mfa-credential-process/internal/application/assume/awscreds/mfa"
 	"github.com/aripalo/aws-mfa-credential-process/internal/config"
 	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
 )
@@ -45,6 +45,8 @@ func New() (*App, error) {
 // Assume defines the command attached to cobra
 func (a *App) Assume() {
 
+	//a.Config.Load()
+
 	err := a.Profile.Load(a.Config)
 	if err != nil {
 		panic(err)
@@ -52,10 +54,17 @@ func (a *App) Assume() {
 
 	fmt.Println("ASSUME")
 
-	_, err = mfa.GetToken(a)
+	pretty, err := json.MarshalIndent(a.Config, "", "    ")
 	if err != nil {
 		panic(err)
 	}
+
+	fmt.Println(string(pretty))
+
+	//_, err = mfa.GetToken(a)
+	//if err != nil {
+	//	panic(err)
+	//}
 
 	//fmt.Println(fmt.Sprintf("Got token %s via %s", token.Value, token.Provider))
 

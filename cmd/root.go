@@ -1,32 +1,18 @@
 package cmd
 
 import (
-	"fmt"
-	"os"
-
+	"github.com/aripalo/aws-mfa-credential-process/internal/config"
 	"github.com/spf13/cobra"
-
-	"github.com/spf13/viper"
 )
 
 var cfgFile string
-
-var appName string = "aws-mfa-credential-process"
 var version string = "development"
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   appName,
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
+	Use:     config.APP_NAME,
+	Short:   config.APP_DESCRIPTION_SHORT,
+	Long:    config.APP_DESCRIPTION_LONG,
 	Version: version,
 }
 
@@ -37,16 +23,25 @@ func Execute() {
 }
 
 func init() {
-	cobra.OnInitialize(initConfig)
+	//cobra.OnInitialize(initConfig)
 
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
+	rootCmd.PersistentFlags().Bool(
+		config.Defaults.NoColor.Name,
+		config.Defaults.NoColor.Value,
+		config.Defaults.NoColor.Usage,
+	)
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.newApp.yaml)")
+	rootCmd.PersistentFlags().Bool(
+		config.Defaults.Verbose.Name,
+		config.Defaults.Verbose.Value,
+		config.Defaults.Verbose.Usage,
+	)
+
+	//rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.newApp.yaml)")
 }
 
 // initConfig reads in config file and ENV variables if set.
+/*
 func initConfig() {
 	if cfgFile != "" {
 		// Use config file from the flag.
@@ -69,3 +64,4 @@ func initConfig() {
 		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
 	}
 }
+*/

@@ -1,0 +1,9 @@
+Assume Temporary Session Credentials with OATH TOPT MFA (provided either via Yubikey Touch or Authenticator App). Securely caches Temporary Session Credentials to local Keyring (macOS Keychain, Windows Credential Manager, Secret Service, pass... etc), refreshes them as needed and outputs them in JSON format to stdin as expected by AWS credential_process.
+
+You shouldn't have to really use this command directly, instead configure it into your ~/.aws/config:
+
+    [profile my-profile]
+    credential_process = aws-mfa-credential-process assume --profile=my-profile 
+    assume_role_arn=arn:aws:iam::123456789012:role/Demo
+    source_profile=default
+    mfa_serial=arn:aws:iam::111111111111:mfa/example

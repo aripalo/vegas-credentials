@@ -8,8 +8,10 @@ require (
 	github.com/cpuguy83/go-md2man/v2 v2.0.0 // indirect
 	github.com/dustin/go-humanize v1.0.0
 	github.com/gookit/color v1.4.2
+	github.com/iancoleman/strcase v0.2.0 // indirect
 	github.com/mattn/go-colorable v0.1.11
 	github.com/mattn/go-tty v0.0.3
+	github.com/mitchellh/mapstructure v1.4.2 // indirect
 	github.com/ncruces/zenity v0.7.12
 	github.com/spf13/cobra v1.2.1 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
