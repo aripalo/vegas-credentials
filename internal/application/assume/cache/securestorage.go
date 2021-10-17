@@ -1,22 +1,16 @@
 package securestorage
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
 
 	"github.com/99designs/keyring"
-	"github.com/aripalo/aws-mfa-credential-process/internal/cachekey"
-	"github.com/aripalo/aws-mfa-credential-process/internal/config"
-	"github.com/aripalo/aws-mfa-credential-process/internal/prompt"
-	"github.com/aripalo/aws-mfa-credential-process/internal/utils"
 )
 
-const KEYRING_LABEL string = config.PRODUCT_NAME
+const KEYRING_LABEL string = "TODO"
 const KEYPREFIX string = KEYRING_LABEL + "__"
 
 var ring keyring.Keyring
@@ -30,11 +24,11 @@ func Init(disableDialog bool) {
 	if err != nil {
 		panic(err)
 	}
-	keyringPath := filepath.Join(homedir, config.PRODUCT_CONFIG_LOCATION, "keyring")
+	keyringPath := filepath.Join(homedir, KEYRING_LABEL, "keyring")
 
 	os.MkdirAll(keyringPath, os.ModePerm)
 
-	utils.SafeLogLn(utils.FormatMessage(utils.COLOR_DEBUG, "ℹ️  ", "Cache Keyring", KEYRING_LABEL))
+	//utils.SafeLogLn(utils.FormatMessage(utils.COLOR_DEBUG, "ℹ️  ", "Cache Keyring", KEYRING_LABEL))
 
 	ring, err = keyring.Open(keyring.Config{
 
@@ -70,16 +64,18 @@ func Init(disableDialog bool) {
 
 		// Fallback encrypted file
 		FileDir: keyringPath,
-		FilePasswordFunc: func(message string) (string, error) {
-			ctx, cancel := context.WithTimeout(nil, 5*time.Minute)
-			defer cancel()
+		/*
+			FilePasswordFunc: func(message string) (string, error) {
+				ctx, cancel := context.WithTimeout(nil, 5*time.Minute)
+				defer cancel()
 
-			if disableDialog {
-				return prompt.Cli(ctx, message)
-			} else {
-				return prompt.Dialog(ctx, "Keyring Unlock", message)
-			}
-		},
+				if disableDialog {
+					return prompt.Cli(ctx, message)
+				} else {
+					return prompt.Dialog(ctx, "Keyring Unlock", message)
+				}
+			},
+		*/
 	})
 
 	if err != nil {
@@ -119,7 +115,7 @@ func RemoveAll(profileName string) error {
 			err = Remove(v)
 			return err
 		} else {
-			if strings.HasPrefix(v, fmt.Sprintf("%s%s", profileName, cachekey.Separator)) {
+			if strings.HasPrefix(v, fmt.Sprintf("%s%s", profileName, "__")) {
 				err = Remove(v)
 				return err
 			}
