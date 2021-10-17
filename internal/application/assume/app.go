@@ -1,11 +1,10 @@
 package assume
 
 import (
-	"encoding/json"
-	"fmt"
 	"io"
 	"os"
 
+	"github.com/aripalo/aws-mfa-credential-process/internal/application/assume/awscreds"
 	"github.com/aripalo/aws-mfa-credential-process/internal/config"
 	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
 )
@@ -47,45 +46,27 @@ func (a *App) Assume() {
 
 	//a.Config.Load()
 
-	err := a.Profile.Load(a.Config)
+	err := a.Profile.Load(a.Config) // TODO could this use a?
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println("ASSUME")
-
-	pretty, err := json.MarshalIndent(a.Config, "", "    ")
+	var credentialprocess *awscreds.CredentialProcess
+	credentialprocess, err = credentialprocess.New(a)
 	if err != nil {
+		// TODO log
+		panic(err)
+	}
+	err = credentialprocess.Get()
+	if err != nil {
+		// TODO log
 		panic(err)
 	}
 
-	fmt.Println(string(pretty))
+	err = credentialprocess.Print()
+	if err != nil {
+		// TODO log
+		panic(err)
+	}
 
-	//_, err = mfa.GetToken(a)
-	//if err != nil {
-	//	panic(err)
-	//}
-
-	//fmt.Println(fmt.Sprintf("Got token %s via %s", token.Value, token.Provider))
-
-	/*
-		creds, err := awscreds.Get(a)
-		if err != nil {
-			panic(err)
-		}
-
-		var foo awscreds.CredentialProcessOutput
-
-		err = foo.GetOutput(creds)
-		if err != nil {
-			panic(err)
-		}
-
-		pretty, err := json.MarshalIndent(foo, "", "    ")
-		if err != nil {
-			panic(err)
-		}
-
-		fmt.Println(string(pretty))
-	*/
 }
