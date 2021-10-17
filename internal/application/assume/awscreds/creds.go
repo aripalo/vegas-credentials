@@ -3,15 +3,15 @@ package awscreds
 import (
 	"time"
 
-	"github.com/aripalo/aws-mfa-credential-process/internal/provider"
+	"github.com/aripalo/aws-mfa-credential-process/internal/data"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/credentials/stscreds"
 	"github.com/aws/aws-sdk-go/aws/session"
 )
 
-func Get(p provider.Provider) (*credentials.Credentials, error) {
-	profile := p.GetProfile()
+func Get(d data.Provider) (*credentials.Credentials, error) {
+	profile := d.GetProfile()
 
 	sess, err := session.NewSession(&aws.Config{
 		Region:      aws.String(profile.Region),

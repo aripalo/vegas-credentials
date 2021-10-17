@@ -1,12 +1,11 @@
 package assume
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 	"os"
 
-	"github.com/aripalo/aws-mfa-credential-process/internal/application/assume/awscreds"
+	"github.com/aripalo/aws-mfa-credential-process/internal/application/assume/awscreds/mfa"
 	"github.com/aripalo/aws-mfa-credential-process/internal/config"
 	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
 )
@@ -18,17 +17,17 @@ type App struct {
 	Profile     *profile.Profile
 }
 
-// GetWriteStream implements provider.Provider method
+// GetWriteStream implements data.Provider method
 func (a *App) GetWriteStream() io.Writer {
 	return a.WriteStream
 }
 
-// GetConfig implements provider.Provider method
+// GetConfig implements data.Provider method
 func (a *App) GetConfig() *config.Config {
 	return a.Config
 }
 
-// GetProfile implements provider.Provider method
+// GetProfile implements data.Provider method
 func (a *App) GetProfile() *profile.Profile {
 	return a.Profile
 }
@@ -53,22 +52,31 @@ func (a *App) Assume() {
 
 	fmt.Println("ASSUME")
 
-	creds, err := awscreds.Get(a)
+	token, err := mfa.GetToken(a)
 	if err != nil {
 		panic(err)
 	}
 
-	var foo awscreds.CredentialProcessOutput
+	fmt.Println(fmt.Sprintf("Got token %s via %s", token.Value, token.Provider))
 
-	err = foo.GetOutput(creds)
-	if err != nil {
-		panic(err)
-	}
+	/*
+		creds, err := awscreds.Get(a)
+		if err != nil {
+			panic(err)
+		}
 
-	pretty, err := json.MarshalIndent(foo, "", "    ")
-	if err != nil {
-		panic(err)
-	}
+		var foo awscreds.CredentialProcessOutput
 
-	fmt.Println(string(pretty))
+		err = foo.GetOutput(creds)
+		if err != nil {
+			panic(err)
+		}
+
+		pretty, err := json.MarshalIndent(foo, "", "    ")
+		if err != nil {
+			panic(err)
+		}
+
+		fmt.Println(string(pretty))
+	*/
 }

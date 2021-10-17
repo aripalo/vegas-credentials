@@ -17,17 +17,17 @@ type App struct {
 	Profile     *profile.Profile
 }
 
-// GetWriteStream implements provider.Provider method
+// GetWriteStream implements data.Provider method
 func (a *App) GetWriteStream() io.Writer {
 	return a.WriteStream
 }
 
-// GetConfig implements provider.Provider method
+// GetConfig implements data.Provider method
 func (a *App) GetConfig() *config.Config {
 	return a.Config
 }
 
-// GetProfile implements provider.Provider method
+// GetProfile implements data.Provider method
 func (a *App) GetProfile() *profile.Profile {
 	return a.Profile
 }
