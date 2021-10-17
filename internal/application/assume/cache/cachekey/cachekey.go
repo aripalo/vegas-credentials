@@ -12,7 +12,7 @@ import (
 const Separator = "__"
 
 // Get is responsible for creating a unique cache key for given profile configuration, therefore ensuring mutated profile configuration will not use previous cached data
-func Get(profileName string, config profile.ProfileConfig) (string, error) {
+func Get(profileName string, config profile.Profile) (string, error) {
 	configString, err := configToString(config)
 	hash := generateSha1Hash(configString)
 	key := combineStrings(profileName, Separator, hash)
@@ -33,7 +33,7 @@ func combineStrings(items ...string) string {
 }
 
 // configToString convertts profile config into stringified JSON
-func configToString(config profile.ProfileConfig) (string, error) {
+func configToString(config profile.Profile) (string, error) {
 	result, err := json.Marshal(config)
 	return string(result), err
 }

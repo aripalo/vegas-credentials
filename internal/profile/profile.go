@@ -10,12 +10,12 @@ import (
 	"github.com/spf13/viper"
 )
 
-func Get(config *config.Config) (ProfileConfig, error) {
-	var profileConfig ProfileConfig
+func (p *Profile) Load(config *config.Config) error {
+	var profileConfig Profile
 
 	home, err := os.UserHomeDir()
 	if err != nil {
-		return profileConfig, err
+		return err
 	}
 
 	v := viper.New()
@@ -31,25 +31,27 @@ func Get(config *config.Config) (ProfileConfig, error) {
 
 	err = v.ReadInConfig()
 	if err != nil {
-		return profileConfig, err
+		return err
 	}
 
-	var configurations map[string]ProfileConfig
+	var configurations map[string]Profile
 
 	err = v.Unmarshal(&configurations)
 	if err != nil {
-		return profileConfig, err
+		return err
 	}
 
 	profileConfig = configurations[section]
 	if profileConfig.AssumeRoleArn == "" || profileConfig.SourceProfile == "" {
-		return profileConfig, errors.New("Invalid profile")
+		return errors.New("Invalid profile")
 	}
 
-	return profileConfig, nil
+	*p = profileConfig
+
+	return nil
 }
 
-type ProfileConfig struct {
+type Profile struct {
 	YubikeySerial   string `mapstructure:"yubikey_serial"`
 	YubikeyLabel    string `mapstructure:"yubikey_label"`
 	SourceProfile   string `mapstructure:"source_profile"`

@@ -8,7 +8,7 @@ import (
 	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
 )
 
-func Get(profileName string, config profile.ProfileConfig) (json.RawMessage, error) {
+func Get(profileName string, config profile.Profile) (json.RawMessage, error) {
 	cacheKey, err := cachekey.Get(profileName, config)
 	if err != nil {
 		return nil, err
@@ -17,14 +17,14 @@ func Get(profileName string, config profile.ProfileConfig) (json.RawMessage, err
 	return cached, err
 }
 
-func Save(profileName string, config profile.ProfileConfig, data json.RawMessage) error {
+func Save(profileName string, config profile.Profile, data json.RawMessage) error {
 	cacheKey, err := cachekey.Get(profileName, config)
 	err = securestorage.Set(cacheKey, data)
 	return err
 }
 
 // Remove a given configuration from cache
-func Remove(profileName string, config profile.ProfileConfig) error {
+func Remove(profileName string, config profile.Profile) error {
 	cacheKey, err := cachekey.Get(profileName, config)
 	err = securestorage.Remove(cacheKey)
 	return err

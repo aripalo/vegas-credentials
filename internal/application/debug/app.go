@@ -11,14 +11,16 @@ import (
 )
 
 type App struct {
-	Out    io.Writer
-	Config *config.Config
+	Out     io.Writer
+	Config  *config.Config
+	Profile *profile.Profile
 }
 
 func New() (*App, error) {
 	a := &App{
-		Out:    os.Stdout,
-		Config: &config.Config{},
+		Out:     os.Stdout,
+		Config:  &config.Config{},
+		Profile: &profile.Profile{},
 	}
 	return a, nil
 }
@@ -32,12 +34,12 @@ func (a *App) Debug() {
 
 	fmt.Println(string(result))
 
-	p, err := profile.Get(a.Config)
+	err = a.Profile.Load(a.Config)
 	if err != nil {
 		panic(err)
 	}
 
-	pretty, err := json.MarshalIndent(p, "", "    ")
+	pretty, err := json.MarshalIndent(a.Profile, "", "    ")
 	if err != nil {
 		panic(err)
 	}
