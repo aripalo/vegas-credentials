@@ -16,7 +16,7 @@ func DefineAssumeFlags(cmd *cobra.Command, c *config.Config, required ...string)
 	cmd.Flags().BoolVar(&c.HideArns, "hide-arns", c.HideArns, "HideArns")
 	cmd.Flags().BoolVar(&c.DisableDialog, "disable-dialog", c.DisableDialog, "DisableDialog")
 	cmd.Flags().BoolVar(&c.DisableRefresh, "disable-refresh", c.DisableRefresh, "DisableRefresh")
-
+	cmd.Flags().BoolVar(&c.NoColor, "no-color", c.NoColor, "NoColor")
 }
 
 func DefineDeleteCacheFlags(cmd *cobra.Command, c *config.Config) {
