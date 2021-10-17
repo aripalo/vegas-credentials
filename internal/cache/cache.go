@@ -3,8 +3,8 @@ package cache
 import (
 	"encoding/json"
 
-	"github.com/aripalo/aws-mfa-credential-process/internal/application/assume/cache/cachekey"
-	"github.com/aripalo/aws-mfa-credential-process/internal/application/assume/cache/securestorage"
+	"github.com/aripalo/aws-mfa-credential-process/internal/cache/cachekey"
+	"github.com/aripalo/aws-mfa-credential-process/internal/cache/securestorage"
 	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
 )
 
