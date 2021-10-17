@@ -22,12 +22,15 @@ type Config struct {
 
 func resolveNoColorDefaultValue() bool {
 	// Check if NO_COLOR set https://no-color.org/
-	if _, ok := os.LookupEnv("NO_COLOR"); ok {
+
+	_, noColorSet := os.LookupEnv("NO_COLOR")
+	if noColorSet {
 		return true
 	}
 
 	// Check if app-specific _NO_COLOR set https://medium.com/@jdxcode/12-factor-cli-apps-dd3c227a0e46
-	if _, ok := os.LookupEnv("AWS_MFA_CREDENTIAL_PROCESS_NO_COLOR"); ok {
+	_, appNoColorSet := os.LookupEnv("AWS_MFA_CREDENTIAL_PROCESS_NO_COLOR")
+	if appNoColorSet {
 		return true
 	}
 

@@ -23,10 +23,8 @@ func format(d data.Provider, colorize color.Color, emoji string, prefix string, 
 	c := d.GetConfig()
 	output := ""
 
-	if emoji != "" {
-		if c.NoColor == false {
-			output = fmt.Sprintf("%s%s", output, emoji)
-		}
+	if emoji != "" && c.NoColor != true {
+		output = fmt.Sprintf("%s%s ", output, emoji)
 	}
 
 	if prefix != "" {
@@ -36,7 +34,7 @@ func format(d data.Provider, colorize color.Color, emoji string, prefix string, 
 		} else {
 			p = colorize.Render(textBold.Render(fmt.Sprintf("%s:", prefix)))
 		}
-		output = fmt.Sprintf("%s %s", output, p)
+		output = fmt.Sprintf("%s%s", output, p)
 	}
 
 	if c.NoColor {
