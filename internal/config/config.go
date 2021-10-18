@@ -56,8 +56,8 @@ func (c *Config) Load(cmd *cobra.Command) error {
 
 	// Config file search pahts
 	v.AddConfigPath(fmt.Sprintf("$XDG_CONFIG_HOME/%s", APP_NAME))
-	v.AddConfigPath(fmt.Sprintf("~/.config/%s", APP_NAME))
-	v.AddConfigPath(fmt.Sprintf("~/.%s", APP_NAME))
+	v.AddConfigPath(fmt.Sprintf("$HOME/.config/%s", APP_NAME))
+	v.AddConfigPath(fmt.Sprintf("$HOME/.%s", APP_NAME))
 
 	// Read from Config
 	err = v.ReadInConfig()
