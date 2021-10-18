@@ -47,7 +47,7 @@ func New() (*App, error) {
 	return a, nil
 }
 
-// Prerun is responsible for loading in configurations etc and is the only method that directly depends on Cobra
+// Prerun is responsible for loading in configurations & init code etc and is the only method that directly depends on Cobra
 func (app *App) Prerun(cmd *cobra.Command) error {
 	var err error
 	err = app.Config.Load(cmd)
@@ -60,13 +60,6 @@ func (app *App) Prerun(cmd *cobra.Command) error {
 	}
 	app.command = cmd.CalledAs()
 	app.version = cmd.Parent().Version
-	return nil
-}
-
-// Run executes the cobra command (but does not directly depend on cobra)
-func (app *App) Run() {
-
-	var err error
 
 	logger.PrintBanner(app, app.command, app.version)
 
@@ -75,6 +68,14 @@ func (app *App) Run() {
 	securestorage.Init(app.Config.DisableDialog)
 
 	logger.DebugJSON(app, "🔧 ", "Profile", app.Profile)
+
+	return nil
+}
+
+// Run executes the cobra command (but does not directly depend on cobra)
+func (app *App) Run() {
+
+	var err error
 
 	cached, cacheErr := cache.Get(app)
 	if cacheErr == nil {
