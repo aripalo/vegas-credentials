@@ -2,7 +2,9 @@ package logger
 
 import (
 	"errors"
+	"fmt"
 
+	"github.com/aripalo/aws-mfa-credential-process/internal/data"
 	"golang.org/x/term"
 )
 
@@ -18,7 +20,7 @@ func getWidth() (int, error) {
 	}
 }
 
-func CreateRuler(char string) string {
+func createRuler(char string) string {
 	width, err := getWidth()
 
 	if err != nil || width == 0 {
@@ -31,4 +33,15 @@ func CreateRuler(char string) string {
 	}
 
 	return banner
+}
+
+func printRuler(d data.Provider, char string) {
+	ruler := createRuler(char)
+	s := d.GetWriteStream()
+	c := d.GetConfig()
+	if c.NoColor {
+		fmt.Fprintln(s, ruler)
+	} else {
+		fmt.Fprintln(s, textColorDebug.Render(ruler))
+	}
 }
