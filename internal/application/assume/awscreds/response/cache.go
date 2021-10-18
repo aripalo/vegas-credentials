@@ -17,6 +17,8 @@ func (r *Response) SaveToCache(d data.Provider) error {
 		return err
 	}
 
+	logger.Debugln(d, "ℹ️ ", "Credentials", "Saved to cache")
+
 	return nil
 }
 
