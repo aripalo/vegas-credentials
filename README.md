@@ -135,14 +135,14 @@ You may also provide other standard [AWS options](https://docs.aws.amazon.com/cl
 
 |       Flag        |                                                                                  Description                                                                                  |
 | :---------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `help`            | Prints help text                                                                                                                                                              |
-| `profile`         | **Required:** Which AWS Profile to use from `~/.aws/config`: Value (for example `my-profile`) must match the profile name in `ini`-section title, e.g. `[profile my-profile]` |
-| `disable-dialog`  | Disable GUI Dialog Prompt and use CLI stdin input instead                                                                                                                     |
-| `disable-refresh` | Disable Session Credentials refreshing (as defined in Botocore)                                                                                                               |
-| `hide-arns`       | Hide IAM Role & MFA Serial ARNS from output (even on verbose mode)                                                                                                            |
-| `verbose`         | Verbose output                                                                                                                                                                |
-| `debug`           | Prints out various debugging information                                                                                                                                      |
-| `no-color`        | Disable colorful fancy output                                                                                                                                                 |
+| `--help`            | Prints help text                                                                                                                                                              |
+| `--profile`         | **Required:** Which AWS Profile to use from `~/.aws/config`: Value (for example `my-profile`) must match the profile name in `ini`-section title, e.g. `[profile my-profile]` |
+| `--disable-dialog`  | Disable GUI Dialog Prompt and use CLI stdin input instead                                                                                                                     |
+| `--disable-refresh` | Disable Session Credentials refreshing (as defined in Botocore)                                                                                                               |
+| `--hide-arns`       | Hide IAM Role & MFA Serial ARNS from output (even on verbose mode)                                                                                                            |
+| `--verbose`         | Verbose output                                                                                                                                                                |
+| `--debug`           | Prints out various debugging information                                                                                                                                      |
+| `--no-color`        | Disable colorful fancy output                                                                                                                                                 |
 
 <br/>
 
