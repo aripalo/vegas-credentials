@@ -103,6 +103,31 @@ If you're unfamiliar with AWS `credential_process`, [this AWS re:Invent video](h
 
 ## Configuration
 
+There are multiple ways to configure this tool. The configuration options are evaluated in the following precedence/priority:
+1. [Command-line Flag](#command-line-flags)
+2. [Profile Configuration Option](#profile-configuration)
+3. [Environment Variable](#environment-variables)
+4. [Global Default Configuration Option](#global-defaults)
+
+
+<br/>
+
+### Command-line Flags
+
+|       Flag        |                                                                                  Description                                                                                  |
+| :---------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--help`            | Prints help text                                                                                                                                                              |
+| `--profile`         | **Required:** Which AWS Profile to use from `~/.aws/config`: Value (for example `my-profile`) must match the profile name in `ini`-section title, e.g. `[profile my-profile]` |
+| `--disable-dialog`  | Disable GUI Dialog Prompt and use CLI stdin input instead                                                                                                                     |
+| `--disable-refresh` | Disable Session Credentials refreshing (as defined in Botocore)                                                                                                               |
+| `--hide-arns`       | Hide IAM Role & MFA Serial ARNS from output (even on verbose mode)                                                                                                            |
+| `--verbose`         | Verbose output                                                                                                                                                                |
+| `--debug`           | Prints out various debugging information                                                                                                                                      |
+| `--no-color`        | Disable colorful fancy output                                                                                                                                                 |
+
+
+<br/>
+
 ### Profile Configuration
 
 
@@ -129,33 +154,6 @@ You may also provide other standard [AWS options](https://docs.aws.amazon.com/cl
 | `yubikey_serial`         | **Required if using Yubikey:** Yubikey Device Serial to use. You can see the serial(s) with `ykman list` command. This enforces the use of a specific Yubikey and also enables the support for using multiple Yubikeys (for different profiles)! |
 | `yubikey_label`         | **Required if using any other label than the AWS MFA Device ARN as label!** Yubikey `oath` Account Label to use. You can see the available accounts with `ykman oath accounts list` command. Set the account label which you have configured your AWS TOPT MFA! |
 
-<br/>
-
-### Command-line Flags
-
-|       Flag        |                                                                                  Description                                                                                  |
-| :---------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--help`            | Prints help text                                                                                                                                                              |
-| `--profile`         | **Required:** Which AWS Profile to use from `~/.aws/config`: Value (for example `my-profile`) must match the profile name in `ini`-section title, e.g. `[profile my-profile]` |
-| `--disable-dialog`  | Disable GUI Dialog Prompt and use CLI stdin input instead                                                                                                                     |
-| `--disable-refresh` | Disable Session Credentials refreshing (as defined in Botocore)                                                                                                               |
-| `--hide-arns`       | Hide IAM Role & MFA Serial ARNS from output (even on verbose mode)                                                                                                            |
-| `--verbose`         | Verbose output                                                                                                                                                                |
-| `--debug`           | Prints out various debugging information                                                                                                                                      |
-| `--no-color`        | Disable colorful fancy output                                                                                                                                                 |
-
-<br/>
-
-### Global Defaults
-
-You may define global defaults (applied to every profile) in global configuration file.
-
-The configuration file may be written in TOML, YAML, JSON or INI with a basename of `config`, for example `config.yaml`. The configuration file is looked up from following locations in this order:
-1. `$XDG_CONFIG_HOME/aws-mfa-credential-process/config.{ext}` (per [XDG-spec](https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html))
-2. `~/.config/aws-mfa-credential-process/config.{ext}`
-3. `~/.aws-mfa-credential-process/config.{ext}`
-
-You may provide any [Profile Configuration option](#profile-configuration) or any behavioural (boolean) [Command-Line Flag](#command-line-flags) (i.e. all except `profile` or `help`) in this config file.
 
 <br/>
 
@@ -168,7 +166,22 @@ You may provide any [Profile Configuration option](#profile-configuration) or an
 | `AWS_MFA_CREDENTIAL_PROCESS_NO_COLOR` | Disable color only for this tool (not for your whole environment ) |
 | `TERM=dumb` | Another way to disable colorful fancy output |
 
+<br/>
 
+### Global Defaults
+
+You may define global defaults (applied to every profile) in global configuration file.
+
+The configuration file may be written in TOML, YAML, JSON or INI with a basename of `config`, for example `config.yaml`. The configuration file is looked up from following locations in this order:
+1. `$XDG_CONFIG_HOME/aws-mfa-credential-process/config.{ext}` (per [XDG-spec](https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html))
+2. `~/.config/aws-mfa-credential-process/config.{ext}`
+3. `~/.aws-mfa-credential-process/config.{ext}`
+
+... where `{ext}` is one of: `toml`, `yaml`, `json` or `ini`.
+
+You may provide any [Profile Configuration option](#profile-configuration) or any behavioural (boolean) [Command-Line Flag](#command-line-flags) (i.e. all except `profile` or `help`) in this config file.
+
+<br/>
 
 
 
