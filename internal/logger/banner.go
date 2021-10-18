@@ -11,8 +11,8 @@ func PrintBanner(d data.Provider, commandName string, version string) {
 	if c.Verbose {
 		PrintRuler(d, "=")
 		Titleln(d, "", config.APP_NAME, commandName)
-		Infoln(d, "ℹ️ ", "Version", version)
-		Infoln(d, "ℹ️ ", "Repository", config.APP_REPO)
-		PrintRuler(d, "=")
+		Infoln(d, "- ", "Version", version)
+		Infoln(d, "- ", "Repository", config.APP_REPO)
+		PrintRuler(d, "-")
 	}
 }
