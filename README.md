@@ -186,7 +186,26 @@ In the background this tool uses [`99designs/keyring`](https://github.com/99desi
 - KDE Wallet
 - Encrypted File
 
-🚧 **TODO**: Document keyring usage
+🚧 **TODO**: Not all keyring backends are tested/verified working!
+
+### Keyring specific notes
+
+<details><summary>macOS Keychain</summary><br>
+
+
+This tool will create a new keychain with a name `aws-mfa-credential-process`.
+
+During first use of the tool, you must create a password for the keychain and later you must provide the password to access items in it. For convenience you should choose `Always Allow`, but see [security related notes](#security-related-notes).
+
+| 1. Initial setup | 2. Usage |
+|:---: | :---: |
+| ![new-keyring](/docs/keyring/1-new-keyring.png) | ![use-keyring-info](/docs/keyring/3-use-keyring-info.png) | 
+
+</details><br>
+
+### Security related notes
+
+Keyring (such as macOS Keychain) by itself probably is one of the most secure places to cache temporary session credentials, but beware: If you allow `aws-mfa-credential-process` to access the keyring, it means that any (potentially hostile) process on your computer could invoke `aws-mfa-credential-process` and retrieve the cached credentials! So it's not 100% secure. Then again, we're storing only _**temporary** session credentials_ there with an expiration and you really should use temporary credentials with short expiration (`3600s` i.e. 1 hour is a good default for expiration).
 
 
 <br/>
