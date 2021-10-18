@@ -40,7 +40,7 @@ type TokenProvider struct {
 const MFA_TIMEOUT_SECONDS = 60
 
 // Provide OATH TOPT MFA Token from supported providers
-func (t *TokenProvider) Provide(d data.Provider) (Token, error) {
+func (t *TokenProvider) Provide(d data.Provider, enableYubikey bool) (Token, error) {
 	t.tokenChan = make(chan *Token, 1)
 	t.errorChan = make(chan *error, 1)
 
@@ -50,14 +50,14 @@ func (t *TokenProvider) Provide(d data.Provider) (Token, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), MFA_TIMEOUT_SECONDS*time.Second)
 	defer cancel()
 
+	if enableYubikey {
+		go t.QueryYubikey(ctx, d)
+	}
+
 	if UseGui(d) {
 		go t.QueryGUI(ctx, d)
 	} else {
 		go t.QueryCLI(ctx, d)
-	}
-
-	if HasYubikey(d) {
-		go t.QueryYubikey(ctx, d)
 	}
 
 	select {
@@ -74,12 +74,6 @@ func (t *TokenProvider) Provide(d data.Provider) (Token, error) {
 func UseGui(d data.Provider) bool {
 	c := d.GetConfig()
 	return !c.DisableDialog
-}
-
-// HasYubikey telss if Yubikey serial+label configured, which means we can query Yubikey for token
-func HasYubikey(d data.Provider) bool {
-	p := d.GetProfile()
-	return p.YubikeySerial != "" && p.YubikeyLabel != ""
 }
 
 // tokenPattern describes the regexp that will match OATH TOPT MFA token code

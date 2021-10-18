@@ -1,7 +1,6 @@
 package assume
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 	"os"
@@ -10,6 +9,7 @@ import (
 	"github.com/aripalo/aws-mfa-credential-process/internal/config"
 	"github.com/aripalo/aws-mfa-credential-process/internal/logger"
 	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
+	"github.com/aripalo/aws-mfa-credential-process/internal/utils"
 )
 
 // App declaration
@@ -48,11 +48,7 @@ func New() (*App, error) {
 func (a *App) Assume() {
 
 	if a.Config.Debug {
-		prettyConfig, err := json.MarshalIndent(a.Config, "", "    ")
-		if err != nil {
-			panic(err)
-		}
-		fmt.Fprintf(os.Stderr, "CONFIG:\n%s\n", string(prettyConfig))
+		fmt.Fprintf(os.Stderr, "CONFIG:\n%s\n", utils.PrettyJSON(a.Config))
 	}
 
 	err := a.Profile.Load(a.Config) // TODO could this use a?
@@ -61,11 +57,7 @@ func (a *App) Assume() {
 	}
 
 	if a.Config.Debug {
-		prettyProfile, err := json.MarshalIndent(a.Profile, "", "    ")
-		if err != nil {
-			panic(err)
-		}
-		fmt.Fprintf(os.Stderr, "PROFILE:\n%s\n", string(prettyProfile))
+		fmt.Fprintf(os.Stderr, "PROFILE:\n%s\n", utils.PrettyJSON(a.Profile))
 	}
 
 	var credentialprocess *awscreds.CredentialProcess
