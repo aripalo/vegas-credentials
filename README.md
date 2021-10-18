@@ -2,7 +2,7 @@
 
 | 🚧 🚧 🚧 <br/> **Work-in-Progress** |
 | :---------------------: |
-| _**Do not use just yet!** The API and configurations may change without any prior notice at any given version. This tool is currently under development & testing. So do not use this for anything important, but feel free to test this out and give feedback!_ |
+| _**Do not use just yet!** Things may not work. The API and configurations may change without any prior notice at any given version. This tool is currently under development & testing. So do not use this for anything important, but feel free to test this out and give feedback!_ |
 
 
 
