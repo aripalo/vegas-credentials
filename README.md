@@ -181,6 +181,12 @@ The configuration file may be written in TOML, YAML, JSON or INI with a basename
 
 You may provide any [Profile Configuration option](#profile-configuration) or any behavioural (boolean) [Command-Line Flag](#command-line-flags) (i.e. all except `profile` or `help`) in this config file.
 
+If you use a single Yubikey, then to avoid typing `yubikey_serial=12345678` into each profile in `~/.aws/config`, you should configure Yubikey Device Serial into global configuration:
+```toml
+# ~/.aws-mfa-credential-process/config.toml
+yubikey_serial = "12345678"
+```
+
 <br/>
 
 
