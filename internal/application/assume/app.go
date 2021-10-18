@@ -53,16 +53,8 @@ func (a *App) Assume() {
 
 	logger.DebugJSON(a, "🔧 ", "Profile", a.Profile)
 
-	var credentialprocess *awscreds.CredentialProcess
-	credentialprocess, err = credentialprocess.New(a)
+	err = awscreds.CredentialProcess(a)
 	if err != nil {
-		// TODO log
-		panic(err)
-	}
-
-	err = credentialprocess.Print()
-	if err != nil {
-		// TODO log
 		panic(err)
 	}
 

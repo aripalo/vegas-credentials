@@ -15,6 +15,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 )
 
+// Response defines the output format expected by AWS credential_process
+// https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sourcing-external.html
 type Response struct {
 	Version         int       `json:"Version"`
 	AccessKeyID     string    `json:"AccessKeyId"`
@@ -23,10 +25,7 @@ type Response struct {
 	Expiration      time.Time `json:"Expiration"`
 }
 
-type CredentialProcess struct {
-	response *Response
-}
-
+// getSession provides AWS session used to assume the target role
 func getSession(d data.Provider) (*session.Session, error) {
 	profile := d.GetProfile()
 	return session.NewSession(&aws.Config{
@@ -35,13 +34,18 @@ func getSession(d data.Provider) (*session.Session, error) {
 	})
 }
 
+// defineCredentials configures how the target role is assumed
 func defineCredentials(d data.Provider, sess *session.Session) *credentials.Credentials {
 	profile := d.GetProfile()
 	return stscreds.NewCredentials(sess, profile.AssumeRoleArn, func(p *stscreds.AssumeRoleProvider) {
+
+		// IAM MFA device ARN
 		p.SerialNumber = aws.String(profile.MfaSerial)
 
+		// Configures the temporary session duration
 		p.Duration = time.Duration(profile.DurationSeconds) * time.Second
 
+		// map our own MFA Token Provider signature to one expected by AWS Go SDK
 		p.TokenProvider = func() (string, error) {
 			result, err := mfa.GetToken(d)
 			if err != nil {
@@ -50,31 +54,36 @@ func defineCredentials(d data.Provider, sess *session.Session) *credentials.Cred
 			return result.Value, nil
 		}
 
+		// ExternalID may not be empty, or otherwise AWS Go SDK errors
 		if profile.ExternalID != "" {
 			p.ExternalID = aws.String(profile.ExternalID)
 		}
 
+		// RoleSessionName may not be empty, or otherwise AWS Go SDK errors
 		if profile.RoleSessionName != "" {
 			p.RoleSessionName = profile.RoleSessionName
 		}
-
 	})
 }
 
+// getCredentialProcessResponse performs the assume role operation and returns response struct ready for printing
 func getCredentialProcessResponse(creds *credentials.Credentials) (*Response, error) {
 	var response *Response
 	var err error
 
+	// Get() performs the actual assume role operation by fetching temporary session credentials
 	value, err := creds.Get()
 	if err != nil {
 		return response, err
 	}
 
+	// Get temporary session expiration time, must be called after creds.Get()
 	expiration, err := creds.ExpiresAt()
 	if err != nil {
 		return response, err
 	}
 
+	// format the response
 	response = &Response{
 		Version:         1,
 		AccessKeyID:     value.AccessKeyID,
@@ -87,34 +96,34 @@ func getCredentialProcessResponse(creds *credentials.Credentials) (*Response, er
 }
 
 // New initializes session credentials
-func (c *CredentialProcess) New(d data.Provider) (*CredentialProcess, error) {
+func CredentialProcess(d data.Provider) error {
 	profile := d.GetProfile()
-
-	credentialprocess := CredentialProcess{}
 
 	logger.Infoln(d, "👷", "Role", profile.AssumeRoleArn)
 
 	sess, err := getSession(d)
 
 	if err != nil {
-		return &credentialprocess, err
+		return err
 	}
 
 	creds := defineCredentials(d, sess)
 
 	response, err := getCredentialProcessResponse(creds)
 	if err != nil {
-		return &credentialprocess, err
+		return err
 	}
 
-	c.response = response
+	logger.DebugJSON(d, "🔧 ", "Response", response)
 
-	return &credentialprocess, err
+	print(response)
+
+	return err
 }
 
 // Print credential_process combatible JSON into stdout
-func (c *CredentialProcess) Print() error {
-	output, err := utils.PrettyJSON(c.response)
+func print(response *Response) error {
+	output, err := utils.PrettyJSON(response)
 	if err != nil {
 		return err
 	}
