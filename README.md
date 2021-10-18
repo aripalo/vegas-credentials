@@ -77,22 +77,23 @@
 3. Configure you source profile and its credentials, most often it's the `default` one which you configure into `~/.aws/credentials`:
 
     ```ini
+    # ~/.aws/credentials
     [default]
     aws_access_key_id = AKIAIOSFODNN7EXAMPLE
     aws_secret_access_key = wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
-    aws_mfa_device = arn:aws:iam::123456789012:mfa/example
+    aws_mfa_device = arn:aws:iam::111111111111:mfa/MyUser
     ```
 
 4. Configure your target profile with `credential_process` into `~/.aws/config`:
 
     ```ini
+    # ~/.aws/config
     [profile my-profile]
-    credential_process = aws-mfa-credential-process assume --profile=my-profile   # in 99% cases the profile should match what's in the ini-section title
-    yubikey_serial=<yubikey-serial>        # which Yubikey Device you're using
-    assume_role_arn=<target-role-arn>      # IMPORTANT: Note "assume_" prefix (vs. the default "role_arn")
-    source_profile=<source-profile-name>   # often "default"
-    mfa_serial=<mfa-device-arn>            # your AWS MFA Device ARN serial
-    # ...any other AWS standard options
+    credential_process = aws-mfa-credential-process assume --profile=my-profile   
+    assume_role_arn=arn:aws:iam::222222222222:role/MyRole    
+    source_profile=default 
+    mfa_serial=arn:aws:iam::111111111111:mfa/MyUser
+    yubikey_serial=12345678 # if you use Yubikey, omit if you don't
     ```
 
 5. Use any AWS tooling that support ini-based configuration with `credential_process`, like AWS CLI v2:
