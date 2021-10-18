@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -42,17 +43,21 @@ func (c *Config) Load(cmd *cobra.Command) error {
 	v := viper.New()
 
 	// Set defaults
-	v.SetDefault(Defaults.DurationSeconds.Name, Defaults.DurationSeconds.Value) // set the default duration seconds to match AWS defaults
-	v.SetDefault(Defaults.Debug.Name, Defaults.Debug.Value)                     // by default, disable debug information
-	v.SetDefault(Defaults.Verbose.Name, Defaults.Verbose.Value)                 // by default, disable verbose output
-	v.SetDefault(Defaults.HideArns.Name, Defaults.HideArns.Value)               // by default, do not hide ARNs in verbose output
-	v.SetDefault(Defaults.DisableDialog.Name, Defaults.DisableDialog.Value)     // by default, use GUI dialog prompt
-	v.SetDefault(Defaults.DisableRefresh.Name, Defaults.DisableRefresh.Value)   // by default, refresh credentials like botocore does
-	v.SetDefault(Defaults.NoColor.Name, Defaults.NoColor.Value)                 // by default, allow colored output (depending on environment)
+	v.SetDefault(Defaults.DurationSeconds.Name, Defaults.DurationSeconds.Value)
+	v.SetDefault(Defaults.Debug.Name, Defaults.Debug.Value)
+	v.SetDefault(Defaults.Verbose.Name, Defaults.Verbose.Value)
+	v.SetDefault(Defaults.HideArns.Name, Defaults.HideArns.Value)
+	v.SetDefault(Defaults.DisableDialog.Name, Defaults.DisableDialog.Value)
+	v.SetDefault(Defaults.DisableRefresh.Name, Defaults.DisableRefresh.Value)
+	v.SetDefault(Defaults.NoColor.Name, Defaults.NoColor.Value)
 
-	// Set Config Path
-	v.SetConfigName("config")   // name of config file (without extension)
-	v.AddConfigPath(configPath) // call multiple times to add many search paths
+	// Set Config file name (without extension)
+	v.SetConfigName("config")
+
+	// Config file search pahts
+	v.AddConfigPath(fmt.Sprintf("$XDG_CONFIG_HOME/%s", APP_NAME))
+	v.AddConfigPath(fmt.Sprintf("~/.config/%s", APP_NAME))
+	v.AddConfigPath(fmt.Sprintf("~/.%s", APP_NAME))
 
 	// Read from Config
 	err = v.ReadInConfig()
