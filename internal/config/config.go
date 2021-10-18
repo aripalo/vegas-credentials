@@ -13,16 +13,16 @@ import (
 
 // Config provides global/shared configuration passed downstream
 type Config struct {
-	Profile         string
-	DurationSeconds int
-	YubikeySerial   string
-	YubikeyLabel    string
-	Debug           bool
-	Verbose         bool
-	HideArns        bool
-	DisableDialog   bool
-	DisableRefresh  bool
-	NoColor         bool
+	Profile         string `mapstructure:"profile"`
+	DurationSeconds int    `mapstructure:"duration_seconds"`
+	YubikeySerial   string `mapstructure:"yubikey_serial"`
+	YubikeyLabel    string `mapstructure:"yubikey_label"`
+	Debug           bool   `mapstructure:"debug"`
+	Verbose         bool   `mapstructure:"verbose"`
+	HideArns        bool   `mapstructure:"hide_arns"`
+	DisableDialog   bool   `mapstructure:"disable_dialog"`
+	DisableRefresh  bool   `mapstructure:"disable_refresh"`
+	NoColor         bool   `mapstructure:"no_color"`
 }
 
 // TODO how to support testing with temp file etc? (e.g. in profile_test.go)
@@ -77,6 +77,7 @@ func (c *Config) Load(cmd *cobra.Command) error {
 // https://pkg.go.dev/github.com/mitchellh/mapstructure#DecoderConfig.MatchName
 func decodeWithMixedCasing(config *mapstructure.DecoderConfig) {
 	config.MatchName = func(mapKey string, fieldName string) bool {
-		return strings.EqualFold(strcase.ToCamel(mapKey), fieldName)
+		snakedMapKey := strcase.ToSnake(mapKey)
+		return strings.EqualFold(snakedMapKey, fieldName)
 	}
 }
