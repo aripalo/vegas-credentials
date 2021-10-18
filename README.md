@@ -246,7 +246,7 @@ Keyring (such as macOS Keychain) by itself probably is one of the most secure pl
 
 ## Role Chaining
 
-This tool also supports role chaining, which means assuming an initial role and then using it to assume another role. An example with 3 different AWS accounts would look like:
+This tool also supports role chaining - **given that the specific AWS tool your using supports it** - which means assuming an initial role and then using it to assume another role. An example with 3 different AWS accounts would look like:
 
 ![role-chaining](/docs/role-chaining.svg)
 
