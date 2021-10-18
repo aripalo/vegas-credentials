@@ -13,6 +13,8 @@ func DebugJSON(d data.Provider, emoji string, prefix string, message interface{}
 			panic(err)
 		}
 
+		printRuler(d, "-")
 		Debugf(d, emoji, prefix, "\n%s\n", output)
+		printRuler(d, "-")
 	}
 }
