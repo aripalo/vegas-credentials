@@ -1,25 +1,89 @@
 package config
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
+
+	"github.com/iancoleman/strcase"
+	"github.com/mitchellh/mapstructure"
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
-const (
-	// PRODUCT_NAME defines product name used in various outputs
-	PRODUCT_NAME string = "aws-mfa-credential-process"
+// Config provides global/shared configuration passed downstream
+type Config struct {
+	Profile         string `mapstructure:"profile"`
+	DurationSeconds int    `mapstructure:"duration_seconds"`
+	YubikeySerial   string `mapstructure:"yubikey_serial"`
+	YubikeyLabel    string `mapstructure:"yubikey_label"`
+	Debug           bool   `mapstructure:"debug"`
+	Verbose         bool   `mapstructure:"verbose"`
+	HideArns        bool   `mapstructure:"hide_arns"`
+	DisableDialog   bool   `mapstructure:"disable_dialog"`
+	DisableRefresh  bool   `mapstructure:"disable_refresh"`
+	NoColor         bool   `mapstructure:"no_color"`
+}
 
-	PRODUCT_CONFIG_LOCATION = "." + PRODUCT_NAME
-)
+// TODO how to support testing with temp file etc? (e.g. in profile_test.go)
+func (c *Config) Load(cmd *cobra.Command) error {
 
-// Init creates the main config folder with keyring folder
-func Init() {
+	var err error
 
+	// Initialize config Path
 	homedir, err := os.UserHomeDir()
 	if err != nil {
 		panic(err)
 	}
-	configPath := filepath.Join(homedir, PRODUCT_CONFIG_LOCATION)
+	configPath := filepath.Join(homedir, ".aws-mfa-credential-process")
+	os.MkdirAll(configPath, os.ModePerm) // TODO maybe remove this? XDG thing also...
 
-	os.MkdirAll(configPath, os.ModePerm)
+	// New viper instance
+	v := viper.New()
+
+	// Set defaults
+	v.SetDefault(Defaults.DurationSeconds.Name, Defaults.DurationSeconds.Value)
+	v.SetDefault(Defaults.Debug.Name, Defaults.Debug.Value)
+	v.SetDefault(Defaults.Verbose.Name, Defaults.Verbose.Value)
+	v.SetDefault(Defaults.HideArns.Name, Defaults.HideArns.Value)
+	v.SetDefault(Defaults.DisableDialog.Name, Defaults.DisableDialog.Value)
+	v.SetDefault(Defaults.DisableRefresh.Name, Defaults.DisableRefresh.Value)
+	v.SetDefault(Defaults.NoColor.Name, Defaults.NoColor.Value)
+
+	// Set Config file name (without extension)
+	v.SetConfigName("config")
+
+	// Config file search pahts
+	v.AddConfigPath(fmt.Sprintf("$XDG_CONFIG_HOME/%s", APP_NAME))
+	v.AddConfigPath(fmt.Sprintf("$HOME/.config/%s", APP_NAME))
+	v.AddConfigPath(fmt.Sprintf("$HOME/.%s", APP_NAME))
+
+	// Read from Config
+	err = v.ReadInConfig()
+	if err != nil && err != err.(viper.ConfigFileNotFoundError) {
+		return err
+	} else {
+		// Config file is optional, so ignore
+		err = nil
+	}
+
+	// Read CLI flags
+	// https://github.com/spf13/viper#working-with-flags
+	v.BindPFlags(cmd.Flags())
+
+	// Unmarshal viper configuration into config.Config
+	err = v.Unmarshal(&c, decodeWithMixedCasing)
+
+	return err
+}
+
+// decodeWithMixedCasing enables support for different kinds of casing in configuration (snake, param, etc)
+// This works because Viper prefers CLI flags to config file & default values.
+// https://pkg.go.dev/github.com/mitchellh/mapstructure#DecoderConfig.MatchName
+func decodeWithMixedCasing(config *mapstructure.DecoderConfig) {
+	config.MatchName = func(mapKey string, fieldName string) bool {
+		snakedMapKey := strcase.ToSnake(mapKey)
+		return strings.EqualFold(snakedMapKey, fieldName)
+	}
 }

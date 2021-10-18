@@ -6,85 +6,59 @@ import (
 	"os"
 	"path/filepath"
 
-	"gopkg.in/ini.v1"
+	"github.com/aripalo/aws-mfa-credential-process/internal/config"
+	"github.com/spf13/viper"
 )
 
-const awsConfigFileLocation string = ".aws/config"
+func (p *Profile) Load(config *config.Config) error {
+	var profileConfig Profile
 
-func GetProfile(profileName string) (Profile, error) {
-
-	var path string
-	var config *ini.File
-	var profile Profile
-	var err error
-
-	path, err = resolveConfigPath()
-	config, err = loadConfig(path)
-	profile, err = loadProfile(config, profileName)
-
-	return profile, err
-}
-
-// resolveConfigPath provides the absolute path to AWS config file
-func resolveConfigPath() (string, error) {
-	homedir, err := os.UserHomeDir()
+	home, err := os.UserHomeDir()
 	if err != nil {
-		return "", err
+		return err
 	}
-	configPath := filepath.Join(homedir, awsConfigFileLocation)
 
-	return configPath, nil
+	v := viper.New()
+	v.SetConfigName("config")
+	v.SetConfigType("ini")
+	v.AddConfigPath(filepath.Join(home, ".aws"))
 
-}
+	section := fmt.Sprintf("profile %s", config.Profile)
 
-// loadConfig loads an ini-file based configuration from given path
-func loadConfig(configPath string) (*ini.File, error) {
-	config, err := ini.Load(configPath)
+	v.SetDefault(fmt.Sprintf("%s.duration_seconds", section), config.DurationSeconds)
+	v.SetDefault(fmt.Sprintf("%s.yubikey_serial", section), config.YubikeySerial)
+	v.SetDefault(fmt.Sprintf("%s.yubikey_label", section), config.YubikeyLabel)
+
+	err = v.ReadInConfig()
 	if err != nil {
-		return nil, err
-	}
-	return config, nil
-}
-
-func loadProfile(config *ini.File, profileName string) (Profile, error) {
-
-	sectionName := fmt.Sprintf("profile %s", profileName)
-
-	profile := &Profile{
-		DurationSeconds: 3600, // default to 1 hour as AWS does
+		return err
 	}
 
-	section, err := config.GetSection(sectionName)
+	var configurations map[string]Profile
+
+	err = v.Unmarshal(&configurations)
 	if err != nil {
-		return *profile, err
+		return err
 	}
 
-	err = section.MapTo(profile)
-	if err != nil {
-		return *profile, err
+	profileConfig = configurations[section]
+	if profileConfig.AssumeRoleArn == "" || profileConfig.SourceProfile == "" {
+		return errors.New("Invalid profile")
 	}
 
-	if profile.AssumeRoleArn == "" {
-		return *profile, errors.New(fmt.Sprintf("Missing assume_role_arn from profile %s config", profileName))
-	}
+	*p = profileConfig
 
-	if profile.MfaSerial == "" {
-		return *profile, errors.New(fmt.Sprintf("Missing mfa_serial from profile %s config", profileName))
-	}
-
-	return *profile, nil
+	return nil
 }
-
-// TODO validate ARNs
 
 type Profile struct {
-	YubikeySerial   string `ini:"yubikey_serial"`
-	YubikeyLabel    string `ini:"yubikey_label"`
-	SourceProfile   string `ini:"source_profile"`
-	AssumeRoleArn   string `ini:"assume_role_arn"`
-	MfaSerial       string `ini:"mfa_serial"`
-	DurationSeconds int    `ini:"duration_seconds"`
-	Region          string `ini:"region"`
-	RoleSessionName string `ini:"role_session_name"`
-	ExternalID      string `ini:"external_id"`
+	YubikeySerial   string `mapstructure:"yubikey_serial"`
+	YubikeyLabel    string `mapstructure:"yubikey_label"`
+	SourceProfile   string `mapstructure:"source_profile"`
+	AssumeRoleArn   string `mapstructure:"assume_role_arn"`
+	MfaSerial       string `mapstructure:"mfa_serial"`
+	DurationSeconds int    `mapstructure:"duration_seconds"`
+	Region          string `mapstructure:"region"`
+	RoleSessionName string `mapstructure:"role_session_name"`
+	ExternalID      string `mapstructure:"external_id"`
 }
