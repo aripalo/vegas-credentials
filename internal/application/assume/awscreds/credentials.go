@@ -17,7 +17,7 @@ func GetCredentials(d data.Provider) error {
 
 	r, err = getCachedCredentials(d)
 	if err != nil {
-		logger.Infof(d, "ℹ️ ", "Credentials", "Cached: %s", err.Error())
+		logger.Infof(d, "ℹ️ ", "Credentials", "Cached: %s\n", err.Error())
 		r, err = getNewCredentials(d)
 		if err != nil {
 			logger.Errorln(d, "ℹ️ ", "Credentials", err.Error())
