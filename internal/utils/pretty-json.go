@@ -4,12 +4,10 @@ import (
 	"encoding/json"
 )
 
-func PrettyJSON(input interface{}) string {
-
+func PrettyJSON(input interface{}) (string, error) {
 	output, err := json.MarshalIndent(input, "", "    ")
 	if err != nil {
-		panic(err)
+		return "", err
 	}
-	return string(output)
-
+	return string(output), nil
 }
