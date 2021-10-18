@@ -47,8 +47,8 @@ func New() (*App, error) {
 	return a, nil
 }
 
-// Prerun is responsible for loading in configurations & init code etc and is the only method that directly depends on Cobra
-func (app *App) Prerun(cmd *cobra.Command) error {
+// PreRunE is responsible for loading in configurations & init code etc and is the only method that directly depends on Cobra
+func (app *App) PreRunE(cmd *cobra.Command) error {
 	var err error
 	err = app.Config.Load(cmd)
 	if err != nil {
