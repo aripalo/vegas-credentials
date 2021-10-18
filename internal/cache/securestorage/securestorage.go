@@ -8,9 +8,10 @@ import (
 	"strings"
 
 	"github.com/99designs/keyring"
+	"github.com/aripalo/aws-mfa-credential-process/internal/config"
 )
 
-const KEYRING_LABEL string = "TODO"
+const KEYRING_LABEL string = config.APP_NAME
 const KEYPREFIX string = KEYRING_LABEL + "__"
 
 var ring keyring.Keyring

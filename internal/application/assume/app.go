@@ -4,9 +4,12 @@ import (
 	"io"
 
 	"github.com/aripalo/aws-mfa-credential-process/internal/application/assume/awscreds"
+	"github.com/aripalo/aws-mfa-credential-process/internal/cache"
+	"github.com/aripalo/aws-mfa-credential-process/internal/cache/securestorage"
 	"github.com/aripalo/aws-mfa-credential-process/internal/config"
 	"github.com/aripalo/aws-mfa-credential-process/internal/logger"
 	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
+	"github.com/aripalo/aws-mfa-credential-process/internal/utils"
 )
 
 // App declaration
@@ -53,11 +56,25 @@ func (a *App) Assume(commandName string, version string) {
 		panic(err)
 	}
 
+	securestorage.Init(a.Config.DisableDialog)
+
 	logger.DebugJSON(a, "🔧 ", "Profile", a.Profile)
 
-	err = awscreds.CredentialProcess(a)
-	if err != nil {
-		panic(err)
+	cached, cacheErr := cache.Get(a)
+	if cacheErr == nil {
+		result, err := utils.PrettyJSON(cached)
+		if err == nil {
+			awscreds.OutputToAwsCredentialProcess(result)
+		}
+	} else {
+		logger.Infoln(a, "ℹ️ ", "Cache", cacheErr.Error())
+	}
+
+	if cached == nil {
+		err = awscreds.CredentialProcess(a)
+		if err != nil {
+			panic(err)
+		}
 	}
 
 }

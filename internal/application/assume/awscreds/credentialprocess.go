@@ -1,11 +1,13 @@
 package awscreds
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"time"
 
 	"github.com/aripalo/aws-mfa-credential-process/internal/application/assume/awscreds/mfa"
+	"github.com/aripalo/aws-mfa-credential-process/internal/cache"
 	"github.com/aripalo/aws-mfa-credential-process/internal/data"
 	"github.com/aripalo/aws-mfa-credential-process/internal/logger"
 	"github.com/aripalo/aws-mfa-credential-process/internal/utils"
@@ -116,6 +118,9 @@ func CredentialProcess(d data.Provider) error {
 
 	logger.DebugJSON(d, "🔧 ", "Response", response)
 
+	forCache, err := json.Marshal(response)
+	err = cache.Save(d, forCache)
+
 	print(response)
 
 	return err
@@ -128,13 +133,13 @@ func print(response *Response) error {
 		return err
 	}
 
-	outputToAwsCredentialProcess(output)
+	OutputToAwsCredentialProcess(output)
 
 	return nil
 }
 
 // OutputToAwsCredentialProcess prints to stdout so aws credential_process can read it
 // https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sourcing-external.html
-func outputToAwsCredentialProcess(output string) {
+func OutputToAwsCredentialProcess(output string) {
 	fmt.Fprintf(os.Stdout, output)
 }
