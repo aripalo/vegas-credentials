@@ -62,12 +62,10 @@ func (app *App) PreRunE(cmd *cobra.Command) error {
 	app.version = cmd.Parent().Version
 
 	logger.PrintBanner(app, app.command, app.version)
-
 	logger.DebugJSON(app, "🔧 ", "Config", app.Config)
+	logger.DebugJSON(app, "🔧 ", "Profile", app.Profile)
 
 	securestorage.Init(app.Config.DisableDialog)
-
-	logger.DebugJSON(app, "🔧 ", "Profile", app.Profile)
 
 	return nil
 }
