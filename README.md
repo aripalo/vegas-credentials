@@ -271,6 +271,5 @@ This `aws-mfa-credential-process` is _yet another tool_, but it plugs into the s
 - Feature comparison chart?
 - Docs to https://pkg.go.dev/
 - https://medium.com/@jdxcode/12-factor-cli-apps-dd3c227a0e46
-- XDG spec? https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
 - https://github.com/uber-go/guide/blob/master/style.md
 - Error handler (At the end)
