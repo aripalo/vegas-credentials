@@ -8,7 +8,7 @@
 
 <br/><br/>
 
-[AWS `credential_process`](https://docs.aws.amazon.com/sdkref/latest/guide/setting-global-credential_process.html) utility to assume AWS IAM Roles with _[Yubikey Touch](https://www.yubico.com/products/yubikey-5-overview/) and Authenticator App_ [TOPT MFA](https://en.wikipedia.org/wiki/Time-based_One-Time_Password) to provide temporary session credentials – with local caching to [Keyring](#keyring) and support for automatic credential refresh.
+[AWS `credential_process`](https://docs.aws.amazon.com/sdkref/latest/guide/setting-global-credential_process.html) utility to assume AWS IAM Roles with _[Yubikey Touch](https://www.yubico.com/products/yubikey-5-overview/) and Authenticator App_ [TOPT MFA](https://en.wikipedia.org/wiki/Time-based_One-Time_Password) to provide temporary session credentials; With caching to local [keyring](#keyring) and support for automatic credential refresh.
 
 If you're unfamiliar with AWS `credential_process`, [this AWS re:Invent video](https://www.youtube.com/watch?v=W8IyScUGuGI&t=1260s) explains it very well.
 
@@ -127,7 +127,7 @@ You may also provide other standard [AWS options](https://docs.aws.amazon.com/cl
 | :------------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `assume_role_arn`        | **Required:** The target IAM Role ARN to be assumed.                                                                                                                                                                                                                                         |
 | `yubikey_serial`         | **Required if using Yubikey:** Yubikey Device Serial to use. You can see the serial(s) with `ykman list` command. This enforces the use of a specific Yubikey and also enables the support for using multiple Yubikeys (for different profiles)! |
-| `yubikey_label`         | **Required if using Yubikey:** Yubikey `oath` Account Label to use. You can see the available accounts with `ykman oath accounts list` command. Set the account label which you have configured your AWS TOPT MFA! |
+| `yubikey_label`         | **Required if using any other label than the AWS MFA Device ARN as label!** Yubikey `oath` Account Label to use. You can see the available accounts with `ykman oath accounts list` command. Set the account label which you have configured your AWS TOPT MFA! |
 
 <br/>
 
@@ -193,8 +193,14 @@ In the background this tool uses [`99designs/keyring`](https://github.com/99desi
 
 ## Yubikey Setup
 
-🚧 **TODO**: Document keyring usage
-
+- Supports [Yubikey Touch devices](https://www.yubico.com/products/yubikey-5-overview/) with [OATH TOPT](https://en.wikipedia.org/wiki/Time-based_One-Time_Password) support (Yubikey 5 or 5C recommended).
+- Requires [`ykman` CLI](https://developers.yubico.com/yubikey-manager/).
+- Yubikey must be set up as [**`Virtual MFA device`** in AWS IAM](https://aws.amazon.com/blogs/security/enhance-programmatic-access-for-iam-users-using-yubikey-for-multi-factor-authentication/) - Not ~~`U2F MFA`~~!
+- Think of backup strategy in case you lose your Yubikey device, you should do at least one of the following:
+    - Print the QR-code (and store it securely) 
+    - During `Virtual MFA device` setup also assign Authenticator App (such as [Authy](https://authy.com/)) for backup in case you lose your Yubikey
+    - If you own multiple Yubikey devices, during `Virtual MFA device` setup also configure the second Yubikey and once done, store it securely
+- During setup, it's recommended to use `arn:aws:iam::<ACCOUNT_ID>:mfa/<IAM_USERNAME>` (i.e. MFA device ARN) as the Yubikey OATH account label.
 
 <br/>
 
