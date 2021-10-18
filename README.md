@@ -19,7 +19,7 @@
 
 <br/>
 
-| [Features](#features) | [Get Started](#getting-started) | [Configuration](#configuration) | [Keyring](#keyring) | [Yubikey](#yubikey-setup) |  [Why yet another tool?](#why-yet-another-tool-for-this) | [Caveats](#caveats) |[TODO](#todo) |
+| [Features](#features) | [Getting Started](#getting-started) | [Configuration Options](#configuration) | [Keyring Cache](#keyring) | [Yubikey Setup](#yubikey-setup) | [Role Chaining](#role-chaining) | [Why yet another tool?](#why-yet-another-tool-for-this) | [Caveats](#caveats) | 
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 
 <br/>
