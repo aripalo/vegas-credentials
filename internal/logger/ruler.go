@@ -35,13 +35,17 @@ func createRuler(char string) string {
 	return banner
 }
 
-func printRuler(d data.Provider, char string) {
-	ruler := createRuler(char)
-	s := d.GetWriteStream()
+// PrintRuler repeats a character as many times as thera are columns in the terminal (if verbose mode)
+func PrintRuler(d data.Provider, char string) {
 	c := d.GetConfig()
-	if c.NoColor {
-		fmt.Fprintln(s, ruler)
-	} else {
-		fmt.Fprintln(s, textColorDebug.Render(ruler))
+	if c.Verbose {
+		ruler := createRuler(char)
+		s := d.GetWriteStream()
+		c := d.GetConfig()
+		if c.NoColor {
+			fmt.Fprintln(s, ruler)
+		} else {
+			fmt.Fprintln(s, textColorDebug.Render(ruler))
+		}
 	}
 }

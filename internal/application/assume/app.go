@@ -4,12 +4,10 @@ import (
 	"io"
 
 	"github.com/aripalo/aws-mfa-credential-process/internal/application/assume/awscreds"
-	"github.com/aripalo/aws-mfa-credential-process/internal/cache"
 	"github.com/aripalo/aws-mfa-credential-process/internal/cache/securestorage"
 	"github.com/aripalo/aws-mfa-credential-process/internal/config"
 	"github.com/aripalo/aws-mfa-credential-process/internal/logger"
 	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
-	"github.com/aripalo/aws-mfa-credential-process/internal/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -75,21 +73,10 @@ func (app *App) Run() {
 
 	var err error
 
-	cached, cacheErr := cache.Get(app)
-	if cacheErr == nil {
-		result, err := utils.PrettyJSON(cached)
-		if err == nil {
-			awscreds.OutputToAwsCredentialProcess(result)
-		}
-	} else {
-		logger.Infoln(app, "ℹ️ ", "Cache", cacheErr.Error())
-	}
+	err = awscreds.GetCredentials(app)
 
-	if cached == nil {
-		err = awscreds.CredentialProcess(app)
-		if err != nil {
-			panic(err)
-		}
+	if err != nil {
+		panic(err)
 	}
 
 }

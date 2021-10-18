@@ -5,6 +5,7 @@ go 1.16
 require (
 	github.com/99designs/keyring v1.1.6
 	github.com/aws/aws-sdk-go v1.40.59
+	github.com/dustin/go-humanize v1.0.0
 	github.com/gookit/color v1.4.2
 	github.com/iancoleman/strcase v0.2.0
 	github.com/mattn/go-colorable v0.1.11
