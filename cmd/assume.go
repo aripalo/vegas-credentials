@@ -27,10 +27,10 @@ func buildAssumeCommand(app *assume.App) *cobra.Command {
 		Short: config.ASSUME_DESCRIPTION_SHORT,
 		Long:  config.ASSUME_DESCRIPTION_LONG,
 		PreRunE: func(cmd *cobra.Command, args []string) error {
-			return app.Config.Load(cmd)
+			return app.Prerun(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			app.Assume(cmd.CalledAs(), cmd.Parent().Version)
+			app.Run()
 		},
 	}
 

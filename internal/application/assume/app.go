@@ -10,6 +10,7 @@ import (
 	"github.com/aripalo/aws-mfa-credential-process/internal/logger"
 	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
 	"github.com/aripalo/aws-mfa-credential-process/internal/utils"
+	"github.com/spf13/cobra"
 )
 
 // App declaration
@@ -17,6 +18,8 @@ type App struct {
 	WriteStream io.Writer
 	Config      *config.Config
 	Profile     *profile.Profile
+	command     string
+	version     string
 }
 
 // GetWriteStream implements data.Provider method
@@ -44,34 +47,47 @@ func New() (*App, error) {
 	return a, nil
 }
 
-// Assume defines the command attached to cobra
-func (a *App) Assume(commandName string, version string) {
-
-	logger.PrintBanner(a, commandName, version)
-
-	logger.DebugJSON(a, "🔧 ", "Config", a.Config)
-
-	err := a.Profile.Load(a.Config) // TODO could this use a?
+// Prerun is responsible for loading in configurations etc and is the only method that directly depends on Cobra
+func (app *App) Prerun(cmd *cobra.Command) error {
+	var err error
+	err = app.Config.Load(cmd)
 	if err != nil {
-		panic(err)
+		return err
 	}
+	err = app.Profile.Load(app.Config)
+	if err != nil {
+		return err
+	}
+	app.command = cmd.CalledAs()
+	app.version = cmd.Parent().Version
+	return nil
+}
 
-	securestorage.Init(a.Config.DisableDialog)
+// Run executes the cobra command (but does not directly depend on cobra)
+func (app *App) Run() {
 
-	logger.DebugJSON(a, "🔧 ", "Profile", a.Profile)
+	var err error
 
-	cached, cacheErr := cache.Get(a)
+	logger.PrintBanner(app, app.command, app.version)
+
+	logger.DebugJSON(app, "🔧 ", "Config", app.Config)
+
+	securestorage.Init(app.Config.DisableDialog)
+
+	logger.DebugJSON(app, "🔧 ", "Profile", app.Profile)
+
+	cached, cacheErr := cache.Get(app)
 	if cacheErr == nil {
 		result, err := utils.PrettyJSON(cached)
 		if err == nil {
 			awscreds.OutputToAwsCredentialProcess(result)
 		}
 	} else {
-		logger.Infoln(a, "ℹ️ ", "Cache", cacheErr.Error())
+		logger.Infoln(app, "ℹ️ ", "Cache", cacheErr.Error())
 	}
 
 	if cached == nil {
-		err = awscreds.CredentialProcess(a)
+		err = awscreds.CredentialProcess(app)
 		if err != nil {
 			panic(err)
 		}
