@@ -42,7 +42,9 @@ func New() (*App, error) {
 }
 
 // Assume defines the command attached to cobra
-func (a *App) Assume() {
+func (a *App) Assume(commandName string, version string) {
+
+	logger.PrintBanner(a, commandName, version)
 
 	logger.DebugJSON(a, "🔧 ", "Config", a.Config)
 

@@ -30,7 +30,7 @@ func buildAssumeCommand(app *assume.App) *cobra.Command {
 			return app.Config.Load(cmd)
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			app.Assume()
+			app.Assume(cmd.CalledAs(), cmd.Parent().Version)
 		},
 	}
 
