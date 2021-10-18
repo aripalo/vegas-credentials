@@ -74,6 +74,7 @@ func (c *Config) Load(cmd *cobra.Command) error {
 }
 
 // decodeWithMixedCasing enables support for different kinds of casing in configuration (snake, param, etc)
+// This works because Viper prefers CLI flags to config file & default values.
 // https://pkg.go.dev/github.com/mitchellh/mapstructure#DecoderConfig.MatchName
 func decodeWithMixedCasing(config *mapstructure.DecoderConfig) {
 	config.MatchName = func(mapKey string, fieldName string) bool {
