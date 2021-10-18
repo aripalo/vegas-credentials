@@ -103,18 +103,25 @@ If you're unfamiliar with AWS `credential_process`, [this AWS re:Invent video](h
 
 ## Configuration
 
-Configuration for this tool happens `~/.aws/config` ini-file, mostly in the standard way, but do not configure `role_arn`, instead provide `assume_role_arn`: Otherwise AWS tools would ignore the `credential_process` and assume the role directly without using this tool.
+### Profile Configuration
 
 
-### Required default AWS configuration
+Configuration for this tool mostly happens `~/.aws/config` ini-file. 
+
+Important: Do not configure `role_arn`, instead provide `assume_role_arn`: Otherwise AWS tools would ignore the `credential_process` and assume the role directly without using this tool.
+
+
+#### Standard AWS options
 
 |       Option        |                                                                                                                                     Description                                                                                                                                      |
 | :------------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `source_profile`  | **Required:** Which credentials (profile) are to be used as a source for assuming the target role                                                                                                                                                                                      |
-| `mfa_serial`      | **Required:**                                                                                                                                                                                               
+| `credential_process`  | **Required:** To enable this tool, set the value as `aws-mfa-credential-process assume --profile <my-profile>`. Value of `my-profile` must match the profile name in `ini`-section title, e.g. `[profile my-profile]`.  |
+| `source_profile`  | **Required:** Which credentials (profile) are to be used as a source for assuming the target role.                                                                                                                                                                                      |
+| `mfa_serial`      | **Required:** The ARN of the Virtual (OATH TOPT) MFA device used in Multi-Factor Authentication.                                                                                                                                                                                              
 
+You may also provide other standard [AWS options](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html#cli-configure-files-global) in `~/.aws/config`, such as `region`, `duration_seconds`, `role_session_name`, etc.
 
-### Custom configuration
+#### Custom options
 
 |       Option        |                                                                                                                                     Description                                                                                                                                      |
 | :------------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -122,26 +129,50 @@ Configuration for this tool happens `~/.aws/config` ini-file, mostly in the stan
 | `yubikey_serial`         | **Required if using Yubikey:** Yubikey Device Serial to use. You can see the serial(s) with `ykman list` command. This enforces the use of a specific Yubikey and also enables the support for using multiple Yubikeys (for different profiles)! |
 | `yubikey_label`         | **Required if using Yubikey:** Yubikey `oath` Account Label to use. You can see the available accounts with `ykman oath accounts list` command. Set the account label which you have configured your AWS TOPT MFA! |
 
-### Optional default AWS configuration
+<br/>
 
-You can see all the possible configuration options in [AWS documentation](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html#cli-configure-files-global), but mainly you should be interested in:
-- `region`
-- `duration_seconds`
-- `role_session_name`
-- `external_id`
+### Command-line Flags
+
+|       Flag        |                                                                                  Description                                                                                  |
+| :---------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `help`            | Prints help text                                                                                                                                                              |
+| `profile`         | **Required:** Which AWS Profile to use from `~/.aws/config`: Value (for example `my-profile`) must match the profile name in `ini`-section title, e.g. `[profile my-profile]` |
+| `disable-dialog`  | Disable GUI Dialog Prompt and use CLI stdin input instead                                                                                                                     |
+| `disable-refresh` | Disable Session Credentials refreshing (as defined in Botocore)                                                                                                               |
+| `hide-arns`       | Hide IAM Role & MFA Serial ARNS from output (even on verbose mode)                                                                                                            |
+| `verbose`         | Verbose output                                                                                                                                                                |
+| `debug`           | Prints out various debugging information                                                                                                                                      |
+| `no-color`        | Disable colorful fancy output                                                                                                                                                 |
+
+<br/>
+
+### Global Defaults
+
+You may define global defaults (applied to every profile) in global configuration file.
+
+The configuration file may be written in TOML, YAML, JSON or INI with a basename of `config`, for example `config.yaml`. The configuration file is looked up from following locations in this order:
+1. `$XDG_CONFIG_HOME/aws-mfa-credential-process/config.{ext}` (per [XDG-spec](https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html))
+2. `~/.config/aws-mfa-credential-process/config.{ext}`
+3. `~/.aws-mfa-credential-process/config.{ext}`
+
+You may provide any [Profile Configuration option](#profile-configuration) or any behavioural (boolean) [Command-Line Flag](#command-line-flags) (i.e. all except `profile` or `help`) in this config file.
+
+<br/>
+
+### Environment Variables
 
 
-### CLI configuratiopn
+|   Option   |          Description          |
+| :--------- | :---------------------------- |
+| [`NO_COLOR`](https://no-color.org/) | Disable colorful fancy output, see also [`--no-color` CLI flag](#command-line-flags) |
+| `AWS_MFA_CREDENTIAL_PROCESS_NO_COLOR` | Disable color only for this tool (not for your whole environment ) |
+| `TERM=dumb` | Another way to disable colorful fancy output |
 
-TODO
 
-|       Option        |                                                                                                           Description                                                                                                           |
-| :------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `--profile <value>` | **Required:** Tells which profile to use. Should almost always be the same profile (name) as the `ini`-section title you configured this tool                                                                                   |
-| `--verbose`         | Print verbose output                                                                                                                                                                                                            |
-| `--hide-arns`       | Hide MFA ARN serial and target Role ARNs even on verbose-mode                                                                                                                                                                   |
-| `--disable-dialog`  | By default this tool prompts a GUI dialog for manual MFA Token Code entry (to circumvent some tools like CDK not attaching `stdin` into `credential_process`); Provide this flag if you wish to enter MFA token via CLI instead |
-| `--disable-refresh`  | By default this tool automatically refreshes session credentials if they're going to expire within 10 minutes [to match the Botocore implementation](https://github.com/boto/botocore/blob/221ffa67a567df99ee78d7ae308c0e12d7eeeea7/botocore/credentials.py#L353-L355); Provide this flag to disable this functionality |
+
+
+
+
 
 <br/>
 
