@@ -5,8 +5,11 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/aripalo/aws-mfa-credential-process/internal/config"
+	"github.com/iancoleman/strcase"
+	"github.com/mitchellh/mapstructure"
 	"github.com/spf13/viper"
 )
 
@@ -36,7 +39,7 @@ func (p *Profile) Load(config *config.Config) error {
 
 	var configurations map[string]Profile
 
-	err = v.Unmarshal(&configurations)
+	err = v.Unmarshal(&configurations, decodeWithMixedCasing)
 	if err != nil {
 		return err
 	}
@@ -61,4 +64,14 @@ type Profile struct {
 	Region          string `mapstructure:"region"`
 	RoleSessionName string `mapstructure:"role_session_name"`
 	ExternalID      string `mapstructure:"external_id"`
+}
+
+// decodeWithMixedCasing enables support for different kinds of casing in configuration (snake, param, etc)
+// This works because Viper prefers CLI flags to config file & default values.
+// https://pkg.go.dev/github.com/mitchellh/mapstructure#DecoderConfig.MatchName
+func decodeWithMixedCasing(config *mapstructure.DecoderConfig) {
+	config.MatchName = func(mapKey string, fieldName string) bool {
+		snakedMapKey := strings.TrimPrefix(strcase.ToSnake(mapKey), "_")
+		return strings.EqualFold(snakedMapKey, fieldName)
+	}
 }
