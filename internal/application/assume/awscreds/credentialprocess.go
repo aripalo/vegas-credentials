@@ -53,7 +53,8 @@ func (c *CredentialProcess) New(d data.Provider) (*CredentialProcess, error) {
 	// referenced by the "myRoleARN" ARN. Prompt for MFA token from stdin.
 	creds := stscreds.NewCredentials(sess, profile.AssumeRoleArn, func(p *stscreds.AssumeRoleProvider) {
 		p.SerialNumber = aws.String(profile.MfaSerial)
-		p.Duration = time.Duration(profile.DurationSeconds * int(time.Second))
+
+		p.Duration = time.Duration(profile.DurationSeconds) * time.Second
 
 		p.TokenProvider = func() (string, error) {
 			result, err := mfa.GetToken(d)
@@ -82,12 +83,8 @@ func (c *CredentialProcess) New(d data.Provider) (*CredentialProcess, error) {
 func (c *CredentialProcess) Get() error {
 	var err error
 
-	if c.credentials.IsExpired() {
-		c.credentials.Expire()
-	}
-
-	expiration, err := c.credentials.ExpiresAt()
 	value, err := c.credentials.Get()
+	expiration, err := c.credentials.ExpiresAt()
 
 	c.response = &Response{
 		Version:         1,
