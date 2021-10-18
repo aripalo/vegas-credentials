@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/aripalo/aws-mfa-credential-process/internal/data"
+	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
 )
 
 func (t *TokenProvider) QueryYubikey(ctx context.Context, d data.Provider) {
@@ -16,7 +17,9 @@ func (t *TokenProvider) QueryYubikey(ctx context.Context, d data.Provider) {
 	p := d.GetProfile()
 	token.Provider = TOKEN_PROVIDER_YUBIKEY_TOUCH
 
-	cmd := exec.CommandContext(ctx, "ykman", "--device", p.YubikeySerial, "oath", "accounts", "code", p.YubikeyLabel)
+	label := getYubikeyLabel(p)
+
+	cmd := exec.CommandContext(ctx, "ykman", "--device", p.YubikeySerial, "oath", "accounts", "code", label)
 	stdout, err := cmd.Output()
 	if err != nil {
 		t.errorChan <- &err
@@ -32,8 +35,10 @@ func VerifyYubikey(ctx context.Context, d data.Provider) error {
 	var err error
 	p := d.GetProfile()
 
+	label := getYubikeyLabel(p)
+
 	// first check if Yubikey configured
-	if p.YubikeySerial == "" || p.YubikeyLabel == "" {
+	if p.YubikeySerial == "" || label == "" {
 		return errors.New(YubikeyErrorNotConfigured)
 	}
 
@@ -50,6 +55,13 @@ func VerifyYubikey(ctx context.Context, d data.Provider) error {
 		return errors.New(YubikeyErrorNotConnected)
 	}
 	return nil
+}
+
+func getYubikeyLabel(p *profile.Profile) string {
+	if p.YubikeyLabel != "" {
+		return p.YubikeyLabel
+	}
+	return p.MfaSerial
 }
 
 const (
