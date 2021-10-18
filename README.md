@@ -67,7 +67,7 @@ If you're unfamiliar with AWS `credential_process`, [this AWS re:Invent video](h
         3. Save the binary to your preferred location
         4. In some directory that is in your `$PATH`, create a symlink of `aws-mfa-credential-process` pointing into the downloaded binary
 
-    3. more installation methods maybe implemented later:
+    3. more installation methods **maybe implemented later**:
         - `go install github.com/aripalo/aws-mfa-credential-process` ?
         - `pipx install aws-mfa-credential-process` ? Convenient as there's lot of AWS CLI, Boto3 and Botocore users...
         - `npm install -g @aripalo/aws-mfa-credential-process` ? Convenient as there's a lot of AWS CDK & AWS NodeJS SDK users...
@@ -87,7 +87,6 @@ If you're unfamiliar with AWS `credential_process`, [this AWS re:Invent video](h
     [profile my-profile]
     credential_process = aws-mfa-credential-process assume --profile=my-profile   # in 99% cases the profile should match what's in the ini-section title
     yubikey_serial=<yubikey-serial>        # which Yubikey Device you're using
-    yubikey_label=<yubikey-label>          # which Yubikey Slot you're using
     assume_role_arn=<target-role-arn>      # IMPORTANT: Note "assume_" prefix (vs. the default "role_arn")
     source_profile=<source-profile-name>   # often "default"
     mfa_serial=<mfa-device-arn>            # your AWS MFA Device ARN serial
