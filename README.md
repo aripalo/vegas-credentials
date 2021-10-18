@@ -10,8 +10,6 @@
 
 [AWS `credential_process`](https://docs.aws.amazon.com/sdkref/latest/guide/setting-global-credential_process.html) utility to assume AWS IAM Roles with _[Yubikey Touch](https://www.yubico.com/products/yubikey-5-overview/) and Authenticator App_ [TOPT MFA](https://en.wikipedia.org/wiki/Time-based_One-Time_Password) to provide temporary session credentials; With caching to local [keyring](#keyring) and support for automatic credential refresh.
 
-If you're unfamiliar with AWS `credential_process`, [this AWS re:Invent video](https://www.youtube.com/watch?v=W8IyScUGuGI&t=1260s) explains it very well.
-
 <br/>
 
 
@@ -28,13 +26,15 @@ If you're unfamiliar with AWS `credential_process`, [this AWS re:Invent video](h
 
 ## Features
 
+- **Based on AWS `credential_process`**: If you're unfamiliar with AWS `credential_process`, [this AWS re:Invent video](https://www.youtube.com/watch?v=W8IyScUGuGI&t=1260s) explains it very well
+
 - **Supports _automatic_ temporary session credentials refreshing** for tools that understand session credential expiration
 
 - **Works out-of-the-box with most AWS tools** such as AWS CDK, AWS SDKs and AWS CLI:
 
     Tested with AWS CDK (TypeScript), AWS CLI v2, AWS NodeJS SDK (v3), AWS Boto3 and AWS Go SDK. Should probably work with other AWS SDKs as well.
 
-- **Caching of session credentials into [Keyring](#keyring)** to speed things up & to avoid having to input MFA token code for each operation
+- **Caching of session credentials into [Keyring](#keyring)** to speed things up & to avoid having to input MFA token code for each operation (like in CDK)
 
 - **Supports both Yubikey Touch or Authenticator App TOPT MFA simultaneously**: 
     
