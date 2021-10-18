@@ -26,14 +26,10 @@ func buildAssumeCommand(app *assume.App) *cobra.Command {
 		Use:   "assume",
 		Short: config.ASSUME_DESCRIPTION_SHORT,
 		Long:  config.ASSUME_DESCRIPTION_LONG,
-		//PreRunE: func(cmd *cobra.Command, args []string) error {
-		//	return app.Config.Load(cmd)
-		//},
+		PreRunE: func(cmd *cobra.Command, args []string) error {
+			return app.Config.Load(cmd)
+		},
 		Run: func(cmd *cobra.Command, args []string) {
-			err := app.Config.Load(cmd)
-			if err != nil {
-				panic(err)
-			}
 			app.Assume()
 		},
 	}
