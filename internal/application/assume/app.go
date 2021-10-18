@@ -1,7 +1,10 @@
 package assume
 
 import (
+	"encoding/json"
+	"fmt"
 	"io"
+	"os"
 
 	"github.com/aripalo/aws-mfa-credential-process/internal/application/assume/awscreds"
 	"github.com/aripalo/aws-mfa-credential-process/internal/config"
@@ -44,11 +47,25 @@ func New() (*App, error) {
 // Assume defines the command attached to cobra
 func (a *App) Assume() {
 
-	//a.Config.Load()
+	if a.Config.Debug {
+		prettyConfig, err := json.MarshalIndent(a.Config, "", "    ")
+		if err != nil {
+			panic(err)
+		}
+		fmt.Fprintf(os.Stderr, "CONFIG:\n%s\n", string(prettyConfig))
+	}
 
 	err := a.Profile.Load(a.Config) // TODO could this use a?
 	if err != nil {
 		panic(err)
+	}
+
+	if a.Config.Debug {
+		prettyProfile, err := json.MarshalIndent(a.Profile, "", "    ")
+		if err != nil {
+			panic(err)
+		}
+		fmt.Fprintf(os.Stderr, "PROFILE:\n%s\n", string(prettyProfile))
 	}
 
 	var credentialprocess *awscreds.CredentialProcess

@@ -37,6 +37,12 @@ func init() {
 		config.Defaults.Verbose.Usage,
 	)
 
+	rootCmd.PersistentFlags().Bool(
+		config.Defaults.Debug.Name,
+		config.Defaults.Debug.Value,
+		config.Defaults.Debug.Usage,
+	)
+
 	//rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.newApp.yaml)")
 }
 

@@ -14,14 +14,15 @@ import (
 // Config provides global/shared configuration passed downstream
 type Config struct {
 	Profile         string
-	DurationSeconds int    //`mapstructure:"duration-seconds"`
-	YubikeySerial   string //`mapstructure:"yubikey-serial"`
-	YubikeyLabel    string //`mapstructure:"yubikey-label"`
-	Verbose         bool   //`mapstructure:"verbose"`
-	HideArns        bool   //`mapstructure:"hide-arns"`
-	DisableDialog   bool   //`mapstructure:"disable-dialog"`
-	DisableRefresh  bool   //`mapstructure:"disable-refresh"`
-	NoColor         bool   //`mapstructure:"no-color"`
+	DurationSeconds int
+	YubikeySerial   string
+	YubikeyLabel    string
+	Debug           bool
+	Verbose         bool
+	HideArns        bool
+	DisableDialog   bool
+	DisableRefresh  bool
+	NoColor         bool
 }
 
 // TODO how to support testing with temp file etc? (e.g. in profile_test.go)
@@ -35,13 +36,14 @@ func (c *Config) Load(cmd *cobra.Command) error {
 		panic(err)
 	}
 	configPath := filepath.Join(homedir, ".aws-mfa-credential-process")
-	os.MkdirAll(configPath, os.ModePerm)
+	os.MkdirAll(configPath, os.ModePerm) // TODO maybe remove this? XDG thing also...
 
 	// New viper instance
 	v := viper.New()
 
 	// Set defaults
 	v.SetDefault(Defaults.DurationSeconds.Name, Defaults.DurationSeconds.Value) // set the default duration seconds to match AWS defaults
+	v.SetDefault(Defaults.Debug.Name, Defaults.Debug.Value)                     // by default, disable debug information
 	v.SetDefault(Defaults.Verbose.Name, Defaults.Verbose.Value)                 // by default, disable verbose output
 	v.SetDefault(Defaults.HideArns.Name, Defaults.HideArns.Value)               // by default, do not hide ARNs in verbose output
 	v.SetDefault(Defaults.DisableDialog.Name, Defaults.DisableDialog.Value)     // by default, use GUI dialog prompt
