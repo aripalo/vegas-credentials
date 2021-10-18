@@ -1,7 +1,6 @@
 package awscreds
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 	"time"
@@ -9,6 +8,7 @@ import (
 	"github.com/aripalo/aws-mfa-credential-process/internal/application/assume/awscreds/mfa"
 	"github.com/aripalo/aws-mfa-credential-process/internal/data"
 	"github.com/aripalo/aws-mfa-credential-process/internal/logger"
+	"github.com/aripalo/aws-mfa-credential-process/internal/utils"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/credentials/stscreds"
@@ -24,34 +24,20 @@ type Response struct {
 }
 
 type CredentialProcess struct {
-	response    *Response
-	credentials *credentials.Credentials
+	response *Response
 }
 
-// New initializes session credentials
-func (c *CredentialProcess) New(d data.Provider) (*CredentialProcess, error) {
+func getSession(d data.Provider) (*session.Session, error) {
 	profile := d.GetProfile()
-
-	credentialprocess := CredentialProcess{}
-
-	//c.response = Response{}
-	//c.credentials = credentials.Credentials{}
-	//var creds *credentials.Credentials
-
-	logger.Infoln(d, "👷", "Role", profile.AssumeRoleArn)
-
-	sess, err := session.NewSession(&aws.Config{
+	return session.NewSession(&aws.Config{
 		Region:      aws.String(profile.Region),
 		Credentials: credentials.NewSharedCredentials("", profile.SourceProfile),
 	})
+}
 
-	if err != nil {
-		return &credentialprocess, err
-	}
-
-	// Create the credentials from AssumeRoleProvider to assume the role
-	// referenced by the "myRoleARN" ARN. Prompt for MFA token from stdin.
-	creds := stscreds.NewCredentials(sess, profile.AssumeRoleArn, func(p *stscreds.AssumeRoleProvider) {
+func defineCredentials(d data.Provider, sess *session.Session) *credentials.Credentials {
+	profile := d.GetProfile()
+	return stscreds.NewCredentials(sess, profile.AssumeRoleArn, func(p *stscreds.AssumeRoleProvider) {
 		p.SerialNumber = aws.String(profile.MfaSerial)
 
 		p.Duration = time.Duration(profile.DurationSeconds) * time.Second
@@ -73,20 +59,23 @@ func (c *CredentialProcess) New(d data.Provider) (*CredentialProcess, error) {
 		}
 
 	})
-
-	credentialprocess.credentials = creds
-
-	return &credentialprocess, err
 }
 
-// Get Temporary Session Credentials
-func (c *CredentialProcess) Get() error {
+func getCredentialProcessResponse(creds *credentials.Credentials) (*Response, error) {
+	var response *Response
 	var err error
 
-	value, err := c.credentials.Get()
-	expiration, err := c.credentials.ExpiresAt()
+	value, err := creds.Get()
+	if err != nil {
+		return response, err
+	}
 
-	c.response = &Response{
+	expiration, err := creds.ExpiresAt()
+	if err != nil {
+		return response, err
+	}
+
+	response = &Response{
 		Version:         1,
 		AccessKeyID:     value.AccessKeyID,
 		SecretAccessKey: value.SecretAccessKey,
@@ -94,16 +83,49 @@ func (c *CredentialProcess) Get() error {
 		Expiration:      expiration,
 	}
 
-	return err
+	return response, err
+}
+
+// New initializes session credentials
+func (c *CredentialProcess) New(d data.Provider) (*CredentialProcess, error) {
+	profile := d.GetProfile()
+
+	credentialprocess := CredentialProcess{}
+
+	logger.Infoln(d, "👷", "Role", profile.AssumeRoleArn)
+
+	sess, err := getSession(d)
+
+	if err != nil {
+		return &credentialprocess, err
+	}
+
+	creds := defineCredentials(d, sess)
+
+	response, err := getCredentialProcessResponse(creds)
+	if err != nil {
+		return &credentialprocess, err
+	}
+
+	c.response = response
+
+	return &credentialprocess, err
 }
 
 // Print credential_process combatible JSON into stdout
 func (c *CredentialProcess) Print() error {
-	pretty, err := json.MarshalIndent(c.response, "", "    ")
+	output, err := utils.PrettyJSON(c.response)
 	if err != nil {
 		return err
 	}
 
-	fmt.Fprintf(os.Stdout, string(pretty))
+	outputToAwsCredentialProcess(output)
+
 	return nil
+}
+
+// OutputToAwsCredentialProcess prints to stdout so aws credential_process can read it
+// https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sourcing-external.html
+func outputToAwsCredentialProcess(output string) {
+	fmt.Fprintf(os.Stdout, output)
 }
