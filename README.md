@@ -30,6 +30,8 @@
 
 - **Supports _automatic_ temporary session credentials refreshing** for tools that understand session credential expiration
 
+- **Supports [Role Chaining](#role-chaining)**
+
 - **Works out-of-the-box with most AWS tools** such as AWS CDK, AWS SDKs and AWS CLI:
 
     Tested with AWS CDK (TypeScript), AWS CLI v2, AWS NodeJS SDK (v3), AWS Boto3 and AWS Go SDK. Should probably work with other AWS SDKs as well.
@@ -242,6 +244,51 @@ Keyring (such as macOS Keychain) by itself probably is one of the most secure pl
 <br/>
 
 
+## Role Chaining
+
+This tool also supports role chaining, which means assuming an initial role and then using it to assume another role. An example with 3 different AWS accounts would look like:
+
+![role-chaining](/docs/role-chaining.svg)
+
+<br/>
+
+Assuming correct IAM roles exists with valid permissions and trust policies:
+
+1. Configure your long-term source credentials:
+    ```ini
+    # ~/.aws/credentials
+    [default]
+    aws_access_key_id = AKIAIOSFODNN7EXAMPLE
+    aws_secret_access_key = wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+    aws_mfa_device = arn:aws:iam::111111111111:mfa/MyUser
+    ```
+
+2. Configure your profile with `credential_process`:
+    ```ini
+    # ~/.aws/config
+    [profile my-profile]
+    credential_process = aws-mfa-credential-process assume --profile=my-profile   
+    assume_role_arn=arn:aws:iam::222222222222:role/MyRole    
+    source_profile=default 
+    mfa_serial=arn:aws:iam::111111111111:mfa/MyUser
+    ```
+
+3. Configure the final role with a `source_profile`:
+    ```ini
+    # ~/.aws/config
+    [profile final]
+    role_arn = arn:aws:iam::333333333333:role/FinalRole
+    source_profile = my-profile
+    ```
+
+4. Run:
+    ```shell
+    aws sts get-caller-identity --profile final
+    ```
+
+<br/>
+
+
 ## Why yet another tool for this?
 
 There are already a bazillion ways to assume an IAM Role with MFA, but most existing open source tools in this scene either:
@@ -278,8 +325,6 @@ This `aws-mfa-credential-process` is _yet another tool_, but it plugs into the s
 
 ## TODO
 
-
-- Ensure Role Chaining Works!
 - Test manually CDK, CLI, NodeJS SDK v3, Boto3, Go ... for refresh/cache support!
 - Add Unit tests
 - Add disclaimer for orgs using this tool ("software provided as is")
