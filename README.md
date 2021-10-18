@@ -8,19 +8,25 @@
 
 <br/><br/>
 
-Utility for [AWS `credential_process`](https://docs.aws.amazon.com/sdkref/latest/guide/setting-global-credential_process.html) to assume AWS IAM Roles with _[Yubikey Touch](https://www.yubico.com/products/yubikey-5-overview/) and Authenticator App_ [TOPT MFA](https://en.wikipedia.org/wiki/Time-based_One-Time_Password) to provide temporary session credentials – with local caching to [Keyring](#keyring).
+[AWS `credential_process`](https://docs.aws.amazon.com/sdkref/latest/guide/setting-global-credential_process.html) utility to assume AWS IAM Roles with _[Yubikey Touch](https://www.yubico.com/products/yubikey-5-overview/) and Authenticator App_ [TOPT MFA](https://en.wikipedia.org/wiki/Time-based_One-Time_Password) to provide temporary session credentials – with local caching to [Keyring](#keyring) and support for automatic credential refresh.
 
-If you're unfamiliar with `credential_process`, [this AWS re:Invent video](https://www.youtube.com/watch?v=W8IyScUGuGI&t=1260s) explains it very well.
+If you're unfamiliar with AWS `credential_process`, [this AWS re:Invent video](https://www.youtube.com/watch?v=W8IyScUGuGI&t=1260s) explains it very well.
 
 <br/>
+
+
+
 
 ![diagram](/docs/diagram.svg)
 
 <br/>
 
+| [Features](#features) | [Get Started](#getting-started) | [Configuration](#configuration) | [Keyring](#keyring) | [Yubikey](#yubikey-setup) |  [Why yet another tool?](#why-yet-another-tool-for-this) | [Caveats](#caveats) |[TODO](#todo) |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+
+<br/>
 
 ## Features
-
 
 - **Supports _automatic_ temporary session credentials refreshing** for tools that understand session credential expiration
 
@@ -42,39 +48,6 @@ If you're unfamiliar with `credential_process`, [this AWS re:Invent video](https
 
 <br/>
 
-## Why yet another tool for this?
-
-There are already a bazillion ways to assume an IAM Role with MFA, but most existing open source tools in this scene either:
-- export the temporary session credentials to environment variables (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_SESSION_TOKEN`)
-- write new sections for “short-term” credentials into `~/.aws/credentials` (for example like [`aws-mfa`](https://github.com/broamski/aws-mfa) does)
-
-The downside with those approaches is that using most of these tools (especially the ones that export environment variables) means you lose the built-in ability to automatically refresh the temporary credentials and/or the temporary credentials are “cached” in some custom location or saved into `~/.aws/credentials`.
-
-This tool follows the concept that [you should never put temporary credentials into `~/.aws/credentials`](https://ben11kehoe.medium.com/never-put-aws-temporary-credentials-in-env-vars-or-credentials-files-theres-a-better-way-25ec45b4d73e).
-
-Most AWS provided tools & SDKs already support MFA & assuming a role out of the box, but what they lack is a nice integration with Yubikey Touch, requiring you to manually type in or copy-paste the MFA TOPT token code: This utility instead integrates with [`ykman` Yubikey CLI](https://developers.yubico.com/yubikey-manager/) so just a quick touch is enough!
-
-Also with this tool, even if you use Yubikey Touch, you still get the possibility to input MFA TOPT token code manually from an Authenticator App (for example if you don't have your Yubikey on your person).
-
-Then there's tools such as AWS CDK that [does not support caching of assumed temporary credentials](https://github.com/aws/aws-cdk/issues/10867), requiring the user to input the MFA TOPT token code for every operation with `cdk` CLI – which makes the developer experience really cumbersome.
-
-To recap, most existing solutions (I've seen so far) to these challenges either lack support for automatic temporary session credential refreshing, cache/write temporary session credentials to suboptimal locations and/or don't work that well with AWS tooling (i.e. requiring one to create “wrappers”):
-
-This `aws-mfa-credential-process` is _yet another tool_, but it plugs into the standard [`credential_process`](https://docs.aws.amazon.com/sdkref/latest/guide/setting-global-credential_process.html) AWS configuration so most of AWS tooling (CLI v2, SDKs and CDK) will work out-of-the-box with it and also support automatic temporary session credential refreshing.
-
-<br/>
-
-## Caveats
-
-- Does not work with [AWS SSO](https://aws.amazon.com/single-sign-on/): 
-
-    This is by design, for AWS SSO you should use the [native SSO features](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html) and fallback to using [`benkehoe/aws-sso-util`](https://github.com/benkehoe/aws-sso-util/) via `credential_process` for tooling that don't support native AWS SSO
-
-- May work with Windows, but not tested (at least yet)
-
-- May not output debug/info messages on some systems if `/dev/tty` not available due to [`botocore` not connecting to subprocess `stderr` on `credential_process `](https://github.com/boto/botocore/issues/1348)
-
-<br/>
 
 ## Getting Started
 
@@ -184,12 +157,54 @@ In the background this tool uses [`99designs/keyring`](https://github.com/99desi
 
 🚧 **TODO**: Document keyring usage
 
+
+<br/>
+
+## Yubikey Setup
+
+🚧 **TODO**: Document keyring usage
+
+
+<br/>
+
+
+## Why yet another tool for this?
+
+There are already a bazillion ways to assume an IAM Role with MFA, but most existing open source tools in this scene either:
+- export the temporary session credentials to environment variables (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_SESSION_TOKEN`)
+- write new sections for “short-term” credentials into `~/.aws/credentials` (for example like [`aws-mfa`](https://github.com/broamski/aws-mfa) does)
+
+The downside with those approaches is that using most of these tools (especially the ones that export environment variables) means you lose the built-in ability to automatically refresh the temporary credentials and/or the temporary credentials are “cached” in some custom location or saved into `~/.aws/credentials`.
+
+This tool follows the concept that [you should never put temporary credentials into `~/.aws/credentials`](https://ben11kehoe.medium.com/never-put-aws-temporary-credentials-in-env-vars-or-credentials-files-theres-a-better-way-25ec45b4d73e).
+
+Most AWS provided tools & SDKs already support MFA & assuming a role out of the box, but what they lack is a nice integration with Yubikey Touch, requiring you to manually type in or copy-paste the MFA TOPT token code: This utility instead integrates with [`ykman` Yubikey CLI](https://developers.yubico.com/yubikey-manager/) so just a quick touch is enough!
+
+Also with this tool, even if you use Yubikey Touch, you still get the possibility to input MFA TOPT token code manually from an Authenticator App (for example if you don't have your Yubikey on your person).
+
+Then there's tools such as AWS CDK that [does not support caching of assumed temporary credentials](https://github.com/aws/aws-cdk/issues/10867), requiring the user to input the MFA TOPT token code for every operation with `cdk` CLI – which makes the developer experience really cumbersome.
+
+To recap, most existing solutions (I've seen so far) to these challenges either lack support for automatic temporary session credential refreshing, cache/write temporary session credentials to suboptimal locations and/or don't work that well with AWS tooling (i.e. requiring one to create “wrappers”):
+
+This `aws-mfa-credential-process` is _yet another tool_, but it plugs into the standard [`credential_process`](https://docs.aws.amazon.com/sdkref/latest/guide/setting-global-credential_process.html) AWS configuration so most of AWS tooling (CLI v2, SDKs and CDK) will work out-of-the-box with it and also support automatic temporary session credential refreshing.
+
+<br/>
+
+## Caveats
+
+- Does not work with [AWS SSO](https://aws.amazon.com/single-sign-on/): 
+
+    This is by design, for AWS SSO you should use the [native SSO features](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html) and fallback to using [`benkehoe/aws-sso-util`](https://github.com/benkehoe/aws-sso-util/) via `credential_process` for tooling that don't support native AWS SSO
+
+- May work with Windows, but not tested (at least yet)
+
+- May not output debug/info messages on some systems if `/dev/tty` not available due to [`botocore` not connecting to subprocess `stderr` on `credential_process `](https://github.com/boto/botocore/issues/1348)
+
 <br/>
 
 ## TODO
 
 
-- Configuration file! For defaults (could be json/yaml/toml)
 - Ensure Role Chaining Works!
 - Test manually CDK, CLI, NodeJS SDK v3, Boto3, Go ... for refresh/cache support!
 - Add Unit tests
@@ -199,8 +214,6 @@ In the background this tool uses [`99designs/keyring`](https://github.com/99desi
 - Development docs (maybe separate site?)
 - Contribution guidelines
 - Add video that showcases the features (with CDK)
-- Comments to code
-- TODO log file
 - Documentation pages (docusaurus to Github Pages)
     - Custom domain?
     - Most of the stuff from README
@@ -219,10 +232,14 @@ In the background this tool uses [`99designs/keyring`](https://github.com/99desi
     - Comparison to other solutions
     - Development Docs???
 - Security notes about "always allow" keyring
-- Keyring requires password input multiple times? wtf?
 - Linux & Windows support is essential
 - Document auto refresh with supporting aws tools (improvement over broamski)
 - Document advisory & mandatory refresh (that matches botocore)
+- Document botocore retry (if less than 15*60s expiration)
 - Vagrant testing / debugging for Linux & Windows
 - Feature comparison chart?
 - Docs to https://pkg.go.dev/
+- https://medium.com/@jdxcode/12-factor-cli-apps-dd3c227a0e46
+- XDG spec? https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
+- https://github.com/uber-go/guide/blob/master/style.md
+- Error handler (At the end)
