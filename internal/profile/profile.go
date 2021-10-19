@@ -58,7 +58,7 @@ type Profile struct {
 	YubikeySerial   string `mapstructure:"yubikey_serial"`
 	YubikeyLabel    string `mapstructure:"yubikey_label"`
 	SourceProfile   string `mapstructure:"source_profile"`
-	AssumeRoleArn   string `mapstructure:"assume_role_arn"`
+	AssumeRoleArn   string `mapstructure:"assume_role_arn"` // Todo consider using just the underscore prefix?
 	MfaSerial       string `mapstructure:"mfa_serial"`
 	DurationSeconds int    `mapstructure:"duration_seconds"`
 	Region          string `mapstructure:"region"`
@@ -71,7 +71,15 @@ type Profile struct {
 // https://pkg.go.dev/github.com/mitchellh/mapstructure#DecoderConfig.MatchName
 func decodeWithMixedCasing(config *mapstructure.DecoderConfig) {
 	config.MatchName = func(mapKey string, fieldName string) bool {
-		snakedMapKey := strings.TrimPrefix(strcase.ToSnake(mapKey), "_")
+
+		// Underscore prefixes are used for making Terraform to work
+		// as TF fails if source_profile defined, so we support TF by allowing _source_profile
+		prefixRemovedMapKey := strings.TrimPrefix(mapKey, "_")
+
+		// Convert to snake_case (in case the key was provided in other casing)
+		snakedMapKey := strcase.ToSnake(prefixRemovedMapKey)
+
+		// EqualFold is the default MatchName function
 		return strings.EqualFold(snakedMapKey, fieldName)
 	}
 }
