@@ -3,7 +3,7 @@
 | 🚧 🚧 🚧 <br/> **Work-in-Progress** | 🚀 ⁉️<br/> Publish Plan |
 | :--------------------- | :--- |
 | _**Do not use just yet (for anything real)!** Things may not work. The API and configurations may change without any prior notice at any given version. This tool is currently under development & testing. So do not use this for anything important, but feel free to test this out and give feedback!_ | After some testing (with various platforms and use case combinations), depending on the amount of bugs/issues/feedback, I'm hoping to release `v1.0.0` during November 2021 hopefully. No commitments though! |
-
+---
 
 
 <br/><br/>
