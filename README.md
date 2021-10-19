@@ -419,3 +419,4 @@ This `aws-mfa-credential-process` is _yet another tool_, but it plugs into the s
 - https://blog.xendit.engineer/how-we-repurposed-npm-to-publish-and-distribute-our-go-binaries-for-internal-cli-23981b80911b
 - CACHE SECURITY!!
 - ENCRYPTION PASSPHRASE !!1
+- Expiration outputs with humanize!
