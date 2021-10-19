@@ -2,6 +2,7 @@ package assume
 
 import (
 	"io"
+	"time"
 
 	"github.com/aripalo/aws-mfa-credential-process/internal/application/assume/awscreds"
 	"github.com/aripalo/aws-mfa-credential-process/internal/config"
@@ -17,6 +18,7 @@ type App struct {
 	Profile     *profile.Profile
 	command     string
 	version     string
+	startedAt   time.Time
 }
 
 // GetWriteStream implements data.Provider method
@@ -40,6 +42,7 @@ func New() (*App, error) {
 		WriteStream: logger.GetSafeWriter(),
 		Config:      &config.Config{},
 		Profile:     &profile.Profile{},
+		startedAt:   time.Now(),
 	}
 	return a, nil
 }
@@ -76,4 +79,13 @@ func (app *App) Run() {
 		panic(err)
 	}
 
+}
+
+// PostRunE executes after everything
+func (app *App) PostRunE() error {
+	if app.Config.Debug {
+		logger.Debugf(app, "⏱ ", "Duration", "%s\n", time.Now().Sub(app.startedAt))
+		logger.PrintRuler(app, "-")
+	}
+	return nil
 }

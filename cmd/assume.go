@@ -32,6 +32,9 @@ func buildAssumeCommand(app *assume.App) *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			app.Run()
 		},
+		PostRunE: func(cmd *cobra.Command, args []string) error {
+			return app.PostRunE()
+		},
 	}
 
 	cmd.Flags().String(
