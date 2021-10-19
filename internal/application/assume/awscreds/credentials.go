@@ -17,10 +17,10 @@ func GetCredentials(d data.Provider) error {
 	p := d.GetProfile()
 	logger.Infoln(d, "👷", "Role", p.RoleArn)
 
-	err = getCachedCredentials(d, r)
+	err = r.GetCachedCredentials(d)
 	if err != nil {
 		logger.Infof(d, "ℹ️ ", "Credentials", "Cached: %s\n", err.Error())
-		err = getNewCredentials(d, r)
+		err = r.GetNewCredentials(d)
 		if err != nil {
 			logger.Errorln(d, "ℹ️ ", "Credentials", err.Error())
 			return err
