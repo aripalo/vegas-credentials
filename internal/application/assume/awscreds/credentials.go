@@ -12,6 +12,8 @@ func GetCredentials(d data.Provider) error {
 	var r *response.Response
 	var err error
 
+	defer r.Teardown()
+
 	p := d.GetProfile()
 	logger.Infoln(d, "👷", "Role", p.RoleArn)
 

@@ -4,7 +4,6 @@ import (
 	"io"
 
 	"github.com/aripalo/aws-mfa-credential-process/internal/application/assume/awscreds"
-	"github.com/aripalo/aws-mfa-credential-process/internal/cache/securestorage"
 	"github.com/aripalo/aws-mfa-credential-process/internal/config"
 	"github.com/aripalo/aws-mfa-credential-process/internal/logger"
 	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
@@ -62,8 +61,6 @@ func (app *App) PreRunE(cmd *cobra.Command) error {
 	logger.PrintBanner(app, app.command, app.version)
 	logger.DebugJSON(app, "🔧 ", "Config", app.Config)
 	logger.DebugJSON(app, "🔧 ", "Profile", app.Profile)
-
-	securestorage.Init(app.Config.DisableDialog)
 
 	return nil
 }
