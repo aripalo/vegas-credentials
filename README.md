@@ -237,7 +237,8 @@ Keyring (such as macOS Keychain) by itself probably is one of the most secure pl
 - Requires [`ykman` CLI](https://developers.yubico.com/yubikey-manager/).
 - Yubikey must be set up as [**`Virtual MFA device`** in AWS IAM](https://aws.amazon.com/blogs/security/enhance-programmatic-access-for-iam-users-using-yubikey-for-multi-factor-authentication/) - Not ~~`U2F MFA`~~!
 - Think of backup strategy in case you lose your Yubikey device, you should do at least one of the following:
-    - Save or print the QR-code (and store & lock it very securely) 
+    - Save the QR-code or secret key in some secure & encrypted location
+    - Print the QR-code (and store & lock it very securely) 
     - During `Virtual MFA device` setup also assign Authenticator App (such as [Authy](https://authy.com/)) for backup in case you lose your Yubikey
     - If you own multiple Yubikey devices, during `Virtual MFA device` setup also configure the second Yubikey and once done, store it securely
 - During setup, it's recommended to use `arn:aws:iam::<ACCOUNT_ID>:mfa/<IAM_USERNAME>` (i.e. MFA device ARN) as the Yubikey OATH account label.
