@@ -9,7 +9,7 @@ import (
 // GetCredentials handles everything in regards of getting Temporary Session Credentials (both from cache and STS)
 func GetCredentials(d data.Provider) error {
 
-	var r *response.Response
+	r := response.New()
 	var err error
 
 	defer r.Teardown()
@@ -17,10 +17,10 @@ func GetCredentials(d data.Provider) error {
 	p := d.GetProfile()
 	logger.Infoln(d, "👷", "Role", p.RoleArn)
 
-	r, err = getCachedCredentials(d)
+	err = getCachedCredentials(d, r)
 	if err != nil {
 		logger.Infof(d, "ℹ️ ", "Credentials", "Cached: %s\n", err.Error())
-		r, err = getNewCredentials(d)
+		err = getNewCredentials(d, r)
 		if err != nil {
 			logger.Errorln(d, "ℹ️ ", "Credentials", err.Error())
 			return err

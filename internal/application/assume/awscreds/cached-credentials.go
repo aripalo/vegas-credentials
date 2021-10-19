@@ -6,25 +6,25 @@ import (
 )
 
 // getCachedCredentials handles fetching cached Temporary Session Credentials from secure keyring
-func getCachedCredentials(d data.Provider) (*response.Response, error) {
+func getCachedCredentials(d data.Provider, r *response.Response) error {
 
 	var err error
-	r := response.New()
+	//r := response.New()
 
 	err = r.ReadFromCache(d)
 	if err != nil {
-		return r, err
+		return err
 	}
 
 	err = r.Validate(d)
 	if err != nil {
-		return r, err
+		return err
 	}
 
 	err = r.ValidateForMandatoryRefresh(d)
 	if err != nil {
-		return r, err
+		return err
 	}
 
-	return r, nil
+	return nil
 }

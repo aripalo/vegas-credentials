@@ -6,26 +6,26 @@ import (
 )
 
 // getNewCredentials handles fetching new Temporary Session Credentials from STS
-func getNewCredentials(d data.Provider) (*response.Response, error) {
+func getNewCredentials(d data.Provider, r *response.Response) error {
 
 	var err error
-	r := response.New()
+	//r := response.New()
 
 	err = r.Get(d)
 	if err != nil {
-		return r, err
+		return err
 	}
 
 	err = r.Validate(d)
 	if err != nil {
-		return r, err
+		return err
 	}
 
 	err = r.SaveToCache(d)
 	if err != nil {
-		return r, err
+		return err
 	}
 
-	return r, nil
+	return nil
 
 }
