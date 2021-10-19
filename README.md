@@ -8,7 +8,7 @@
 
 <br/><br/>
 
-[AWS `credential_process`](https://docs.aws.amazon.com/sdkref/latest/guide/setting-global-credential_process.html) utility to assume AWS IAM Roles with _[Yubikey Touch](https://www.yubico.com/products/yubikey-5-overview/) and Authenticator App_ [TOPT MFA](https://en.wikipedia.org/wiki/Time-based_One-Time_Password) to provide temporary session credentials; With caching to local [keyring](#keyring) and support for automatic credential refresh.
+[AWS `credential_process`](https://docs.aws.amazon.com/sdkref/latest/guide/setting-global-credential_process.html) utility to assume AWS IAM Roles with _[Yubikey Touch](https://www.yubico.com/products/yubikey-5-overview/) and Authenticator App_ [TOPT MFA](https://en.wikipedia.org/wiki/Time-based_One-Time_Password) to provide temporary session credentials; With encrypted caching and support for automatic credential refresh.
 
 <br/>
 
@@ -19,8 +19,8 @@
 
 <br/>
 
-| [Features](#features) | [Getting Started](#getting-started) | [Configuration Options](#configuration) | [Keyring Cache](#keyring) | [Yubikey Setup](#yubikey-setup) | [Specific Use Cases](#specific-use-cases) | [Why yet another tool?](#why-yet-another-tool-for-this) | [Caveats](#caveats) | 
-| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| [Features](#features) | [Getting Started](#getting-started) | [Configuration Options](#configuration) | [Yubikey Setup](#yubikey-setup) | [Specific Use Cases](#specific-use-cases) | [Why yet another tool?](#why-yet-another-tool-for-this) | [Caveats](#caveats) | 
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | 
 
 <br/>
 
@@ -36,7 +36,7 @@
 
     Tested with AWS CDK (TypeScript), AWS CLI v2, AWS NodeJS SDK (v3), AWS Boto3 and AWS Go SDK. Should probably work with other AWS SDKs as well. Hashicorp [Terraform works as well with a minor hack](#terraform)!
 
-- **Caching of session credentials into [Keyring](#keyring)** to speed things up & to avoid having to input MFA token code for each operation (like in CDK)
+- **Encrypted Caching of session credentials** to speed things up & to avoid having to input MFA token code for each operation (like in CDK)
 
 - **Supports both Yubikey Touch or Authenticator App TOPT MFA simultaneously**: 
     
@@ -238,45 +238,6 @@ If you use a single Yubikey, then to avoid typing `yubikey_serial=12345678` into
 yubikey_serial = "12345678"
 ```
 
-<br/>
-
-
-
-
-
-<br/>
-
-## Keyring
-
-In the background this tool uses [`99designs/keyring`](https://github.com/99designs/keyring) to integrate with:
-- macOS/OSX Keychain
-- Windows credential store
-- Pass
-- Secret Service
-- KDE Wallet
-- Encrypted File
-
-🚧 **TODO**: Not all keyring backends are tested/verified working!
-
-### Keyring specific notes
-
-<details><summary>macOS Keychain</summary><br>
-
-
-This tool will create a new keychain with a name `aws-mfa-credential-process`.
-
-During first use of the tool, you must create a password for the keychain and later you must provide the password to access items in it. For convenience you should choose `Always Allow`, but see [security related notes](#security-related-notes).
-
-| 1. Initial setup | 2. Usage |
-|:---: | :---: |
-| ![new-keyring](/docs/keyring/1-new-keyring.png) | ![use-keyring-info](/docs/keyring/3-use-keyring-info.png) | 
-
-</details><br>
-
-### Security related notes
-
-Keyring (such as macOS Keychain) by itself probably is one of the most secure places to cache temporary session credentials, but beware: If you allow `aws-mfa-credential-process` to access the keyring, it means that any (potentially hostile) process on your computer could invoke `aws-mfa-credential-process` and retrieve the cached credentials! So it's not 100% secure. Then again, we're storing only _**temporary** session credentials_ there with an expiration and you really should use temporary credentials with short expiration (`3600s` i.e. 1 hour is a good default for expiration).
-
 
 <br/>
 
@@ -436,14 +397,12 @@ This `aws-mfa-credential-process` is _yet another tool_, but it plugs into the s
     - Role Chaining
     - Getting Started
     - Configuration
-    - Keyring
     - Recommended Yubikeys
     - How to setup Yubikey for TOPT MFA (and additionally add to Authenticator App)
     - MFA QR security/backup (for example print)
     - Alternatives 
     - Comparison to other solutions
     - Development Docs???
-- Security notes about "always allow" keyring
 - Linux & Windows support is essential
 - Document auto refresh with supporting aws tools (improvement over broamski)
 - Document advisory & mandatory refresh (that matches botocore)
@@ -458,3 +417,5 @@ This `aws-mfa-credential-process` is _yet another tool_, but it plugs into the s
 - Flag to force use of encrypted file 
 - https://www.npmjs.com/package/@compose-generator/go-npm
 - https://blog.xendit.engineer/how-we-repurposed-npm-to-publish-and-distribute-our-go-binaries-for-internal-cli-23981b80911b
+- CACHE SECURITY!!
+- ENCRYPTION PASSPHRASE !!1
