@@ -60,38 +60,38 @@
     - **macOS (or Linux)** via [Homebrew](https://brew.sh/):
 
         - Requires [`brew`-command](https://brew.sh/#install)
+        - Install:
+            ```shell
+            brew tap aripalo/tap
+            brew install aws-mfa-credential-process
 
-        ```shell
-        brew tap aripalo/tap
-        brew install aws-mfa-credential-process
-
-        # Verify installation
-        aws-mfa-credential-process --version
-        ```
+            # Verify installation
+            aws-mfa-credential-process --version
+            ```
 
     - **Windows** via [Scoop](https://scoop.sh):
 
         - Requires [`scoop`-command](https://scoop.sh#installs-in-seconds)
+        - Install:
+            ```shell
+            scoop bucket add aripalo https://github.com/aripalo/scoops.git
+            scoop install aripalo/aws-mfa-credential-process
 
-        ```shell
-        scoop bucket add aripalo https://github.com/aripalo/scoops.git
-        scoop install aripalo/aws-mfa-credential-process
-
-        # Verify installation
-        aws-mfa-credential-process --version
-        ```
+            # Verify installation
+            aws-mfa-credential-process --version
+            ```
 
     - **Cross-Platform** via Go Install:
 
         - Requires [`Go`-command](https://golang.org/) (`v1.17+`)
         - Perform the installation outside of any Go Module
+        - Install:
+            ```shell
+            go install github.com/aripalo/aws-mfa-credential-process
 
-        ```shell
-        go install github.com/aripalo/aws-mfa-credential-process
-
-        # Verify installation
-        aws-mfa-credential-process --version
-        ```
+            # Verify installation
+            aws-mfa-credential-process --version
+            ```
 
     - **Manual download (not recommended)** via Github releases:
         1. Go to https://github.com/aripalo/aws-mfa-credential-process/releases
