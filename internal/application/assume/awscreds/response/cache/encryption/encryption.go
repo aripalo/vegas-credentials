@@ -54,7 +54,10 @@ func Decrypt(ciphertext []byte) ([]byte, error) {
 
 func getSecretKey() ([]byte, error) {
 
-	passphrase := "password" // TODO
+	passphrase, err := password()
+	if err != nil {
+		return []byte(passphrase), err
+	}
 
 	encKey := strings.ReplaceAll(fmt.Sprintf("%-64x\n", passphrase), " ", "0")[:AES_256_KEYSIZE]
 
@@ -63,8 +66,16 @@ func getSecretKey() ([]byte, error) {
 
 func createCipher() (cipher.Block, error) {
 	aesKey, err := getSecretKey()
+	if err != nil {
+		return nil, err
+	}
 	c, err := aes.NewCipher(aesKey)
 	return c, err
 }
 
 const AES_256_KEYSIZE int = 32
+
+func password() (string, error) {
+	tmp := "password" // TODO
+	return strings.TrimSpace(string(tmp)), nil
+}
