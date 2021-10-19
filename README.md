@@ -90,7 +90,7 @@
     # ~/.aws/config
     [profile my-profile]
     credential_process = aws-mfa-credential-process assume --profile=my-profile   
-    _role_arn=arn:aws:iam::222222222222:role/MyRole    
+    _role_arn=arn:aws:iam::222222222222:role/MyRole # Note the underscore prefix (_)   
     source_profile=default 
     mfa_serial=arn:aws:iam::111111111111:mfa/MyUser
     yubikey_serial=12345678 # if you use Yubikey, omit if you don't
