@@ -55,53 +55,73 @@
 
 1. [Install `ykman`](https://developers.yubico.com/yubikey-manager/) (if you choose to use Yubikeys)
 
-2. **TODO** Install:
+2. Install `aws-mfa-credential-process` via one of the following:
 
-    - **macOS (or Linux)** via [Homebrew](https://brew.sh/):
+    <details><summary><strong>Homebrew</strong> (MacOS/Linux)</summary><br/>
+        
+    - Requires [`brew`-command](https://brew.sh/#install)
+    - Install:
+        ```shell
+        brew tap aripalo/tap
+        brew install aws-mfa-credential-process
 
-        - Requires [`brew`-command](https://brew.sh/#install)
-        - Install:
-            ```shell
-            brew tap aripalo/tap
-            brew install aws-mfa-credential-process
+        # Verify installation
+        aws-mfa-credential-process --version
+        ```
+    <br/> 
+    </details>
 
-            # Verify installation
-            aws-mfa-credential-process --version
-            ```
+    <details><summary><strong>Scoop</strong> (Windows)</summary><br/>
+    
+    - Requires [`scoop`-command](https://scoop.sh#installs-in-seconds)
+    - Install:
+        ```shell
+        scoop bucket add aripalo https://github.com/aripalo/scoops.git
+        scoop install aripalo/aws-mfa-credential-process
 
-    - **Windows** via [Scoop](https://scoop.sh):
+        # Verify installation
+        aws-mfa-credential-process --version
+        ```
+    <br/>
+    </details>
+    
+    <details><summary><strong>NPM</strong> (MacOS/Linux/Windows)</summary><br/>
 
-        - Requires [`scoop`-command](https://scoop.sh#installs-in-seconds)
-        - Install:
-            ```shell
-            scoop bucket add aripalo https://github.com/aripalo/scoops.git
-            scoop install aripalo/aws-mfa-credential-process
+    - Requires [`node`-command](https://nodejs.org) (`v14+`)
+    - Install:
+        ```shell
+        npm install -g aws-mfa-credential-process
 
-            # Verify installation
-            aws-mfa-credential-process --version
-            ```
+        # Verify installation
+        aws-mfa-credential-process --version
+        ```
+    <br/>
+    </details>
 
-    - **Cross-Platform** via Go Install:
+    <details><summary><strong>Go</strong> (MacOS/Linux/Windows)</summary><br/>
+    
+    - Requires [`Go`-command](https://golang.org/) (`v1.17+`)
+    - Perform the installation outside of any Go Module
+    - Install:
+        ```shell
+        go install github.com/aripalo/aws-mfa-credential-process
 
-        - Requires [`Go`-command](https://golang.org/) (`v1.17+`)
-        - Perform the installation outside of any Go Module
-        - Install:
-            ```shell
-            go install github.com/aripalo/aws-mfa-credential-process
+        # Verify installation
+        aws-mfa-credential-process --version
+        ```
+    <br/>
+    </details>
 
-            # Verify installation
-            aws-mfa-credential-process --version
-            ```
+    <details><summary><strong>Manual download (not recommended)</strong> (MacOS/Linux/Windows)</summary><br/>
+    
+    - Go to https://github.com/aripalo/aws-mfa-credential-process/releases
+    - Download the latest binary for your platform & operating system
+    - Save the binary to your preferred location
+    - In some directory that is in your `$PATH`, create a symlink of `aws-mfa-credential-process` pointing into the downloaded binary
 
-    - **Manual download (not recommended)** via Github releases:
-        1. Go to https://github.com/aripalo/aws-mfa-credential-process/releases
-        2. Download the latest binary for your platform & operating system
-        3. Save the binary to your preferred location
-        4. In some directory that is in your `$PATH`, create a symlink of `aws-mfa-credential-process` pointing into the downloaded binary
-
-    - more installation methods **maybe implemented later**:
-        - `pipx install aws-mfa-credential-process` ? Convenient as there's lot of AWS CLI, Boto3 and Botocore users...
-        - `npm install -g @aripalo/aws-mfa-credential-process` ? Convenient as there's a lot of AWS CDK & AWS NodeJS SDK users...
+    <br/>
+    </details>
+    <br/>
 
 3. Configure you source profile and its credentials, most often it's the `default` one which you configure into `~/.aws/credentials`:
 
