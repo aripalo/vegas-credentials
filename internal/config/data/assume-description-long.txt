@@ -4,6 +4,6 @@ You shouldn't have to really use this command directly, instead configure it int
 
     [profile my-profile]
     credential_process = aws-mfa-credential-process assume --profile=my-profile 
-    assume_role_arn=arn:aws:iam::123456789012:role/Demo
+    _role_arn=arn:aws:iam::123456789012:role/Demo
     source_profile=default
     mfa_serial=arn:aws:iam::111111111111:mfa/example

@@ -90,7 +90,7 @@
     # ~/.aws/config
     [profile my-profile]
     credential_process = aws-mfa-credential-process assume --profile=my-profile   
-    assume_role_arn=arn:aws:iam::222222222222:role/MyRole    
+    _role_arn=arn:aws:iam::222222222222:role/MyRole    
     source_profile=default 
     mfa_serial=arn:aws:iam::111111111111:mfa/MyUser
     yubikey_serial=12345678 # if you use Yubikey, omit if you don't
@@ -135,7 +135,7 @@ There are multiple ways to configure this tool. The configuration options are ev
 
 Configuration for this tool mostly happens `~/.aws/config` ini-file. 
 
-Important: Do not configure `role_arn`, instead provide `assume_role_arn`: Otherwise AWS tools would ignore the `credential_process` and assume the role directly without using this tool.
+Important: Do not configure `role_arn`, instead provide `_role_arn`: Otherwise AWS tools would ignore the `credential_process` and assume the role directly without using this tool.
 
 
 #### Standard AWS options
@@ -152,7 +152,7 @@ You may also provide other standard [AWS options](https://docs.aws.amazon.com/cl
 
 |       Option        |                                                                                                                                     Description                                                                                                                                      |
 | :------------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `assume_role_arn`        | **Required:** The target IAM Role ARN to be assumed.                                                                                                                                                                                                                                         |
+| `_role_arn`        | **Required:** The target IAM Role ARN to be assumed.                                                                                                                                                                                                                                         |
 | `yubikey_serial`         | **Required if using Yubikey:** Yubikey Device Serial to use. You can see the serial(s) with `ykman list` command. This enforces the use of a specific Yubikey and also enables the support for using multiple Yubikeys (for different profiles)! |
 | `yubikey_label`         | **Required if using any other label than the AWS MFA Device ARN as label!** Yubikey `oath` Account Label to use. You can see the available accounts with `ykman oath accounts list` command. Set the account label which you have configured your AWS TOPT MFA! |
 
@@ -270,7 +270,7 @@ Assuming correct IAM roles exists with valid permissions and trust policies:
     # ~/.aws/config
     [profile my-profile]
     credential_process = aws-mfa-credential-process assume --profile=my-profile   
-    assume_role_arn=arn:aws:iam::222222222222:role/MyRole    
+    _role_arn=arn:aws:iam::222222222222:role/MyRole    
     source_profile=default 
     mfa_serial=arn:aws:iam::111111111111:mfa/MyUser
     ```
@@ -302,7 +302,7 @@ To circumvent this, you may prefix this (and any other) option in `~/.aws/config
 # ~/.aws/config
 [profile my-profile]
 credential_process = aws-mfa-credential-process assume --profile=my-profile   
-assume_role_arn=arn:aws:iam::222222222222:role/MyRole    
+_role_arn=arn:aws:iam::222222222222:role/MyRole    
 _source_profile=default # NOTE the underscore (_) prefix!
 mfa_serial=arn:aws:iam::111111111111:mfa/MyUser
 ```

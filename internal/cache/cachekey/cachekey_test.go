@@ -44,7 +44,7 @@ func TestCombineStringsWithRealInput(t *testing.T) {
 
 func TestConfigToString(t *testing.T) {
 	input := profile.Profile{
-		AssumeRoleArn: "arn:aws:iam::123456789012:role/ExampleRole",
+		RoleArn:       "arn:aws:iam::123456789012:role/ExampleRole",
 		YubikeySerial: "123456",
 		YubikeyLabel:  "foobar",
 		MfaSerial:     "arn:aws:iam::123456789012:mfa/example",
@@ -63,7 +63,7 @@ func TestConfigToString(t *testing.T) {
 func TestGet(t *testing.T) {
 	input1 := "my-profile"
 	input2 := profile.Profile{
-		AssumeRoleArn: "arn:aws:iam::123456789012:role/ExampleRole",
+		RoleArn:       "arn:aws:iam::123456789012:role/ExampleRole",
 		YubikeySerial: "123456",
 		YubikeyLabel:  "foobar",
 		MfaSerial:     "arn:aws:iam::123456789012:mfa/example",

@@ -32,7 +32,7 @@ func TestLoadConfig(t *testing.T) {
 	}
 
 	want := "arn:aws:iam::123456789012:role/Demo"
-	output := config.Section("profile my-profile").Key("assume_role_arn").String()
+	output := config.Section("profile my-profile").Key("_role_arn").String()
 
 	if output != want {
 		t.Fatalf("Got %s, want %s", output, want)
@@ -117,7 +117,7 @@ func TestLoadProfileInvalid(t *testing.T) {
 		t.Fatalf("Expected error, but got %q", profile)
 	}
 
-	want := fmt.Sprintf("Missing assume_role_arn from profile %s config", profileName)
+	want := fmt.Sprintf("Missing _role_arn from profile %s config", profileName)
 
 	if err.Error() != want {
 		t.Fatalf("Error loading profile: %s", err.Error())

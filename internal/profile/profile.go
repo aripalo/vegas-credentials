@@ -45,7 +45,7 @@ func (p *Profile) Load(config *config.Config) error {
 	}
 
 	profileConfig = configurations[section]
-	if profileConfig.AssumeRoleArn == "" || profileConfig.SourceProfile == "" {
+	if profileConfig.RoleArn == "" || profileConfig.SourceProfile == "" {
 		return errors.New("Invalid profile")
 	}
 
@@ -58,7 +58,7 @@ type Profile struct {
 	YubikeySerial   string `mapstructure:"yubikey_serial"`
 	YubikeyLabel    string `mapstructure:"yubikey_label"`
 	SourceProfile   string `mapstructure:"source_profile"`
-	AssumeRoleArn   string `mapstructure:"assume_role_arn"` // Todo consider using just the underscore prefix?
+	RoleArn         string `mapstructure:"role_arn"`
 	MfaSerial       string `mapstructure:"mfa_serial"`
 	DurationSeconds int    `mapstructure:"duration_seconds"`
 	Region          string `mapstructure:"region"`
@@ -78,6 +78,11 @@ func decodeWithMixedCasing(config *mapstructure.DecoderConfig) {
 
 		// Convert to snake_case (in case the key was provided in other casing)
 		snakedMapKey := strcase.ToSnake(prefixRemovedMapKey)
+
+		// Handle specific undocumented "feature" ... which may be removed later
+		if snakedMapKey == "assume_role_arn" {
+			snakedMapKey = "role_arn"
+		}
 
 		// EqualFold is the default MatchName function
 		return strings.EqualFold(snakedMapKey, fieldName)

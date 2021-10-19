@@ -56,7 +56,7 @@ func defineCredentials(d data.Provider, sess *session.Session) *credentials.Cred
 
 	profile := d.GetProfile()
 
-	return stscreds.NewCredentials(sess, profile.AssumeRoleArn, func(p *stscreds.AssumeRoleProvider) {
+	return stscreds.NewCredentials(sess, profile.RoleArn, func(p *stscreds.AssumeRoleProvider) {
 
 		// IAM MFA device ARN
 		p.SerialNumber = aws.String(profile.MfaSerial)
