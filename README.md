@@ -57,20 +57,49 @@
 
 2. **TODO** Install:
 
-    1. via [Homebrew](https://brew.sh/):
+    - **macOS (or Linux)** via [Homebrew](https://brew.sh/):
+
+        - Requires [`brew`-command](https://brew.sh/#install)
+
         ```shell
         brew tap aripalo/tap
         brew install aws-mfa-credential-process
+
+        # Verify installation
+        aws-mfa-credential-process --version
         ```
 
-    2. or manual download via Github releases:
+    - **Windows** via [Scoop](https://scoop.sh):
+
+        - Requires [`scoop`-command](https://scoop.sh#installs-in-seconds)
+
+        ```shell
+        scoop bucket add aripalo https://github.com/aripalo/scoops.git
+        scoop install aripalo/aws-mfa-credential-process
+
+        # Verify installation
+        aws-mfa-credential-process --version
+        ```
+
+    - **Cross-Platform** via Go Install:
+
+        - Requires [`Go`-command](https://golang.org/) (`v1.17+`)
+        - Perform the installation outside of any Go Module
+
+        ```shell
+        go install github.com/aripalo/aws-mfa-credential-process
+
+        # Verify installation
+        aws-mfa-credential-process --version
+        ```
+
+    - **Manual download (not recommended)** via Github releases:
         1. Go to https://github.com/aripalo/aws-mfa-credential-process/releases
         2. Download the latest binary for your platform & operating system
         3. Save the binary to your preferred location
         4. In some directory that is in your `$PATH`, create a symlink of `aws-mfa-credential-process` pointing into the downloaded binary
 
-    3. more installation methods **maybe implemented later**:
-        - `go install github.com/aripalo/aws-mfa-credential-process` ?
+    - more installation methods **maybe implemented later**:
         - `pipx install aws-mfa-credential-process` ? Convenient as there's lot of AWS CLI, Boto3 and Botocore users...
         - `npm install -g @aripalo/aws-mfa-credential-process` ? Convenient as there's a lot of AWS CDK & AWS NodeJS SDK users...
 
@@ -407,3 +436,5 @@ This `aws-mfa-credential-process` is _yet another tool_, but it plugs into the s
 - Error handler (At the end)
 - `delete-cache` command
 - Flag to force use of encrypted file 
+- https://www.npmjs.com/package/@compose-generator/go-npm
+- https://blog.xendit.engineer/how-we-repurposed-npm-to-publish-and-distribute-our-go-binaries-for-internal-cli-23981b80911b
