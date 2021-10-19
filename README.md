@@ -19,7 +19,7 @@
 
 <br/>
 
-| [Features](#features) | [Getting Started](#getting-started) | [Configuration Options](#configuration) | [Keyring Cache](#keyring) | [Yubikey Setup](#yubikey-setup) | [Role Chaining](#role-chaining) | [Why yet another tool?](#why-yet-another-tool-for-this) | [Caveats](#caveats) | 
+| [Features](#features) | [Getting Started](#getting-started) | [Configuration Options](#configuration) | [Keyring Cache](#keyring) | [Yubikey Setup](#yubikey-setup) | [Specific Use Cases](#specific-use-cases) | [Why yet another tool?](#why-yet-another-tool-for-this) | [Caveats](#caveats) | 
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 
 <br/>
@@ -34,7 +34,7 @@
 
 - **Works out-of-the-box with most AWS tools** such as AWS CDK, AWS SDKs and AWS CLI:
 
-    Tested with AWS CDK (TypeScript), AWS CLI v2, AWS NodeJS SDK (v3), AWS Boto3 and AWS Go SDK. Should probably work with other AWS SDKs as well.
+    Tested with AWS CDK (TypeScript), AWS CLI v2, AWS NodeJS SDK (v3), AWS Boto3 and AWS Go SDK. Should probably work with other AWS SDKs as well. Hashicorp [Terraform works as well with a minor hack](#terraform)!
 
 - **Caching of session credentials into [Keyring](#keyring)** to speed things up & to avoid having to input MFA token code for each operation (like in CDK)
 
@@ -244,8 +244,9 @@ Keyring (such as macOS Keychain) by itself probably is one of the most secure pl
 
 <br/>
 
+## Specific Use Cases
 
-## Role Chaining
+### Role Chaining
 
 This tool also supports role chaining - **given that the specific AWS tool your using supports it** - which means assuming an initial role and then using it to assume another role. An example with 3 different AWS accounts would look like:
 
@@ -286,6 +287,47 @@ Assuming correct IAM roles exists with valid permissions and trust policies:
     ```shell
     aws sts get-caller-identity --profile final
     ```
+
+<br/>
+
+### Terraform
+
+With Terraform AWS provider, you can not provide `source_profile` option in your profile configuration within `~/.aws/config`, if you do, Terraform will fail with an error:
+```
+Error: error configuring Terraform AWS Provider: Error creating AWS session: CredentialRequiresARNError: credential type source_profile requires role_arn, profile my-profile
+```
+
+To circumvent this, you may prefix this (and any other) option in `~/.aws/config` profile - that uses this credential process utility - with underscore character `_`:
+```ini
+# ~/.aws/config
+[profile my-profile]
+credential_process = aws-mfa-credential-process assume --profile=my-profile   
+assume_role_arn=arn:aws:iam::222222222222:role/MyRole    
+_source_profile=default # NOTE the underscore (_) prefix!
+mfa_serial=arn:aws:iam::111111111111:mfa/MyUser
+```
+
+After that, you should be able to use Terraform as usual:
+```tf
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.27"
+    }
+  }
+  required_version = ">= 0.14.9"
+}
+
+provider "aws" {
+  profile = "my-profile"
+  region  = "eu-west-1"
+}
+```
+
+```sh
+terraform plan
+```
 
 <br/>
 
