@@ -3,7 +3,6 @@ package cache
 import (
 	"time"
 
-	"github.com/aripalo/aws-mfa-credential-process/internal/cache/compression"
 	"github.com/aripalo/aws-mfa-credential-process/internal/cache/database"
 	"github.com/aripalo/aws-mfa-credential-process/internal/cache/encryption"
 )
@@ -29,12 +28,8 @@ func (n *NewCache) Set(key string, data []byte, ttl time.Duration) error {
 	if err != nil {
 		return err
 	}
-	compressed, err := compression.Compress(encrypted)
-	if err != nil {
-		return err
-	}
 
-	err = n.db.Write(key, compressed, ttl)
+	err = n.db.Write(key, encrypted, ttl)
 	if err != nil {
 		return err
 	}
@@ -48,12 +43,8 @@ func (n *NewCache) Get(key string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	decompressed, err := compression.Decompress(cached)
-	if err != nil {
-		return nil, err
-	}
 
-	decrypted, err := encryption.Decrypt(decompressed)
+	decrypted, err := encryption.Decrypt(cached)
 	if err != nil {
 		return nil, err
 	}
