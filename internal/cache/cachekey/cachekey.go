@@ -1,13 +1,12 @@
 package cachekey
 
 import (
-	"crypto/sha1"
-	"encoding/hex"
 	"encoding/json"
 	"strings"
 
 	"github.com/aripalo/aws-mfa-credential-process/internal/data"
 	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
+	"github.com/aripalo/aws-mfa-credential-process/internal/utils"
 )
 
 const Separator = "__"
@@ -17,22 +16,9 @@ func Get(d data.Provider) (string, error) {
 	c := d.GetConfig()
 	p := d.GetProfile()
 	configString, err := configToString(*p)
-	hash := generateSha1Hash(configString)
-	key := combineStrings(c.Profile, Separator, hash)
+	hash := utils.GenerateSHA1(configString)
+	key := strings.Join([]string{c.Profile, Separator, hash}, "")
 	return key, err
-}
-
-// generateSha1Hash reads byte array of data and creates a SHA1 hash string from it
-func generateSha1Hash(data string) string {
-	h := sha1.New()
-	h.Write([]byte(data))
-	sha1_hash := hex.EncodeToString(h.Sum(nil))
-	return sha1_hash
-}
-
-// combineStrings combines two strings
-func combineStrings(items ...string) string {
-	return strings.Join(items, "")
 }
 
 // configToString convertts profile config into stringified JSON
