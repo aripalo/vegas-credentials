@@ -131,9 +131,9 @@
     [profile my-profile]
     credential_process = aws-mfa-credential-process assume --profile=my-profile   
     _role_arn=arn:aws:iam::222222222222:role/MyRole # Note the underscore prefix (_)   
-    source_profile=default 
-    mfa_serial=arn:aws:iam::111111111111:mfa/MyUser
-    yubikey_serial=12345678 # if you use Yubikey, omit if you don't
+    _source_profile=default 
+    _mfa_serial=arn:aws:iam::111111111111:mfa/MyUser
+    _yubikey_serial=12345678 # if you use Yubikey, omit if you don't
     ```
 
 5. Use any AWS tooling that support ini-based configuration with `credential_process`, like AWS CLI v2:
@@ -176,6 +176,8 @@ There are multiple ways to configure this tool. The configuration options are ev
 Configuration for this tool mostly happens `~/.aws/config` ini-file. 
 
 Important: Do not configure `role_arn`, instead provide `_role_arn`: Otherwise AWS tools would ignore the `credential_process` and assume the role directly without using this tool.
+
+You should also prefix `source_profile` with underscore, i.e. `_source_profile`, to [avoid errors with Terraform](#terraform).
 
 
 #### Standard AWS options
@@ -273,8 +275,8 @@ Assuming correct IAM roles exists with valid permissions and trust policies:
     [profile my-profile]
     credential_process = aws-mfa-credential-process assume --profile=my-profile   
     _role_arn=arn:aws:iam::222222222222:role/MyRole    
-    source_profile=default 
-    mfa_serial=arn:aws:iam::111111111111:mfa/MyUser
+    _source_profile=default 
+    _mfa_serial=arn:aws:iam::111111111111:mfa/MyUser
     ```
 
 3. Configure the final role with a `source_profile`:
