@@ -6,7 +6,12 @@ import (
 	"crypto/rand"
 	"fmt"
 	"io"
+	"os"
+	"os/user"
 	"strings"
+
+	"github.com/aripalo/aws-mfa-credential-process/internal/utils"
+	"github.com/shirou/gopsutil/host"
 )
 
 // See https://pkg.go.dev/crypto/cipher#NewCTR
@@ -54,7 +59,7 @@ func Decrypt(ciphertext []byte) ([]byte, error) {
 
 func getSecretKey() ([]byte, error) {
 
-	passphrase, err := password()
+	passphrase, err := getPassphrase()
 	if err != nil {
 		return []byte(passphrase), err
 	}
@@ -75,7 +80,32 @@ func createCipher() (cipher.Block, error) {
 
 const AES_256_KEYSIZE int = 32
 
-func password() (string, error) {
-	tmp := "password" // TODO
-	return strings.TrimSpace(string(tmp)), nil
+// Generate the string value used in AES-256-CTR encryption secret.
+// The getPassphrase is generated from the environment (boot time, hostname and user UID).
+// If those values change (i.e. reboot or running in Docker container), it's okay,
+// since it only means that the existing cache is ignored and new temporary credentials
+// will be fetched from AWS STS.
+func getPassphrase() (string, error) {
+
+	// Get system boot time, ignore error and use the default value (0) in that case
+	bootedAt, _ := host.BootTime()
+	bootedAtS := fmt.Sprint(bootedAt)
+
+	// Resolve system hostname
+	hostname, err := os.Hostname()
+	if err != nil {
+		return "", err
+	}
+
+	// Resolve current user's UID
+	user, err := user.Current()
+	if err != nil {
+		return "", err
+	}
+	userUid := user.Uid
+
+	// Join the resolved values, create a SHA1 out of them and return it
+	joined := strings.Join([]string{hostname, userUid, bootedAtS}, "")
+	pwd := utils.GenerateSHA1(joined)
+	return pwd, nil
 }
