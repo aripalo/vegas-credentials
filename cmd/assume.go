@@ -3,7 +3,7 @@ package cmd
 import (
 	"log"
 
-	"github.com/aripalo/aws-mfa-credential-process/internal/application/assume"
+	"github.com/aripalo/aws-mfa-credential-process/internal/commands/assume"
 	"github.com/aripalo/aws-mfa-credential-process/internal/config"
 	"github.com/spf13/cobra"
 )

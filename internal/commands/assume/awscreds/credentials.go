@@ -1,7 +1,7 @@
 package awscreds
 
 import (
-	"github.com/aripalo/aws-mfa-credential-process/internal/application/assume/awscreds/response"
+	"github.com/aripalo/aws-mfa-credential-process/internal/commands/assume/awscreds/response"
 	"github.com/aripalo/aws-mfa-credential-process/internal/data"
 	"github.com/aripalo/aws-mfa-credential-process/internal/logger"
 )

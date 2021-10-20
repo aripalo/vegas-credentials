@@ -4,7 +4,7 @@ import (
 	"io"
 	"time"
 
-	"github.com/aripalo/aws-mfa-credential-process/internal/application/assume/awscreds"
+	"github.com/aripalo/aws-mfa-credential-process/internal/commands/assume/awscreds"
 	"github.com/aripalo/aws-mfa-credential-process/internal/config"
 	"github.com/aripalo/aws-mfa-credential-process/internal/logger"
 	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
