@@ -3,7 +3,7 @@ package response
 import (
 	"time"
 
-	"github.com/aripalo/aws-mfa-credential-process/internal/application/assume/awscreds/response/cache"
+	"github.com/aripalo/aws-mfa-credential-process/internal/cache"
 	"github.com/aripalo/aws-mfa-credential-process/internal/config"
 )
 

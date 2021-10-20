@@ -3,9 +3,9 @@ package cache
 import (
 	"time"
 
-	"github.com/aripalo/aws-mfa-credential-process/internal/application/assume/awscreds/response/cache/compression"
-	"github.com/aripalo/aws-mfa-credential-process/internal/application/assume/awscreds/response/cache/database"
-	"github.com/aripalo/aws-mfa-credential-process/internal/application/assume/awscreds/response/cache/encryption"
+	"github.com/aripalo/aws-mfa-credential-process/internal/cache/compression"
+	"github.com/aripalo/aws-mfa-credential-process/internal/cache/database"
+	"github.com/aripalo/aws-mfa-credential-process/internal/cache/encryption"
 )
 
 // NewCache (and its methods) describes the caching mechanism
