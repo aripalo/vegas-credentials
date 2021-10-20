@@ -4,7 +4,6 @@ import (
 	"io"
 	"time"
 
-	"github.com/aripalo/aws-mfa-credential-process/internal/commands/assume/awscreds"
 	"github.com/aripalo/aws-mfa-credential-process/internal/config"
 	"github.com/aripalo/aws-mfa-credential-process/internal/logger"
 	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
@@ -73,7 +72,7 @@ func (app *App) Run() {
 
 	var err error
 
-	err = awscreds.GetCredentials(app)
+	err = getCredentials(app)
 
 	if err != nil {
 		panic(err)

@@ -4,9 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/aripalo/aws-mfa-credential-process/internal/commands/assume/awscreds/mfa/provider"
 	"github.com/aripalo/aws-mfa-credential-process/internal/data"
 	"github.com/aripalo/aws-mfa-credential-process/internal/logger"
+	"github.com/aripalo/aws-mfa-credential-process/internal/mfa/provider"
 )
 
 func GetToken(d data.Provider) (provider.Token, error) {
