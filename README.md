@@ -112,15 +112,6 @@
     <br/>
     </details>
 
-    <details><summary><strong>Manual download (not recommended)</strong> (MacOS/Linux/Windows)</summary><br/>
-    
-    - Go to https://github.com/aripalo/aws-mfa-credential-process/releases
-    - Download the latest binary for your platform & operating system
-    - Save the binary to your preferred location
-    - In some directory that is in your `$PATH`, create a symlink of `aws-mfa-credential-process` pointing into the downloaded binary
-
-    <br/>
-    </details>
     <br/>
 
 3. Configure you source profile and its credentials, most often it's the `default` one which you configure into `~/.aws/credentials`:
@@ -420,3 +411,4 @@ This `aws-mfa-credential-process` is _yet another tool_, but it plugs into the s
 - CACHE SECURITY!!
 - ENCRYPTION PASSPHRASE !!1
 - Expiration outputs with humanize!
+- Password script location in config file?
