@@ -393,3 +393,21 @@ This `aws-mfa-credential-process` is _yet another tool_, but it plugs into the s
 - CACHE SECURITY!!
 - Expiration outputs with humanize!
 - See when tagger release of https://github.com/shirou/gopsutil/pull/1157 
+
+<br/>
+
+## Development
+
+1. Fork this repository
+2. Do what you need to do
+3. Run all the unit tests:
+    ```shell
+    make test
+    ```
+4. Run build:
+    ```shell
+    make build
+    ```
+5. Perform manual testing
+6. Push your changes
+7. Create a Pull Request
