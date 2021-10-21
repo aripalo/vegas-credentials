@@ -5,7 +5,7 @@
 BIN_FOLDER="bin"
 
 build: clean ## Build binaries
-	@(go build -o bin/aws-mfa-credential-process main.go)
+	@(goreleaser release --snapshot --rm-dist)
 
 all: test build ## Build and run tests
 
