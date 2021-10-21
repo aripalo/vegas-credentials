@@ -85,9 +85,11 @@ function getBinaryPath(goArch: GoArch, goPlatform: GoPlatform): string {
     execution.stdout?.pipe(process.stdout);
     const { exitCode } = await execution; 
     process.exit(exitCode);
-  } catch(e) {
-    console.error("NodeJS wrapper failed: ", e);
+  } catch(e: any) {
+    // Only print error if there is no stderr from the subprocess
+    if (!("stderr" in e)) {
+      console.error("NodeJS wrapper failed: ", e);
+    }
     process.exit(1);
   }
-
 }());
