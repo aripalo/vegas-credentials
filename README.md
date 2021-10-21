@@ -378,7 +378,6 @@ This `aws-mfa-credential-process` is _yet another tool_, but it plugs into the s
 - Add Unit tests
 - Add disclaimer for orgs using this tool ("software provided as is")
 - Blog post
-- Development docs (maybe separate site?)
 - Contribution guidelines
 - Add video that showcases the features (with CDK)
 - Comparison to other solutions
@@ -392,7 +391,7 @@ This `aws-mfa-credential-process` is _yet another tool_, but it plugs into the s
 - https://github.com/uber-go/guide/blob/master/style.md
 - CACHE SECURITY!!
 - Expiration outputs with humanize!
-- See when tagger release of https://github.com/shirou/gopsutil/pull/1157 
+- See when tagged release of https://github.com/shirou/gopsutil/pull/1157 
 
 <br/>
 
