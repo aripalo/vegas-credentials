@@ -14,8 +14,7 @@ import (
 	"github.com/shirou/gopsutil/host"
 )
 
-// See https://pkg.go.dev/crypto/cipher#NewCTR
-
+// Encrypt data with AES-256-CTR
 func Encrypt(plaintext []byte) ([]byte, error) {
 
 	var err error
@@ -39,6 +38,7 @@ func Encrypt(plaintext []byte) ([]byte, error) {
 	return ciphertext, err
 }
 
+// Decrypt AES-256-CTR encrypted data
 func Decrypt(ciphertext []byte) ([]byte, error) {
 
 	var err error
@@ -57,20 +57,9 @@ func Decrypt(ciphertext []byte) ([]byte, error) {
 	return plaintext, err
 }
 
-func getSecretKey() ([]byte, error) {
-
-	passphrase, err := getPassphrase()
-	if err != nil {
-		return []byte(passphrase), err
-	}
-
-	encKey := strings.ReplaceAll(fmt.Sprintf("%-64x\n", passphrase), " ", "0")[:AES_256_KEYSIZE]
-
-	return []byte(encKey), nil
-}
-
+// createCipher defines new cipherBlock used in AES encryption
 func createCipher() (cipher.Block, error) {
-	aesKey, err := getSecretKey()
+	aesKey, err := getPassphrase()
 	if err != nil {
 		return nil, err
 	}
@@ -78,6 +67,7 @@ func createCipher() (cipher.Block, error) {
 	return c, err
 }
 
+// AES_256_KEYSIZE describes the length for key AES-256 encryption
 const AES_256_KEYSIZE int = 32
 
 // Generate the string value used in AES-256-CTR encryption secret.
@@ -85,7 +75,7 @@ const AES_256_KEYSIZE int = 32
 // If those values change (i.e. reboot or running in Docker container), it's okay,
 // since it only means that the existing cache is ignored and new temporary credentials
 // will be fetched from AWS STS.
-func getPassphrase() (string, error) {
+func getPassphrase() ([]byte, error) {
 
 	// Get system boot time, ignore error and use the default value (0) in that case
 	bootedAt, _ := host.BootTime()
@@ -94,18 +84,22 @@ func getPassphrase() (string, error) {
 	// Resolve system hostname
 	hostname, err := os.Hostname()
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	// Resolve current user's UID
 	user, err := user.Current()
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	userUid := user.Uid
 
-	// Join the resolved values, create a SHA1 out of them and return it
+	// Join the resolved values
 	joined := strings.Join([]string{hostname, userUid, bootedAtS}, "")
-	pwd := utils.GenerateSHA1(joined)
-	return pwd, nil
+
+	// Create a SHA1 hash out of the joined strings and enforce length to 32 bytes for AES-256
+	passphrase := utils.GenerateSHA1(joined)[:AES_256_KEYSIZE]
+
+	// Finally return the passphrase as byte array
+	return []byte(passphrase), nil
 }

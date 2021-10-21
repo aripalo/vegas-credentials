@@ -5,7 +5,7 @@ import (
 	"encoding/hex"
 )
 
-// GenerateSHA1 reads string data and creates a SHA1 hash string from it
+// GenerateSHA1 reads string data and creates a SHA1 hash string in hex encoding from it
 func GenerateSHA1(data string) string {
 	h := sha1.New()
 	h.Write([]byte(data))
