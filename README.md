@@ -372,45 +372,23 @@ This `aws-mfa-credential-process` is _yet another tool_, but it plugs into the s
 
 ## TODO
 
+- Error handler (At the end)
+- `delete-cache` command
 - Test manually CDK, CLI, NodeJS SDK v3, Boto3, Go ... for refresh/cache support!
 - Add Unit tests
 - Add disclaimer for orgs using this tool ("software provided as is")
-- Add PR templates (bug, feature request...)
 - Blog post
 - Development docs (maybe separate site?)
 - Contribution guidelines
 - Add video that showcases the features (with CDK)
-- Documentation pages (docusaurus to Github Pages)
-    - Custom domain?
-    - Most of the stuff from README
-    - Examples
-    - Video
-    - Logging/Debugging
-    - Session Credential Refresh
-    - Role Chaining
-    - Getting Started
-    - Configuration
-    - Recommended Yubikeys
-    - How to setup Yubikey for TOPT MFA (and additionally add to Authenticator App)
-    - MFA QR security/backup (for example print)
-    - Alternatives 
-    - Comparison to other solutions
-    - Development Docs???
+- Comparison to other solutions
+- Development Docs???
 - Linux & Windows support is essential
 - Document auto refresh with supporting aws tools (improvement over broamski)
 - Document advisory & mandatory refresh (that matches botocore)
 - Document botocore retry (if less than 15*60s expiration)
-- Vagrant testing / debugging for Linux & Windows
-- Feature comparison chart?
+- Vagrant testing / debugging for Linux & Windows ???
 - Docs to https://pkg.go.dev/
-- https://medium.com/@jdxcode/12-factor-cli-apps-dd3c227a0e46
 - https://github.com/uber-go/guide/blob/master/style.md
-- Error handler (At the end)
-- `delete-cache` command
-- Flag to force use of encrypted file 
-- https://www.npmjs.com/package/@compose-generator/go-npm
-- https://blog.xendit.engineer/how-we-repurposed-npm-to-publish-and-distribute-our-go-binaries-for-internal-cli-23981b80911b
 - CACHE SECURITY!!
-- ENCRYPTION PASSPHRASE !!1
 - Expiration outputs with humanize!
-- Password script location in config file?
