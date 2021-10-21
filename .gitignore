@@ -26,3 +26,7 @@ dist/
 
 # NodeJS specific stuff
 node_modules
+
+# Build output from TSC
+**/*.js
+**/*.d.ts
