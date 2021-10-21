@@ -15,7 +15,7 @@ A clear and concise description of what the bug is.
  - OS Version: [e.g. `11.6`]
  - Tool Version: [e.g. `v0.5.1`]
  - Tool Installation Method: [e.g. `brew`]
- - Credential Process invoked via: [e.g. AWS CLI v2]
+ - Credential Process invoked via: [e.g. `terraform`]
 
 **To Reproduce**
 Steps to reproduce the behavior:
