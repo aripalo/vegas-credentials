@@ -5,12 +5,14 @@
     "node": ">=14.16.1",
     "npm": ">=6.14.12"
   },
+  "bin": "index.js",
   "description": "TODO",
   "main": "index.js",
   "directories": {
     "doc": "docs"
   },
   "scripts": {
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
