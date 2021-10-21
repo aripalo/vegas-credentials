@@ -23,3 +23,6 @@ dist/
 
 # Ignore Vagrant related files
 .vagrant/
+
+# NodeJS specific stuff
+node_modules
