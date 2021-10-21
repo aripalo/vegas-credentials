@@ -16,10 +16,11 @@ func GetSafeWriter() io.Writer {
 	var out io.Writer
 
 	tty, err := tty.Open()
+
 	if err != nil {
-		defer tty.Close()
 		out = os.Stderr
 	} else {
+		defer tty.Close()
 		out = colorable.NewColorable(tty.Output())
 	}
 
