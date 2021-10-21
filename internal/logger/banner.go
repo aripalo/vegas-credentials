@@ -1,6 +1,8 @@
 package logger
 
 import (
+	"os"
+
 	"github.com/aripalo/aws-mfa-credential-process/internal/config"
 	"github.com/aripalo/aws-mfa-credential-process/internal/data"
 )
@@ -13,6 +15,13 @@ func PrintBanner(d data.Provider, commandName string, version string) {
 		Titleln(d, "", config.APP_NAME, commandName)
 		Infoln(d, "- ", "Version", version)
 		Infoln(d, "- ", "Repository", config.APP_REPO)
+
+		wrapper := os.Getenv("AWS_MFA_CREDENTIAL_PROCESS_WRAPPER")
+
+		if wrapper != "" {
+			Infoln(d, "- ", "Called via Wrapper", wrapper)
+		}
+
 		PrintRuler(d, "-")
 	}
 }

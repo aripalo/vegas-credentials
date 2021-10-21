@@ -75,8 +75,8 @@ function getBinaryPath(goArch: GoArch, goPlatform: GoPlatform): string {
 (async function() {
 
   try {
-    console.error("Using NodeJS wrapper...") // TODO pass in as an (hidden argument to Go app)
-    const args = process.argv.slice(2)
+    const args = process.argv.slice(2);
+    process.env["AWS_MFA_CREDENTIAL_PROCESS_WRAPPER"] = "NodeJS";
     const goArch = getGoArch(os.arch());
     const goPlatform = getGoPlatform(os.platform());
     const binaryPath = getBinaryPath(goArch, goPlatform);
