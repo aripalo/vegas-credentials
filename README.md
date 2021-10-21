@@ -400,10 +400,12 @@ This `aws-mfa-credential-process` is _yet another tool_, but it plugs into the s
 1. Fork this repository
 2. Do what you need to do
 3. Run all the unit tests:
+
     ```shell
     make test
     ```
 4. Run build:
+
     ```shell
     make build
     ```
