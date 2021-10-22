@@ -19,8 +19,8 @@
 
 <br/>
 
-| [Features](#features) | [Get Started](#getting-started) | [Configuration Options](#configuration) | [Yubikey Setup](#yubikey-setup) | [Examples](#examples) | [Caveats](#caveats) | [Why yet another tool?](#why-yet-another-tool-for-this) |  [Alternatives](#alternatives) | [Cache Mechanism](#cache-mechanism) |
-| :---: | :---: | :---: | :---: | :---: | :---: | :---: |  :---: | :---: |
+ | [Get Started](#getting-started) | [Configuration Options](#configuration) | [Yubikey Setup](#yubikey-setup) | [Examples](#examples) | [Caveats](#caveats) | [Why yet another tool?](#why-yet-another-tool-for-this) |  [Alternatives](#alternatives) | [Cache Mechanism](#cache-mechanism) |
+| :---: | :---: | :---: | :---: | :---: | :---: |  :---: | :---: |
 
 <br/>
 
