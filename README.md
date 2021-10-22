@@ -244,7 +244,10 @@ yubikey_serial = "12345678"
     - If you own multiple Yubikey devices, during `Virtual MFA device` setup also configure the second Yubikey and once done, store it securely
     - Print the QR-code (and store & lock it very securely) 
     - Save the QR-code or secret key in some secure & encrypted location
-- During setup, it's recommended to use `arn:aws:iam::<ACCOUNT_ID>:mfa/<IAM_USERNAME>` (i.e. MFA device ARN) as the Yubikey OATH account label.
+- During setup, it's recommended to use `arn:aws:iam::<ACCOUNT_ID>:mfa/<IAM_USERNAME>` (i.e. MFA device ARN) as the Yubikey OATH account label:
+    ```shell
+    ykman oath accounts add -t arn:aws:iam::<ACCOUNT_ID>:mfa/<IAM_USERNAME>
+    ```
 
 <br/>
 
