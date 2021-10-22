@@ -46,10 +46,10 @@ func TestDefaultDisableDialog(t *testing.T) {
 	}
 }
 
-func TestDefaultDisableRefresh(t *testing.T) {
+func TestDefaultDisableMandatoryRefresh(t *testing.T) {
 	want := false
-	if Defaults.DisableRefresh.Value != want {
-		t.Fatalf("Got %t, want %t", Defaults.DisableRefresh.Value, want)
+	if Defaults.DisableMandatoryRefresh.Value != want {
+		t.Fatalf("Got %t, want %t", Defaults.DisableMandatoryRefresh.Value, want)
 	}
 }
 

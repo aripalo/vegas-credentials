@@ -55,9 +55,9 @@ func buildAssumeCommand(app *assume.App) *cobra.Command {
 		config.Defaults.DisableDialog.Usage,
 	)
 	cmd.Flags().Bool(
-		config.Defaults.DisableRefresh.Name,
-		config.Defaults.DisableRefresh.Value,
-		config.Defaults.DisableRefresh.Usage,
+		config.Defaults.DisableMandatoryRefresh.Name,
+		config.Defaults.DisableMandatoryRefresh.Value,
+		config.Defaults.DisableMandatoryRefresh.Usage,
 	)
 
 	return cmd

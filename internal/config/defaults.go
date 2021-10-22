@@ -23,25 +23,25 @@ type BoolDefaultOption struct {
 }
 
 type DefaultOptions struct {
-	Profile         StringDefaultOption
-	DurationSeconds IntDefaultOption
-	Debug           BoolDefaultOption
-	Verbose         BoolDefaultOption
-	HideArns        BoolDefaultOption
-	DisableDialog   BoolDefaultOption
-	DisableRefresh  BoolDefaultOption
-	NoColor         BoolDefaultOption
+	Profile                 StringDefaultOption
+	DurationSeconds         IntDefaultOption
+	Debug                   BoolDefaultOption
+	Verbose                 BoolDefaultOption
+	HideArns                BoolDefaultOption
+	DisableDialog           BoolDefaultOption
+	DisableMandatoryRefresh BoolDefaultOption
+	NoColor                 BoolDefaultOption
 }
 
 var Defaults = DefaultOptions{
-	Profile:         StringDefaultOption{"profile", "", "Which AWS Profile to use from ~/.aws/config"},
-	DurationSeconds: IntDefaultOption{"duration-seconds", 3600, "Default Session duration in seconds"},
-	Debug:           BoolDefaultOption{"debug", false, "Prints out various debugging information"},
-	Verbose:         BoolDefaultOption{"verbose", false, "Verbose output"},
-	HideArns:        BoolDefaultOption{"hide-arns", false, "Hide IAM Role & MFA Serial ARNS from output (even on verbose mode)"},
-	DisableDialog:   BoolDefaultOption{"disable-dialog", false, "Disable GUI Dialog Prompt and use CLI stdin input instead"},
-	DisableRefresh:  BoolDefaultOption{"disable-refresh", false, "Disable Session Credentials refreshing (as defined in Botocore)"},
-	NoColor:         BoolDefaultOption{"no-color", resolveNoColorDefaultValue(), "Disable fancy colored output with emojis"},
+	Profile:                 StringDefaultOption{"profile", "", "Which AWS Profile to use from ~/.aws/config"},
+	DurationSeconds:         IntDefaultOption{"duration-seconds", 3600, "Default Session duration in seconds"},
+	Debug:                   BoolDefaultOption{"debug", false, "Prints out various debugging information"},
+	Verbose:                 BoolDefaultOption{"verbose", false, "Verbose output"},
+	HideArns:                BoolDefaultOption{"hide-arns", false, "Hide IAM Role & MFA Serial ARNS from output (even on verbose mode)"},
+	DisableDialog:           BoolDefaultOption{"disable-dialog", false, "Disable GUI Dialog Prompt and use CLI stdin input instead"},
+	DisableMandatoryRefresh: BoolDefaultOption{"disable-mandatory-refresh", false, "Disable Session Credentials refreshing (as defined in Botocore)"},
+	NoColor:                 BoolDefaultOption{"no-color", resolveNoColorDefaultValue(), "Disable fancy colored output with emojis"},
 }
 
 func resolveNoColorDefaultValue() bool {

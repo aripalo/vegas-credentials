@@ -14,16 +14,16 @@ import (
 
 // Config provides global/shared configuration passed downstream
 type Config struct {
-	Profile         string `mapstructure:"profile"`
-	DurationSeconds int    `mapstructure:"duration_seconds"`
-	YubikeySerial   string `mapstructure:"yubikey_serial"`
-	YubikeyLabel    string `mapstructure:"yubikey_label"`
-	Debug           bool   `mapstructure:"debug"`
-	Verbose         bool   `mapstructure:"verbose"`
-	HideArns        bool   `mapstructure:"hide_arns"`
-	DisableDialog   bool   `mapstructure:"disable_dialog"`
-	DisableRefresh  bool   `mapstructure:"disable_refresh"`
-	NoColor         bool   `mapstructure:"no_color"`
+	Profile                 string `mapstructure:"profile"`
+	DurationSeconds         int    `mapstructure:"duration_seconds"`
+	YubikeySerial           string `mapstructure:"yubikey_serial"`
+	YubikeyLabel            string `mapstructure:"yubikey_label"`
+	Debug                   bool   `mapstructure:"debug"`
+	Verbose                 bool   `mapstructure:"verbose"`
+	HideArns                bool   `mapstructure:"hide_arns"`
+	DisableDialog           bool   `mapstructure:"disable_dialog"`
+	DisableMandatoryRefresh bool   `mapstructure:"disable_refresh"`
+	NoColor                 bool   `mapstructure:"no_color"`
 }
 
 // TODO how to support testing with temp file etc? (e.g. in profile_test.go)
@@ -48,7 +48,7 @@ func (c *Config) Load(cmd *cobra.Command) error {
 	v.SetDefault(Defaults.Verbose.Name, Defaults.Verbose.Value)
 	v.SetDefault(Defaults.HideArns.Name, Defaults.HideArns.Value)
 	v.SetDefault(Defaults.DisableDialog.Name, Defaults.DisableDialog.Value)
-	v.SetDefault(Defaults.DisableRefresh.Name, Defaults.DisableRefresh.Value)
+	v.SetDefault(Defaults.DisableMandatoryRefresh.Name, Defaults.DisableMandatoryRefresh.Value)
 	v.SetDefault(Defaults.NoColor.Name, Defaults.NoColor.Value)
 
 	// Set Config file name (without extension)

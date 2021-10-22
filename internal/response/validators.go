@@ -43,7 +43,7 @@ func (r *Response) ValidateForMandatoryRefresh(d data.Provider) error {
 
 	c := d.GetConfig()
 
-	if c.DisableRefresh {
+	if c.DisableMandatoryRefresh {
 		return nil
 	}
 
