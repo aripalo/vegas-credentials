@@ -24,7 +24,7 @@ func (t *TokenProvider) QueryYubikey(ctx context.Context, d data.Provider) {
 	if err != nil {
 		t.errorChan <- &err
 	} else {
-		value := tokenPattern.FindString(string(stdout))
+		value := tokenPattern.FindString(strings.TrimSpace(string(stdout)))
 		token.Value = value
 		t.tokenChan <- &token
 	}
