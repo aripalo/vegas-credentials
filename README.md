@@ -390,11 +390,11 @@ This `aws-mfa-credential-process` is _yet another tool_, but it plugs into the s
 | :----------------------------------------------- | :-----------------------------------------: | :-------------------------------------------------------------: | :-------------------------------------------------------: | :-------------------------------------------------------------------------------: |
 | `credential_process` <br/>with MFA + Assume Role |                      ✅                      |                 ❌ ??? [<sup>[*2]</sup>](#note2)                 |                ❌ [<sup>[*4]</sup>](#note4)                |                                         ✅                                         |
 | Automatic Temporary Session Credential Refresh   |                      ✅                      |                 ❌ ??? [<sup>[*3]</sup>](#note3)                 |                ❌ [<sup>[*5]</sup>](#note5)                |                                         ✅                                         |
-| Yubikey                                          |        ✅ ✅ [<sup>[*1]</sup>](#note1)         |                   ✅ [<sup>[*1]</sup>](#note1)                   |               ❌  [<sup>[*6]</sup>](#note6)                |                                         ✅                                         |
+| Yubikey                                          |        ✅ ✅ [<sup>[*1]</sup>](#note1)         |                   ✅ [<sup>[*1]</sup>](#note1)                   |               ❌  [<sup>[*6]</sup>](#note6)                |                                         ✅ [<sup>[*11]</sup>](#note11)                                        |
 | Cache Encryption                                 |                      ✅                      |                                ✅                                |               ❌  [<sup>[*7]</sup>](#note7)                |                                         ✅                                         |
 | Cache Invalidation on config change              |                      ✅                      |                              ✅  ?                               |               ✅  [<sup>[*8]</sup>](#note8)                |                                         ✅                                         |
 | Cached Performance                               | ⚡️ <br/>`<100ms`[<sup>[*10]</sup>](#note10) |                         ⚡️ <br/>`<50ms`                         |            ⚡️ <br/> [<sup>[*9]</sup>](#note9)             |                     🐢<br/>`>400ms`[<sup>[*10]</sup>](#note10)                     |
-| Comprehensively Unit Tested                      |                      ✅                      |                                ?                                |                             ❌                             |                                         ❌                                         |
+| Comprehensively Unit Tested                      |                      ✅                      |                                ?                                |                             ❌                             |                                         ✅                                          |
 
 Please, [correct me if I'm wrong](https://github.com/aripalo/aws-mfa-credential-process/issues/new/choose) above!
 
@@ -426,13 +426,15 @@ Please, [correct me if I'm wrong](https://github.com/aripalo/aws-mfa-credential-
 
 9. <a id="note9"></a>As temporary session credentials (or "short-term" as `aws-mfa` calls them) are stored as plaintext into `~/aws/credentials`, there is no delay since AWS tools can directly read them from that file.
 
-#### `aripalo/aws-mfa-credential-process` vs. `meeuw/aws-credential-process`
+#### `meeuw/aws-credential-process`
 
 10. <a id="note10"></a>Performance
 
     [Hyperfine](https://github.com/sharkdp/hyperfine) benchmark for retrieving cached temporary session credentials:
 
     ![perf](/docs/perf-comparison.png)
+
+11. <a id="note11"></a>Does not support multiple Yubikey devices.
 
 <br/>
 
