@@ -15,16 +15,26 @@ import (
 
 func (p *Profile) Load(config *config.Config) error {
 	var profileConfig Profile
-
 	home, err := os.UserHomeDir()
 	if err != nil {
 		return err
 	}
+	profileConfig, err = loadWithPath(profileConfig, config, filepath.Join(home, ".aws"))
+	if err != nil {
+		return err
+	}
+
+	*p = profileConfig
+
+	return nil
+}
+
+func loadWithPath(profileConfig Profile, config *config.Config, configPath string) (Profile, error) {
 
 	v := viper.New()
 	v.SetConfigName("config")
 	v.SetConfigType("ini")
-	v.AddConfigPath(filepath.Join(home, ".aws"))
+	v.AddConfigPath(configPath)
 
 	section := fmt.Sprintf("profile %s", config.Profile)
 
@@ -32,26 +42,24 @@ func (p *Profile) Load(config *config.Config) error {
 	v.SetDefault(fmt.Sprintf("%s.yubikey_serial", section), config.YubikeySerial)
 	v.SetDefault(fmt.Sprintf("%s.yubikey_label", section), config.YubikeyLabel)
 
-	err = v.ReadInConfig()
+	err := v.ReadInConfig()
 	if err != nil {
-		return err
+		return profileConfig, err
 	}
 
 	var configurations map[string]Profile
 
 	err = v.Unmarshal(&configurations, decodeWithMixedCasing)
 	if err != nil {
-		return err
+		return profileConfig, err
 	}
 
 	profileConfig = configurations[section]
 	if profileConfig.RoleArn == "" || profileConfig.SourceProfile == "" {
-		return errors.New("Invalid profile")
+		return profileConfig, errors.New(fmt.Sprintf("Invalid Profile Configuration for %s", config.Profile))
 	}
 
-	*p = profileConfig
-
-	return nil
+	return profileConfig, nil
 }
 
 type Profile struct {
