@@ -411,7 +411,10 @@ Please, [correct me if I'm wrong](https://github.com/aripalo/aws-mfa-credential-
 2. <a id="note2"></a>Does not seem to play well with `credential_process`:
     - **At least I haven't figured out how to succesfully configure it to use `credential_process`, assume a role, use Yubikey for MFA and to provide temporary session credentials.** 
     - They themselves [claim that _“`credential_process` is designed for retrieving master credentials”_](https://github.com/99designs/aws-vault/blob/master/USAGE.md#using-credential_proce) - which is NOT true since this tool does work with temporary credentials via `credential_process` just fine and even the [AWS docs on `credential_process` show `SessionToken` and `Expiration` on the expected output from the credentials program](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sourcing-external.html).
-    - There's further indication that [`99designs/aws-vault` is not designed for `credential_process`](https://github.com/99designs/aws-vault/issues/641#issuecomment-681346113).
+    - There's further indication that [`99designs/aws-vault` is not designed for `credential_process`](https://github.com/99designs/aws-vault/issues/641#issuecomment-681346113):
+        > _Using credentials_process isn't the way I use aws-vault, it was a contributed addition, so feels like we should emphasise this is not the recommended path._
+        >
+        > – Michael Tibben, VP Technology, 99designs
 
 3. <a id="note3"></a>This pretty much relates to [point 1](#note1): For AWS tools to automatically request refreshed credentials, the credentials need to be provided via either the multiple standard methods or via `credential_process`.
 
