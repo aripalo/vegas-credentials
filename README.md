@@ -19,7 +19,7 @@
 
 <br/>
 
-| [Features](#features) | [Getting Started](#getting-started) | [Configuration Options](#configuration) | [Yubikey Setup](#yubikey-setup) | [Specific Use Cases](#specific-use-cases) | [Caveats](#caveats) | [Why yet another tool?](#why-yet-another-tool-for-this) |  [Alternatives](#alternatives) | [Caching Mechanism](#caching-mechanism) |
+| [Features](#features) | [Get Started](#getting-started) | [Configuration Options](#configuration) | [Yubikey Setup](#yubikey-setup) | [Specific Use Cases](#specific-use-cases) | [Caveats](#caveats) | [Why yet another tool?](#why-yet-another-tool-for-this) |  [Alternatives](#alternatives) | [Cache Mechanism](#cache-mechanism) |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: |  :---: | :---: |
 
 <br/>
@@ -430,7 +430,7 @@ Please, [correct me if I'm wrong](https://github.com/aripalo/aws-mfa-credential-
 
 <br/>
 
-## Caching Mechanism
+## Cache Mechanism
 
 This tool caches temporary session credentials to disk. In the background it uses [`dgraph-io/badger`](https://github.com/dgraph-io/badger/) which is a fast SSD-optimized key-value store for Go and importantly supports Time-to-Live attributes for data (useful for temporary session credential expiration).
 
