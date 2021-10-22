@@ -386,15 +386,15 @@ This `aws-mfa-credential-process` is _yet another tool_, but it plugs into the s
 
 ### Feature Comparison
 
-|                 Feature support                  |   `aripalo/aws-mfa-credential-process`    | [`99designs/aws-vault`](https://github.com/99designs/aws-vault) | [`broamski/aws-mfa`](https://github.com/broamski/aws-mfa) | [`meeuw/aws-credential-process`](https://github.com/meeuw/aws-credential-process) |
-| :----------------------------------------------- | :---------------------------------------: | :-------------------------------------------------------------: | :-------------------------------------------------------: | :-------------------------------------------------------------------------------: |
-| `credential_process` <br/>with MFA + Assume Role |                     ✅                     |                 ❌ ??? [<sup>[*1]</sup>](#note1)                 |                ❌ [<sup>[*3]</sup>](#note3)                |                                         ✅                                         |
-| Automatic Temporary Session Credential Refresh   |                     ✅                     |                 ❌ ??? [<sup>[*2]</sup>](#note2)                 |                ❌ [<sup>[*4]</sup>](#note4)                |                                         ✅                                         |
-| Yubikey                                          |                     ✅                     |                                ✅                                |               ❌  [<sup>[*5]</sup>](#note5)                |                                         ✅                                         |
-| Cache Encryption                                 |                     ✅                     |                                ✅                                |               ❌  [<sup>[*6]</sup>](#note6)                |                                         ✅                                         |
-| Cache Invalidation on config change              |                     ✅                     |                              ✅  ?                               |               ✅  [<sup>[*7]</sup>](#note7)                |                                         ✅                                         |
-| Cached Performance                               | ⚡️ <br/>`<100ms`[<sup>[*9]</sup>](#note9) |                         ⚡️ <br/>`<50ms`                         |            ⚡️ <br/> [<sup>[*8]</sup>](#note8)             |                      🐢<br/>`>400ms`[<sup>[*9]</sup>](#note9)                      |
-| Comprehensively Unit Tested                      |                     ✅                     |                                ?                                |                             ❌                             |                                         ❌                                         |
+|                 Feature support                  |    `aripalo/aws-mfa-credential-process`     | [`99designs/aws-vault`](https://github.com/99designs/aws-vault) | [`broamski/aws-mfa`](https://github.com/broamski/aws-mfa) | [`meeuw/aws-credential-process`](https://github.com/meeuw/aws-credential-process) |
+| :----------------------------------------------- | :-----------------------------------------: | :-------------------------------------------------------------: | :-------------------------------------------------------: | :-------------------------------------------------------------------------------: |
+| `credential_process` <br/>with MFA + Assume Role |                      ✅                      |                 ❌ ??? [<sup>[*2]</sup>](#note2)                 |                ❌ [<sup>[*4]</sup>](#note4)                |                                         ✅                                         |
+| Automatic Temporary Session Credential Refresh   |                      ✅                      |                 ❌ ??? [<sup>[*3]</sup>](#note3)                 |                ❌ [<sup>[*5]</sup>](#note5)                |                                         ✅                                         |
+| Yubikey                                          |        ✅ ✅ [<sup>[*1]</sup>](#note1)         |                   ✅ [<sup>[*1]</sup>](#note1)                   |               ❌  [<sup>[*6]</sup>](#note6)                |                                         ✅                                         |
+| Cache Encryption                                 |                      ✅                      |                                ✅                                |               ❌  [<sup>[*7]</sup>](#note7)                |                                         ✅                                         |
+| Cache Invalidation on config change              |                      ✅                      |                              ✅  ?                               |               ✅  [<sup>[*8]</sup>](#note8)                |                                         ✅                                         |
+| Cached Performance                               | ⚡️ <br/>`<100ms`[<sup>[*10]</sup>](#note10) |                         ⚡️ <br/>`<50ms`                         |            ⚡️ <br/> [<sup>[*9]</sup>](#note9)             |                     🐢<br/>`>400ms`[<sup>[*10]</sup>](#note10)                     |
+| Comprehensively Unit Tested                      |                      ✅                      |                                ?                                |                             ❌                             |                                         ❌                                         |
 
 Please, [correct me if I'm wrong](https://github.com/aripalo/aws-mfa-credential-process/issues/new/choose) above!
 
@@ -402,27 +402,33 @@ Please, [correct me if I'm wrong](https://github.com/aripalo/aws-mfa-credential-
 
 #### `99designs/aws-vault`
 
-1. <a id="note1"></a>**At least I haven't figured out how to succesfully configure it to use `credential_process`, assume a role, use Yubikey for MFA and to provide temporary session credentials.** They themselves [claim that _“`credential_process` is designed for retrieving master credentials”_](https://github.com/99designs/aws-vault/blob/master/USAGE.md#using-credential_proce) - which is NOT true since this tool does work with temporary credentials via `credential_process` just fine and even the [AWS docs on `credential_process` show `SessionToken` and `Expiration` on the expected output from the credentials program](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sourcing-external.html).
+1. <a id="note1"></a>Yubikey support in `99designs/aws-vault` is not perfect:
+    - Using multiple Yubikeys is cumbersome due to having to pass in Yubikey [device serial as environment variable for each command](https://github.com/99designs/aws-vault/pull/748) – vs. this tool allows setting device serial via configuration per profile (no need to remember the serial for each Yubikey).
+    - Uses deprecated `ykman` commands.
+    - See also [point 2](#note2) about `credential_process`, assumed roles and Yubikeys.
 
-2. <a id="note2"></a>This pretty much relates to [point 1](#note1): For AWS tools to automatically request refreshed credentials, the credentials need to be provided via either the multiple standard methods or via `credential_process`.
+2. <a id="note2"></a>**At least I haven't figured out how to succesfully configure it to use `credential_process`, assume a role, use Yubikey for MFA and to provide temporary session credentials.** They themselves [claim that _“`credential_process` is designed for retrieving master credentials”_](https://github.com/99designs/aws-vault/blob/master/USAGE.md#using-credential_proce) - which is NOT true since this tool does work with temporary credentials via `credential_process` just fine and even the [AWS docs on `credential_process` show `SessionToken` and `Expiration` on the expected output from the credentials program](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sourcing-external.html).
+
+3. <a id="note3"></a>This pretty much relates to [point 1](#note1): For AWS tools to automatically request refreshed credentials, the credentials need to be provided via either the multiple standard methods or via `credential_process`.
+
 
 #### `broamski/aws-mfa`
 
-3. <a id="note3"></a>Works differently by writing temporary session credentials into `~/.aws/credentials`.
+4. <a id="note4"></a>Works differently by writing temporary session credentials into `~/.aws/credentials`.
 
-4. <a id="note4"></a>If temporary session credentials written into `~/.aws/credentials` by `broamski/aws-mfa` are expired, AWS tools will fail and you must invoke `aws-mfa` command manually to fetch new session credentials. There is no (automatic) way for AWS tools to trigger `aws-mfa` command.
+5. <a id="note5"></a>If temporary session credentials written into `~/.aws/credentials` by `broamski/aws-mfa` are expired, AWS tools will fail and you must invoke `aws-mfa` command manually to fetch new session credentials. There is no (automatic) way for AWS tools to trigger `aws-mfa` command.
 
-5. <a id="note5"></a>You may use Yubikey, but it requires you to manually copy-paste the value from `ykman` or Yubikey Manager GUI. No "touch integration".
+6. <a id="note6"></a>You may use Yubikey, but it requires you to manually copy-paste the value from `ykman` or Yubikey Manager GUI. No "touch integration".
 
-6. <a id="note6"></a>Temporary session credentials are written in plaintext into `~/aws/credentials`. Besides being available as plaintext, it pollutes the credentials file.
+7. <a id="note7"></a>Temporary session credentials are written in plaintext into `~/aws/credentials`. Besides being available as plaintext, it pollutes the credentials file.
 
-7. <a id="note7"></a>Configuration is only provided via flags to `aws-mfa` CLI command, so each time you execute `aws-mfa` it will use the flags provided. But, the gotcha is that again you need to execute `aws-mfa` manually always.
+8. <a id="note8"></a>Configuration is only provided via flags to `aws-mfa` CLI command, so each time you execute `aws-mfa` it will use the flags provided. But, the gotcha is that again you need to execute `aws-mfa` manually always.
 
-8. <a id="note8"></a>As temporary session credentials (or "short-term" as `aws-mfa` calls them) are stored as plaintext into `~/aws/credentials`, there is no delay since AWS tools can directly read them from that file.
+9. <a id="note9"></a>As temporary session credentials (or "short-term" as `aws-mfa` calls them) are stored as plaintext into `~/aws/credentials`, there is no delay since AWS tools can directly read them from that file.
 
 #### `aripalo/aws-mfa-credential-process` vs. `meeuw/aws-credential-process`
 
-9. <a id="note9"></a>Performance
+10. <a id="note10"></a>Performance
 
     [Hyperfine](https://github.com/sharkdp/hyperfine) benchmark for retrieving cached temporary session credentials:
 
