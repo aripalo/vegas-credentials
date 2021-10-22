@@ -19,7 +19,7 @@
 
 <br/>
 
-| [Features](#features) | [Get Started](#getting-started) | [Configuration Options](#configuration) | [Yubikey Setup](#yubikey-setup) | [Specific Use Cases](#specific-use-cases) | [Caveats](#caveats) | [Why yet another tool?](#why-yet-another-tool-for-this) |  [Alternatives](#alternatives) | [Cache Mechanism](#cache-mechanism) |
+| [Features](#features) | [Get Started](#getting-started) | [Configuration Options](#configuration) | [Yubikey Setup](#yubikey-setup) | [Examples](#examples) | [Caveats](#caveats) | [Why yet another tool?](#why-yet-another-tool-for-this) |  [Alternatives](#alternatives) | [Cache Mechanism](#cache-mechanism) |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: |  :---: | :---: |
 
 <br/>
@@ -251,7 +251,7 @@ yubikey_serial = "12345678"
 
 <br/>
 
-## Specific Use Cases
+## Examples
 
 ### Role Chaining
 
