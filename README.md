@@ -382,6 +382,7 @@ This `aws-mfa-credential-process` is _yet another tool_, but it plugs into the s
 - [`broamski/aws-mfa`](https://github.com/broamski/aws-mfa)
 - [`99designs/aws-vault`](https://github.com/99designs/aws-vault)
 - [`meeuw/aws-credential-process`](https://github.com/meeuw/aws-credential-process)
+- Many others...
 
 
 ### Feature Comparison
@@ -414,7 +415,7 @@ Please, [correct me if I'm wrong](https://github.com/aripalo/aws-mfa-credential-
 
 #### `broamski/aws-mfa`
 
-4. <a id="note4"></a>Works differently by writing temporary session credentials into `~/.aws/credentials`.
+4. <a id="note4"></a>Works differently by writing temporary session credentials into `~/.aws/credentials`, so therefore no `credential_process` support at all.
 
 5. <a id="note5"></a>If temporary session credentials written into `~/.aws/credentials` by `broamski/aws-mfa` are expired, AWS tools will fail and you must invoke `aws-mfa` command manually to fetch new session credentials. There is no (automatic) way for AWS tools to trigger `aws-mfa` command.
 
