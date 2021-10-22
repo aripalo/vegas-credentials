@@ -19,8 +19,8 @@
 
 <br/>
 
-| [Features](#features) | [Getting Started](#getting-started) | [Configuration Options](#configuration) | [Yubikey Setup](#yubikey-setup) | [Specific Use Cases](#specific-use-cases) | [Caveats](#caveats) | [Why yet another tool?](#why-yet-another-tool-for-this) |  [Alternatives](#alternatives) | 
-| :---: | :---: | :---: | :---: | :---: | :---: | :---: |  :---: | 
+| [Features](#features) | [Getting Started](#getting-started) | [Configuration Options](#configuration) | [Yubikey Setup](#yubikey-setup) | [Specific Use Cases](#specific-use-cases) | [Caveats](#caveats) | [Why yet another tool?](#why-yet-another-tool-for-this) |  [Alternatives](#alternatives) | [Caching Mechanism](#caching-mechanism) |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: |  :---: | :---: |
 
 <br/>
 
@@ -161,7 +161,7 @@ There are multiple ways to configure this tool. The configuration options are ev
 | `--help`            | Prints help text                                                                                                                                                              |
 | `--profile`         | **Required:** Which AWS Profile to use from `~/.aws/config`: Value (for example `my-profile`) must match the profile name in `ini`-section title, e.g. `[profile my-profile]` |
 | `--disable-dialog`  | Disable GUI Dialog Prompt and use CLI stdin input instead                                                                                                                     |
-| `--disable-refresh` | Disable Session Credentials refreshing (as defined in Botocore)                                                                                                               |
+| `--disable-mandatory-refresh` | Disable Session Credentials refreshing if expiration within 10 minutes (as defined in Botocore)                                                                                                               |
 | `--hide-arns`       | Hide IAM Role & MFA Serial ARNS from output (even on verbose mode)                                                                                                            |
 | `--verbose`         | Verbose output                                                                                                                                                                |
 | `--debug`           | Prints out various debugging information                                                                                                                                      |
@@ -428,6 +428,19 @@ Please, [correct me if I'm wrong](https://github.com/aripalo/aws-mfa-credential-
 
     ![perf](/docs/perf-comparison.png)
 
+<br/>
+
+## Caching Mechanism
+
+This tool caches temporary session credentials to disk. In the background it uses [`dgraph-io/badger`](https://github.com/dgraph-io/badger/) which is a fast SSD-optimized key-value store for Go and importantly supports Time-to-Live attributes for data (useful for temporary session credential expiration).
+
+The data is stored into the key-value store with `AES-256-CTR` encryption. The encryption secret is derived from the environment (system boot time, hostname and user UID). So this is not a 100% secure setup, but it's slightly “better” compared to what [`broamski/aws-mfa`](https://github.com/broamski/aws-mfa) does or how AWS CLI caches to `~/.aws/cli/cache`: At least it provides “security by obscurity” solution against rogue scripts that might try to steal your credentials. And then again, it's only caching **temporary** session credentials.
+
+Reason why it caches temporary session credentials in the first place is to create a better user experience with AWS tools that don't support temporary session credential caching with assumed roles.
+
+By default, the cached data is invalidated if the environment changes (system boot time, hostname and user UID), but this is okay since this tool will then query STS for new temporary session credentials and add them to cache.
+
+Also this tool invalidates cached credentials if their expiration time is within 10 minutes and retrieves new ones. This functionality matches to [`botocore`](https://github.com/boto/botocore/blob/221ffa67a567df99ee78d7ae308c0e12d7eeeea7/botocore/credentials.py#L350-L355). You may disable this with `--disable-mandatory-refresh` CLI flag.
 
 
 <br/>
