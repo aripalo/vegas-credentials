@@ -95,10 +95,13 @@ func getPassphrase() ([]byte, error) {
 	userUid := user.Uid
 
 	// Join the resolved values
-	joined := strings.Join([]string{hostname, userUid, bootedAtS}, "")
+	var joined strings.Builder
+	joined.WriteString(hostname)
+	joined.WriteString(userUid)
+	joined.WriteString(bootedAtS)
 
 	// Create a SHA1 hash out of the joined strings and enforce length to 32 bytes for AES-256
-	passphrase := utils.GenerateSHA1(joined)[:AES_256_KEYSIZE]
+	passphrase := utils.GenerateSHA1(joined.String())[:AES_256_KEYSIZE]
 
 	// Finally return the passphrase as byte array
 	return []byte(passphrase), nil

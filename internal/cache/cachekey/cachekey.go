@@ -17,8 +17,13 @@ func Get(d data.Provider) (string, error) {
 	p := d.GetProfile()
 	configString, err := configToString(*p)
 	hash := utils.GenerateSHA1(configString)
-	key := strings.Join([]string{c.Profile, Separator, hash}, "")
-	return key, err
+
+	var key strings.Builder
+	key.WriteString(c.Profile)
+	key.WriteString(Separator)
+	key.WriteString(hash)
+
+	return key.String(), err
 }
 
 // configToString convertts profile config into stringified JSON
