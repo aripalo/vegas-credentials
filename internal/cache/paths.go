@@ -8,12 +8,15 @@ import (
 
 // CachePath provides the location for cache file
 func CachePath(cacheName string, fileName string) string {
+	return cachePathForGOOS(cacheName, fileName, runtime.GOOS)
+}
 
+func cachePathForGOOS(cacheName string, fileName string, goos string) string {
 	xdgCacheHome := os.Getenv("XDG_CACHE_HOME")
 	if xdgCacheHome != "" {
 		return filepath.Join(xdgCacheHome, cacheName, fileName)
 	}
-	if runtime.GOOS == "windows" {
+	if goos == "windows" {
 		return filepath.Join("%LOCALAPPDATA%", cacheName, fileName)
 	}
 
@@ -22,7 +25,7 @@ func CachePath(cacheName string, fileName string) string {
 		panic(err)
 	}
 
-	if runtime.GOOS == "darwin" {
+	if goos == "darwin" {
 		return filepath.Join(homedir, "Library", "Caches", cacheName, fileName)
 	}
 
