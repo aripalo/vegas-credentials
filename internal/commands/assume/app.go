@@ -70,9 +70,7 @@ func (app *App) PreRunE(cmd *cobra.Command) error {
 // Run executes the cobra command (but does not directly depend on cobra)
 func (app *App) Run() {
 
-	var err error
-
-	err = getCredentials(app)
+	err := getCredentials(app)
 
 	if err != nil {
 		panic(err)
