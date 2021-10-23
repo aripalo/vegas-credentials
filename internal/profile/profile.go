@@ -1,7 +1,6 @@
 package profile
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -56,7 +55,7 @@ func loadWithPath(profileConfig Profile, config *config.Config, configPath strin
 
 	profileConfig = configurations[section]
 	if profileConfig.RoleArn == "" || profileConfig.SourceProfile == "" {
-		return profileConfig, errors.New(fmt.Sprintf("Invalid Profile Configuration for %s", config.Profile))
+		return profileConfig, fmt.Errorf("Invalid Profile Configuration for %s", config.Profile)
 	}
 
 	return profileConfig, nil
