@@ -1,0 +1,11 @@
+# This file contains all available configuration options
+
+# output configuration options
+output:
+  # colored-line-number|line-number|json|tab|checkstyle|code-climate|junit-xml|github-actions
+  # default is "colored-line-number"
+  format: checkstyle
+
+  # sorts results by: filepath, line and column
+  sort-results: true
+
