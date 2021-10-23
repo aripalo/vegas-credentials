@@ -23,7 +23,7 @@ func (r *Response) SaveToCache(d data.Provider) error {
 	now := time.Now()
 	ttl := r.Expiration.Sub(now)
 
-	err = r.cache.Set(key, data, ttl) //TODO change exp to dur
+	err = r.cache.Set(key, data, ttl)
 	if err != nil {
 		return err
 	}
