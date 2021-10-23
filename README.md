@@ -2,9 +2,9 @@
 <!-- Badges -->
 [![build](https://github.com/aripalo/aws-mfa-credential-process/actions/workflows/pipeline.yml/badge.svg)](https://github.com/aripalo/aws-mfa-credential-process/actions/workflows/pipeline.yml)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=aripalo_aws-mfa-credential-process&metric=sqale_rating&token=8fef16e73f5087f4331ba8b4ac6993ea8eea0e34)](https://sonarcloud.io/summary/new_code?id=aripalo_aws-mfa-credential-process)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=aripalo_aws-mfa-credential-process&metric=security_rating&token=8fef16e73f5087f4331ba8b4ac6993ea8eea0e34)](https://sonarcloud.io/summary/new_code?id=aripalo_aws-mfa-credential-process)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=aripalo_aws-mfa-credential-process&metric=vulnerabilities&token=8fef16e73f5087f4331ba8b4ac6993ea8eea0e34)](https://sonarcloud.io/summary/new_code?id=aripalo_aws-mfa-credential-process)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=aripalo_aws-mfa-credential-process&metric=coverage&token=8fef16e73f5087f4331ba8b4ac6993ea8eea0e34)](https://sonarcloud.io/summary/new_code?id=aripalo_aws-mfa-credential-process)
-![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/aripalo/aws-mfa-credential-process)
 <!-- /Badges -->
 
 | 🚧 🚧 🚧 <br/> **Work-in-Progress** | 🚀 ⁉️<br/> Publish Plan |
