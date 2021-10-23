@@ -9,7 +9,9 @@ Contributions are very welcome, so thank you for considering on contributing!
 
 ## Goals of this project
 
-The goal of this project is to provide **pleasant user/developer experience for assuming AWS IAM Roles with MFA (via Yubikey or Authenticator App) using AWS `credential_process` to support as many AWS tools (such as SDKs, CLI, CDK, Terraform, etc) as reasonably possible without the user/developer having to use any wrapper scripts around AWS tools.**
+The goal of this project is to provide **unified & pleasant user/developer experience for assuming AWS IAM Roles with MFA (via Yubikey or Authenticator App) using AWS `credential_process` to support as many AWS tools (such as SDKs, CLI, CDK, Terraform, etc) as reasonably possible without the user/developer having to use any wrapper scripts around AWS tools.**
+
+In some ways, I hope this tool will become obsolete and AWS themselves would unify the role assumption, temporary session credential caching & MFA experience (with added support for Yubikeys) across AWS SDKs, CLI and CDK, but I don't think it's going to happen.
 
 The CLI itself tries to follow guidelines for [“12 Factor CLI Apps”](https://medium.com/@jdxcode/12-factor-cli-apps-dd3c227a0e46) as much as reasonably possible.
 
