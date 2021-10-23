@@ -6,8 +6,8 @@ import (
 	"github.com/aripalo/aws-mfa-credential-process/internal/sts"
 )
 
-// Get Temporary Session Credentials response for AWS credential_process
-func (r *Response) Get(d data.Provider) error {
+// Assume IAM Role and fetch temporary session credentials to be used in credential_process
+func (r *Response) AssumeRole(d data.Provider) error {
 
 	var err error
 

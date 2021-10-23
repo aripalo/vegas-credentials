@@ -6,7 +6,6 @@ import "github.com/aripalo/aws-mfa-credential-process/internal/data"
 func (r *Response) GetCachedCredentials(d data.Provider) error {
 
 	var err error
-	//r := response.New()
 
 	err = r.ReadFromCache(d)
 	if err != nil {
@@ -31,7 +30,7 @@ func (r *Response) GetNewCredentials(d data.Provider) error {
 
 	var err error
 
-	err = r.Get(d)
+	err = r.AssumeRole(d)
 	if err != nil {
 		return err
 	}
