@@ -22,11 +22,11 @@ func TestOutput(t *testing.T) {
 
 	r := Response{
 		destination:     &output,
+		Version:         1,
 		AccessKeyID:     "ID",
 		SecretAccessKey: "SECRET",
 		SessionToken:    "TOKEN",
 		Expiration:      exp,
-		Version:         1,
 	}
 
 	err = r.Output()
