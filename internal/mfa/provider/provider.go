@@ -77,4 +77,4 @@ func UseGui(d data.Provider) bool {
 }
 
 // tokenPattern describes the regexp that will match OATH TOPT MFA token code
-var tokenPattern = regexp.MustCompile("\\d{6}\\d*$")
+var tokenPattern = regexp.MustCompile(`\d{6}\d*$`)
