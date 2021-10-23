@@ -40,7 +40,10 @@ func TestSerialize(t *testing.T) {
 func TestDeserialize(t *testing.T) {
 	var r Response
 
-	r.Deserialize([]byte(serializationOutput))
+	err := r.Deserialize([]byte(serializationOutput))
+	if err != nil {
+		t.Fatalf("Got %q, want nil", err)
+	}
 
 	exp, err := time.Parse(time.RFC3339, "2020-05-19T18:06:10Z")
 	if err != nil {
