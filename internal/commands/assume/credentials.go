@@ -12,12 +12,11 @@ func getCredentials(d data.Provider) error {
 	r := response.New()
 	var err error
 
-	defer func() error {
+	defer func() {
 		err := r.Teardown()
 		if err != nil {
-			return err
+			panic(err)
 		}
-		return nil
 	}()
 
 	p := d.GetProfile()
