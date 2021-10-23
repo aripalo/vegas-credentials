@@ -4,11 +4,15 @@ import (
 	"context"
 	"errors"
 	"os/exec"
+	"regexp"
 	"strings"
 
 	"github.com/aripalo/aws-mfa-credential-process/internal/data"
 	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
 )
+
+// yubikeyTokenFindPattern describes the regexp that will match OATH TOPT MFA token code from Yubikey
+var yubikeyTokenFindPattern = regexp.MustCompile(`\d{6}\d*$`)
 
 func (t *TokenProvider) QueryYubikey(ctx context.Context, d data.Provider) {
 	var token Token
@@ -24,7 +28,7 @@ func (t *TokenProvider) QueryYubikey(ctx context.Context, d data.Provider) {
 	if err != nil {
 		t.errorChan <- &err
 	} else {
-		value := tokenPattern.FindString(strings.TrimSpace(string(stdout)))
+		value := yubikeyTokenFindPattern.FindString(strings.TrimSpace(string(stdout)))
 		token.Value = value
 		t.tokenChan <- &token
 	}

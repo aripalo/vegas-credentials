@@ -1,11 +1,16 @@
 package provider
 
-import "errors"
+import (
+	"fmt"
+	"regexp"
+)
 
 func validateToken(token string) error {
-	result := tokenPattern.Match([]byte(token))
+	result := tokenValidatePattern.MatchString(token)
 	if !result {
-		return errors.New("Invalid OATH TOPT MFA Token Code")
+		return fmt.Errorf("Invalid OATH TOPT MFA Token Code: %q", token)
 	}
 	return nil
 }
+
+var tokenValidatePattern = regexp.MustCompile(`^\d{6}\d*$`)

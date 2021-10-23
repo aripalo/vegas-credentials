@@ -2,7 +2,6 @@ package provider
 
 import (
 	"context"
-	"regexp"
 	"time"
 
 	"github.com/aripalo/aws-mfa-credential-process/internal/data"
@@ -75,6 +74,3 @@ func UseGui(d data.Provider) bool {
 	c := d.GetConfig()
 	return !c.DisableDialog
 }
-
-// tokenPattern describes the regexp that will match OATH TOPT MFA token code
-var tokenPattern = regexp.MustCompile(`\d{6}\d*$`)
