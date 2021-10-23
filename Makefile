@@ -10,7 +10,7 @@ build: clean ## Build binaries
 all: test build ## Build and run tests
 
 test: clean ## Run unit tests
-	@(go test ./...)
+	@(go test ./... -coverprofile=coverage.out)
 
 clean: ## Remove previous build
 	@(go clean)
