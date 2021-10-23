@@ -2,7 +2,6 @@ package response
 
 import (
 	"fmt"
-	"os"
 )
 
 // Output to stdout so aws credential_process can read it
@@ -12,6 +11,6 @@ func (r *Response) Output() error {
 	if err != nil {
 		return err
 	}
-	fmt.Fprintf(os.Stdout, string(output))
+	fmt.Fprintf(r.destination, string(output))
 	return nil
 }

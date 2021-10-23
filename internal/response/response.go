@@ -1,6 +1,8 @@
 package response
 
 import (
+	"io"
+	"os"
 	"time"
 
 	"github.com/aripalo/aws-mfa-credential-process/internal/cache"
@@ -10,6 +12,7 @@ import (
 // Response defines the output format expected by AWS credential_process
 // https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sourcing-external.html
 type Response struct {
+	destination     io.Writer
 	cache           *cache.NewCache
 	Version         int       `json:"Version"`
 	AccessKeyID     string    `json:"AccessKeyId"`
@@ -24,8 +27,9 @@ const AWS_CREDENTIAL_PROCESS_VERSION int = 1
 // New defines a response waiting to be fulfilled
 func New() *Response {
 	r := &Response{
-		cache:   cache.New(config.APP_NAME),
-		Version: AWS_CREDENTIAL_PROCESS_VERSION,
+		destination: os.Stdout,
+		cache:       cache.New(config.APP_NAME),
+		Version:     AWS_CREDENTIAL_PROCESS_VERSION,
 	}
 	return r
 }
