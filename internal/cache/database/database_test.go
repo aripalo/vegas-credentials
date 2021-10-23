@@ -61,7 +61,12 @@ func TestDatabaseWrite(t *testing.T) {
 	defer tempDirRemove()
 
 	database, err := Open(tempDir, DatabaseOptions{})
-	defer database.Close()
+	defer func() {
+		err := database.Close()
+		if err != nil {
+			panic(err)
+		}
+	}()
 	if err != nil {
 		t.Fatalf("Could not open the database: %q", err)
 	}
@@ -80,7 +85,12 @@ func TestDatabaseWriteAndRead(t *testing.T) {
 	defer tempDirRemove()
 
 	database, err := Open(tempDir, DatabaseOptions{})
-	defer database.Close()
+	defer func() {
+		err := database.Close()
+		if err != nil {
+			panic(err)
+		}
+	}()
 	if err != nil {
 		t.Fatalf("Could not open the database: %q", err)
 	}
@@ -111,7 +121,12 @@ func TestDatabaseDelete(t *testing.T) {
 	defer tempDirRemove()
 
 	database, err := Open(tempDir, DatabaseOptions{})
-	defer database.Close()
+	defer func() {
+		err := database.Close()
+		if err != nil {
+			panic(err)
+		}
+	}()
 	if err != nil {
 		t.Fatalf("Could not open the database: %q", err)
 	}
@@ -140,7 +155,12 @@ func TestDatabaseDeleteByPrefix(t *testing.T) {
 	defer tempDirRemove()
 
 	database, err := Open(tempDir, DatabaseOptions{})
-	defer database.Close()
+	defer func() {
+		err := database.Close()
+		if err != nil {
+			panic(err)
+		}
+	}()
 	if err != nil {
 		t.Fatalf("Could not open the database: %q", err)
 	}
@@ -169,7 +189,12 @@ func TestDatabaseDeleteAll(t *testing.T) {
 	defer tempDirRemove()
 
 	database, err := Open(tempDir, DatabaseOptions{})
-	defer database.Close()
+	defer func() {
+		err := database.Close()
+		if err != nil {
+			panic(err)
+		}
+	}()
 	if err != nil {
 		t.Fatalf("Could not open the database: %q", err)
 	}
@@ -198,7 +223,12 @@ func TestDatabaseTTL(t *testing.T) {
 	defer tempDirRemove()
 
 	database, err := Open(tempDir, DatabaseOptions{})
-	defer database.Close()
+	defer func() {
+		err := database.Close()
+		if err != nil {
+			panic(err)
+		}
+	}()
 	if err != nil {
 		t.Fatalf("Could not open the database: %q", err)
 	}
