@@ -83,7 +83,7 @@ func (app *App) Run() {
 // PostRunE executes after everything
 func (app *App) PostRunE() error {
 	if app.Config.Debug {
-		logger.Debugf(app, "⏱ ", "Duration", "%s\n", time.Now().Sub(app.startedAt))
+		logger.Debugf(app, "⏱ ", "Duration", "%s\n", time.Since(app.startedAt))
 		logger.PrintRuler(app, "-")
 	}
 	return nil
