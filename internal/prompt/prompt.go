@@ -26,10 +26,6 @@ func Dialog(ctx context.Context, title string, text string) (string, error) {
 func Cli(ctx context.Context, text string) (string, error) {
 	reader := bufio.NewReader(os.Stdin)
 
-	if text != "" {
-		//utils.SafeLogLn(text)
-	}
-
 	value, err := reader.ReadString('\n')
 	if err != nil {
 		return "", err
