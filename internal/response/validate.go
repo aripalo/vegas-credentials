@@ -31,7 +31,7 @@ func (r *Response) Validate(d data.Provider) error {
 	now := time.Now()
 
 	if r.Expiration.Before(now) {
-		return errors.New(fmt.Sprintf("Expired %s\n", humanize.RelTime(r.Expiration, now, "ago", "in future")))
+		return errors.New(fmt.Sprintf("Expired %s", humanize.RelTime(r.Expiration, now, "ago", "in future")))
 	}
 
 	return nil
@@ -52,7 +52,7 @@ func (r *Response) ValidateForMandatoryRefresh(d data.Provider) error {
 	limit := now.Add(time.Duration(-count) * time.Second)
 
 	if r.Expiration.Before(limit) {
-		return errors.New(fmt.Sprintf("Mandatory refresh required because expiration in %s\n", humanize.Time(r.Expiration)))
+		return errors.New(fmt.Sprintf("Mandatory refresh required because expiration in %s", humanize.Time(r.Expiration)))
 	}
 
 	return nil
