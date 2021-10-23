@@ -29,7 +29,10 @@ func TestOutput(t *testing.T) {
 		Version:         1,
 	}
 
-	r.Output()
+	err = r.Output()
+	if err != nil {
+		t.Fatalf("Got %q, want nil", err)
+	}
 
 	got := output.String()
 	want := strings.ReplaceAll(expectedOutput, "\t", "    ")
