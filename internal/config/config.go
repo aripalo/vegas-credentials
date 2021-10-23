@@ -58,7 +58,10 @@ func (c *Config) Load(cmd *cobra.Command) error {
 
 	// Read CLI flags
 	// https://github.com/spf13/viper#working-with-flags
-	v.BindPFlags(cmd.Flags())
+	err = v.BindPFlags(cmd.Flags())
+	if err != nil {
+		return err
+	}
 
 	// Unmarshal viper configuration into config.Config
 	err = v.Unmarshal(&c, decodeWithMixedCasing)
