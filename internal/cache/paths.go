@@ -29,6 +29,5 @@ func cachePathForGOOS(cacheName string, fileName string, goos string) string {
 		return filepath.Join(homedir, "Library", "Caches", cacheName, fileName)
 	}
 
-	// TODO maybe check if this exists (without fileName and if not, use ~)
 	return filepath.Join(homedir, ".cache", cacheName, fileName)
 }
