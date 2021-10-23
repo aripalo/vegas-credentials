@@ -2,8 +2,6 @@ package config
 
 import (
 	"fmt"
-	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/iancoleman/strcase"
@@ -30,14 +28,6 @@ type Config struct {
 func (c *Config) Load(cmd *cobra.Command) error {
 
 	var err error
-
-	// Initialize config Path
-	homedir, err := os.UserHomeDir()
-	if err != nil {
-		panic(err)
-	}
-	configPath := filepath.Join(homedir, ".aws-mfa-credential-process")
-	os.MkdirAll(configPath, os.ModePerm) // TODO maybe remove this? XDG thing also...
 
 	// New viper instance
 	v := viper.New()
