@@ -408,7 +408,7 @@ There are many great existing solutions out there that solve similar problems an
 | Comprehensively Unit Tested                      |                      ✅                      |                                                ?                                                |                                              ❌                                               |                                                    ✅                                                     |
 | Installation methods                             |       `brew`, `scoop`, `npm`  , `go`        |         `brew`, `port`, `choco`, `scoop`, `pacman`, `pkg`, `zypper`, `nix-env`, `asdf`          |                                            `pip`                                             |                                              `brew`, `pip`                                               |
 
-Please, [correct me if I'm wrong](https://github.com/aripalo/aws-mfa-credential-process/issues/new/choose) above or there's any other good alternatives!
+Please, [correct me if I'm wrong](https://github.com/aripalo/aws-mfa-credential-process/discussions) above or there's any other good alternatives!
 
 #### Notes
 
