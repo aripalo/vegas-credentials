@@ -11,6 +11,6 @@ func (r *Response) Output() error {
 	if err != nil {
 		return err
 	}
-	fmt.Fprintf(r.destination, string(output))
+	fmt.Fprint(r.destination, string(output))
 	return nil
 }
