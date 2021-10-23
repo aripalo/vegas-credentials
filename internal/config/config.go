@@ -51,11 +51,9 @@ func (c *Config) Load(cmd *cobra.Command) error {
 
 	// Read from Config
 	err = v.ReadInConfig()
+	// Config file is optional, so ignore
 	if err != nil && err != err.(viper.ConfigFileNotFoundError) {
 		return err
-	} else {
-		// Config file is optional, so ignore
-		err = nil
 	}
 
 	// Read CLI flags
