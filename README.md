@@ -385,7 +385,9 @@ This `aws-mfa-credential-process` is _yet another tool_, but it plugs into the s
 - Many others...
 
 
-### Feature Comparison
+### Comparison
+
+There are many great existing solutions out there that solve similar problems and I've tried to learn from them as much as I can. This tool that I've built is definitely not better than for example [`99designs/aws-vault`](https://github.com/99designs/aws-vault) in many scenarios as it has a lot more features, more contributors and been around some time. Instead the comparison below focuses on the specific use case this tool tries to solve (i.e. providing a nice UX for assuming a role with MFA using `credential_process` to support as many AWS tools as possible without having to use wrapper scripts).
 
 |                   Feature/Info                   |    `aripalo/aws-mfa-credential-process`     |                 [`99designs/aws-vault`](https://github.com/99designs/aws-vault)                 |                  [`broamski/aws-mfa`](https://github.com/broamski/aws-mfa)                   |            [`meeuw/aws-credential-process`](https://github.com/meeuw/aws-credential-process)             |
 | :----------------------------------------------- | :-----------------------------------------: | :---------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------: |
