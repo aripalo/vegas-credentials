@@ -12,27 +12,33 @@ func getCredentials(d data.Provider) error {
 	r := response.New()
 	var err error
 
-	defer r.Teardown()
+	defer func() error {
+		err := r.Teardown()
+		if err != nil {
+			return err
+		}
+		return nil
+	}()
 
 	p := d.GetProfile()
-	logger.Infoln(d, "👷", "Role", p.RoleArn)
+	logger.Debugln(d, "👷", "Role", p.RoleArn)
 
 	err = r.GetCachedCredentials(d)
 	if err != nil {
-		logger.Infof(d, "ℹ️ ", "Credentials", "Cached: %s\n", err.Error())
+		logger.Debugf(d, "ℹ️ ", "Credentials", "Cached: %s\n", err.Error())
 		err = r.GetNewCredentials(d)
 		if err != nil {
 			logger.Errorln(d, "ℹ️ ", "Credentials", err.Error())
 			return err
 		} else {
-			logger.Successln(d, "ℹ️ ", "Credentials", "Received from STS")
+			logger.Debugln(d, "ℹ️ ", "Credentials", "Received from STS")
 			logger.PrintRuler(d, "=")
 			err = r.Output()
 			return err
 
 		}
 	} else {
-		logger.Successln(d, "ℹ️ ", "Credentials", "Received from Cache")
+		logger.Debugln(d, "ℹ️ ", "Credentials", "Received from Cache")
 		logger.PrintRuler(d, "=")
 		err = r.Output()
 		return err
