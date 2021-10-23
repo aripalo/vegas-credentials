@@ -23,7 +23,7 @@ func format(d data.Provider, colorize color.Color, emoji string, prefix string, 
 	c := d.GetConfig()
 	output := ""
 
-	if emoji != "" && c.NoColor != true {
+	if emoji != "" && !c.NoColor {
 		output = fmt.Sprintf("%s%s ", output, emoji)
 	}
 
@@ -85,61 +85,55 @@ func Debugf(d data.Provider, emoji string, prefix string, message string, args .
 // Infoln prints a message with newline if verbose mode enabled (in gray if colors enabled).
 func Infoln(d data.Provider, emoji string, prefix string, message string) {
 	s := d.GetWriteStream()
-	c := d.GetConfig()
-	if c.Verbose {
-		formatted := format(d, textColorInfo, emoji, prefix, message)
-		fmt.Fprintln(s, formatted)
-	}
+
+	formatted := format(d, textColorInfo, emoji, prefix, message)
+	fmt.Fprintln(s, formatted)
+
 }
 
 // Info prints a message if verbose mode enabled (in gray if colors enabled).
 func Info(d data.Provider, emoji string, prefix string, message string) {
 	s := d.GetWriteStream()
-	c := d.GetConfig()
-	if c.Verbose {
-		formatted := format(d, textColorInfo, emoji, prefix, message)
-		fmt.Fprint(s, formatted)
-	}
+
+	formatted := format(d, textColorInfo, emoji, prefix, message)
+	fmt.Fprint(s, formatted)
+
 }
 
 // Infof prints a formatted message if verbose mode enabled (in gray if colors enabled).
 func Infof(d data.Provider, emoji string, prefix string, message string, args ...interface{}) {
 	s := d.GetWriteStream()
-	c := d.GetConfig()
-	if c.Verbose {
-		formatted := format(d, textColorInfo, emoji, prefix, message)
-		fmt.Fprintf(s, formatted, args...)
-	}
+
+	formatted := format(d, textColorInfo, emoji, prefix, message)
+	fmt.Fprintf(s, formatted, args...)
+
 }
 
 // Successln prints a message with newline if verbose mode enabled (in green if colors enabled).
 func Successln(d data.Provider, emoji string, prefix string, message string) {
 	s := d.GetWriteStream()
-	c := d.GetConfig()
-	if c.Verbose {
-		formatted := format(d, textColorSuccess, emoji, prefix, message)
-		fmt.Fprintln(s, formatted)
-	}
+
+	formatted := format(d, textColorSuccess, emoji, prefix, message)
+	fmt.Fprintln(s, formatted)
+
 }
 
 // Success prints a message if verbose mode enabled (in green if colors enabled).
 func Success(d data.Provider, emoji string, prefix string, message string) {
 	s := d.GetWriteStream()
-	c := d.GetConfig()
-	if c.Verbose {
-		formatted := format(d, textColorSuccess, emoji, prefix, message)
-		fmt.Fprint(s, formatted)
-	}
+
+	formatted := format(d, textColorSuccess, emoji, prefix, message)
+	fmt.Fprint(s, formatted)
+
 }
 
 // Successf prints a formatted message if verbose mode enabled (in green if colors enabled).
 func Successf(d data.Provider, emoji string, prefix string, message string, args ...interface{}) {
 	s := d.GetWriteStream()
-	c := d.GetConfig()
-	if c.Verbose {
-		formatted := format(d, textColorSuccess, emoji, prefix, message)
-		fmt.Fprintf(s, formatted, args...)
-	}
+
+	formatted := format(d, textColorSuccess, emoji, prefix, message)
+	fmt.Fprintf(s, formatted, args...)
+
 }
 
 // Titleln prints a message with newline if verbose mode enabled (in magenta if colors enabled).
