@@ -42,7 +42,10 @@ func buildAssumeCommand(app *assume.App) *cobra.Command {
 		config.Defaults.Profile.Value,
 		config.Defaults.Profile.Usage,
 	)
-	cmd.MarkFlagRequired(config.Defaults.Profile.Name)
+	err := cmd.MarkFlagRequired(config.Defaults.Profile.Name)
+	if err != nil {
+		panic(err)
+	}
 
 	cmd.Flags().Bool(
 		config.Defaults.HideArns.Name,
