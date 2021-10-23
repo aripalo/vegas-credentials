@@ -15,8 +15,16 @@ const Separator = "__"
 func Get(d data.Provider) (string, error) {
 	c := d.GetConfig()
 	p := d.GetProfile()
+
 	configString, err := configToString(*p)
-	hash := utils.GenerateSHA1(configString)
+	if err != nil {
+		return "", err
+	}
+
+	hash, err := utils.GenerateSHA1(configString)
+	if err != nil {
+		return "", err
+	}
 
 	var key strings.Builder
 	key.WriteString(c.Profile)

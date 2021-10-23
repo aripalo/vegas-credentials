@@ -6,9 +6,12 @@ import (
 )
 
 // GenerateSHA1 reads string data and creates a SHA1 hash string in hex encoding from it
-func GenerateSHA1(data string) string {
+func GenerateSHA1(data string) (string, error) {
 	h := sha1.New()
-	h.Write([]byte(data))
+	_, err := h.Write([]byte(data))
+	if err != nil {
+		return "", err
+	}
 	hash := hex.EncodeToString(h.Sum(nil))
-	return hash
+	return hash, nil
 }
