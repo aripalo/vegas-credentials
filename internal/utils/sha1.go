@@ -9,6 +9,6 @@ import (
 func GenerateSHA1(data string) string {
 	h := sha1.New()
 	h.Write([]byte(data))
-	sha1_hash := hex.EncodeToString(h.Sum(nil))
-	return sha1_hash
+	hash := hex.EncodeToString(h.Sum(nil))
+	return hash
 }
