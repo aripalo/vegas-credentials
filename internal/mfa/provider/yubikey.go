@@ -14,6 +14,8 @@ import (
 // yubikeyTokenFindPattern describes the regexp that will match OATH TOPT MFA token code from Yubikey
 var yubikeyTokenFindPattern = regexp.MustCompile(`\d{6}\d*$`)
 
+var execCommandContext = exec.CommandContext
+
 func (t *TokenProvider) QueryYubikey(ctx context.Context, d data.Provider) {
 	var token Token
 	var err error
@@ -23,7 +25,7 @@ func (t *TokenProvider) QueryYubikey(ctx context.Context, d data.Provider) {
 
 	label := getYubikeyLabel(p)
 
-	cmd := exec.CommandContext(ctx, "ykman", "--device", p.YubikeySerial, "oath", "accounts", "code", label)
+	cmd := execCommandContext(ctx, "ykman", "--device", p.YubikeySerial, "oath", "accounts", "code", label)
 	stdout, err := cmd.Output()
 	if err != nil {
 		t.errorChan <- &err
@@ -47,7 +49,7 @@ func VerifyYubikey(ctx context.Context, d data.Provider) error {
 	}
 
 	// if configured, check if given device is available
-	cmd := exec.CommandContext(ctx, "ykman", "list")
+	cmd := execCommandContext(ctx, "ykman", "list")
 	stdout, err := cmd.Output()
 	if err != nil {
 		return errors.New(YubikeyErrorFail)

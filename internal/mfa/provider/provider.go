@@ -38,10 +38,17 @@ type TokenProvider struct {
 // MFA_TIMEOUT_SECONDS configures global timeout for the Provide method
 const MFA_TIMEOUT_SECONDS = 60
 
+func New(d data.Provider, enableYubikey bool) *TokenProvider {
+	var provider TokenProvider
+
+	provider.tokenChan = make(chan *Token, 1)
+	provider.errorChan = make(chan *error, 1)
+
+	return &provider
+}
+
 // Provide OATH TOPT MFA Token from supported providers
 func (t *TokenProvider) Provide(d data.Provider, enableYubikey bool) (Token, error) {
-	t.tokenChan = make(chan *Token, 1)
-	t.errorChan = make(chan *error, 1)
 
 	var token Token
 	var err error

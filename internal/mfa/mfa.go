@@ -10,7 +10,6 @@ import (
 )
 
 func GetToken(d data.Provider) (provider.Token, error) {
-	var t provider.TokenProvider
 	p := d.GetProfile()
 
 	enableYubikey := useYubikey(d)
@@ -18,6 +17,7 @@ func GetToken(d data.Provider) (provider.Token, error) {
 	logger.Debugln(d, "🔒", "MFA", p.MfaSerial)
 	logger.Promptf(d, "🔑", "MFA", "> ")
 
+	t := provider.New(d, enableYubikey)
 	token, err := t.Provide(d, enableYubikey)
 
 	// No need to print newline if user entered token via CLI stdin as it contained "enter-press"
