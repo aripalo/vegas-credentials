@@ -12,6 +12,14 @@ Vegas Credentials is an utility with smooth user experience that plugs into AWS 
 
 <br/>
 
+<!-- Badges -->
+[![build](https://github.com/aripalo/vegas-credentials/actions/workflows/pipeline.yml/badge.svg)](https://github.com/aripalo/vegas-credentials/actions/workflows/pipeline.yml)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=aripalo_vegas-credentials&metric=coverage&token=983ccf9b47d7abae7857a352aa71fd52f953cd5c)](https://sonarcloud.io/summary/new_code?id=aripalo_vegas-credentials)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=aripalo_vegas-credentials&metric=sqale_rating&token=983ccf9b47d7abae7857a352aa71fd52f953cd5c)](https://sonarcloud.io/summary/new_code?id=aripalo_vegas-credentials)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=aripalo_vegas-credentials&metric=security_rating&token=983ccf9b47d7abae7857a352aa71fd52f953cd5c)](https://sonarcloud.io/summary/new_code?id=aripalo_vegas-credentials)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=aripalo_vegas-credentials&metric=vulnerabilities&token=983ccf9b47d7abae7857a352aa71fd52f953cd5c)](https://sonarcloud.io/summary/new_code?id=aripalo_vegas-credentials)
+<!-- /Badges -->
+
 ---
 
 | [Features](#features) | [Overview](#overview) | [Get&nbsp;Started](#get-started) | [Yubikeys](#yubikeys) | [Configuration](#configuration) | [Examples](#examples) | [Why?](#why-yet-another-tool) | [Design](#design) |
