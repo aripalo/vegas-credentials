@@ -3,7 +3,7 @@
 | Things may break without any prior notice at any given `v0.x` version: So do not use this for anything critical, but feel free to test this out and give feedback! | After some testing, depending on the amount of bugs/issues/feedback, I'm hoping to release `v1.0.0` during November 2021. No commitments though! |
 ---
 
-# Vegas Credentials
+# ![Vegas Credentials](/assets/vegas-credentials.svg "Vegas Credentials")
 
 _Much like going to AWS re:Invent in Las Vegas,_ using various AWS tools (SDKs, CLI, CDK, Terraform, etc) via command-line to assume IAM roles in different accounts with Multi-Factor Authentication can be an exhausting experience: `vegas-credentials` aims to simplify the credential process! 
 
