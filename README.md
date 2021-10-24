@@ -207,6 +207,79 @@ To use Yubikeys:
 
 ## Configuration
 
+Configuration for the most part happens in `~/.aws/config` ini-file, but there are some command-line flags and environment variables that you may want to use sometimes.
+
+### Source Profile Configuration
+
+|         Option         |                                                                                                                           Description                                                                                                                           |
+| :--------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `mfa_serial`           | **Required:** The ARN of the Virtual (OATH TOPT) MFA device used in Multi-Factor Authentication.                                                                                                                                                                |
+| `vegas_yubikey_serial` | **Required if using Yubikey:** Yubikey Device Serial to use. You can see the serial(s) with `ykman list` command. This enforces the use of a specific Yubikey and also enables the support for using multiple Yubikeys (for different profiles)!                |
+| `vegas_yubikey_label`  | Use only if you have any other value than the AWS MFA Device ARN as `oath` account label! Yubikey `oath` Account Label to use. You can see the available accounts with `ykman oath accounts list` command. Set the account label which you have configured your AWS TOPT MFA! |
+
+Example:
+```ini
+# ~/.aws/config
+[default]
+mfa_serial = arn:aws:iam::111111111111:mfa/FrankSinatra
+vegas_yubikey_serial = 12345678
+```
+
+
+### Target Profile Configuration
+
+|         Option         |                                                                                                      Description                                                                                                       |
+| :--------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `credential_process`   | **Required:** To enable this tool, set the value as `aws-mfa-credential-process assume --profile <my-profile>`. Value of `my-profile` must match the profile name in `ini`-section title, e.g. `[profile my-profile]`. |
+| `vegas_role_arn`       | **Required:** The target IAM Role ARN to be assumed.                                                                                                                                                                   |
+| `vegas_source_profile` | **Required:** Which credentials (profile) are to be used as a source for assuming the target role.                                                                                                                     |
+
+Example:
+```ini
+# ~/.aws/config
+[profile frank@concerts]
+credential_process = vegas-credentials assume --profile=frank@concerts
+vegas_role_arn=arn:aws:iam::222222222222:role/SingerRole
+vegas_source_profile=default
+
+# You may also provide any other additional standard AWS configuration, such as:
+region = us-west-1
+duration_seconds = 4383
+role_session_name = SinatraAtTheSands
+external_id = 0093624694724
+```
+
+
+### Command-line Flags
+
+|       Flag        |                                                                                  Description                                                                                  |
+| :---------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--help`            | Prints help text                                                                                                                                                              |
+| `--profile`         | **Required:** Which AWS Profile to use from `~/.aws/config`: Value (for example `my-profile`) must match the profile name in `ini`-section title, e.g. `[profile my-profile]` |
+| `--disable-dialog`  | Disable GUI Dialog Prompt                                                                                                                   |
+| `--disable-mandatory-refresh` | Disable Session Credentials refreshing if expiration within 10 minutes (as defined in Botocore)                                                                                                               |
+| `--hide-arns`       | Hide IAM Role & MFA Serial ARNS from output (even on verbose mode)                                                                                                            |
+| `--verbose`         | Verbose output                                                                                                                                                                |
+| `--debug`           | Prints out various debugging information                                                                                                                                      |
+| `--no-color`        | Disable colorful fancy output                                                                                                                                                 |
+
+Example:
+```sh
+vegas-credentials assume --profile=frank@concerts --verbose --no-color
+```
+... though you shouldn't really call this tool directly yourself, but instead configure it as `credential_process` in `~/.aws/config`.
+
+### Environment Variables
+
+
+|   Option   |          Description          |
+| :--------- | :---------------------------- |
+| [`NO_COLOR`](https://no-color.org/) | Disable colorful fancy output, see also [`--no-color` CLI flag](#command-line-flags) |
+| `VEGAS_CREDENTIALS_NO_COLOR` | Disable color only for this tool (not for your whole environment ) |
+| `TERM=dumb` | Another way to disable colorful fancy output |
+
+
+
 <br/>
 
 ## Examples
@@ -396,3 +469,10 @@ By default, the cached data is invalidated if the environment changes (system bo
 
 Also this tool invalidates cached credentials if their expiration time is within 10 minutes and retrieves new ones. This functionality matches to [`botocore`](https://github.com/boto/botocore/blob/221ffa67a567df99ee78d7ae308c0e12d7eeeea7/botocore/credentials.py#L350-L355). You may disable this with `--disable-mandatory-refresh` CLI flag.
 
+### Never touch `~/.aws/credentials`
+
+TODO
+
+### Never export credentials to environment
+
+TODO
