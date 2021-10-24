@@ -14,7 +14,7 @@ It's an utility that plugs into AWS [`credential_process`](https://docs.aws.amaz
 
 ---
 
-| [Features](#features) | [Overview](#overview) | [Get&nbsp;Started](#get-started) | [Yubikeys](#yubikeys) | [Configuration](#configuration) | [Examples](#examples) | [Why?](#why) | [Design](#design) |
+| [Features](#features) | [Overview](#overview) | [Get&nbsp;Started](#get-started) | [Yubikeys](#yubikeys) | [Configuration](#configuration) | [Examples](#examples) | [Why?](#why-yet-another-tool) | [Design](#design) |
 | :-------------------: | :-------------------: | :------------------------------: | :-------------------: | :-----------------------------: | :-------------------: | :----------: | :---------------: |
 
 ---
