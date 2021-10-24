@@ -20,4 +20,5 @@ require (
 	github.com/tklauser/go-sysconf v0.3.9 // indirect
 	golang.org/x/sys v0.0.0-20211015200801-69063c4bb744 // indirect
 	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211
+	gopkg.in/ini.v1 v1.63.2
 )
