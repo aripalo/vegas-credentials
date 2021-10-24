@@ -1,0 +1,17 @@
+.github
+.vagrant
+cmd
+internal
+**/*.go
+.golangci.yml
+.goreleaser.yml
+CACHE.md
+coverage.out
+**/*.prof
+go.mod
+go.sum
+**/*.out
+Makefile
+sonar-project.properties
+TODO.md
+Vagrantfile
