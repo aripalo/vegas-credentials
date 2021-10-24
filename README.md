@@ -3,7 +3,7 @@
 | Things may break without any prior notice at any given `v0.x.x` version: So do not use this for anything critical, but feel free to test this out and give feedback! | After some testing, depending on the amount of bugs/issues/feedback, I'm hoping to release `v1.0.0` during November 2021. No commitments though! |
 ---
 
-# ![Vegas Credentials](/assets/vegas-credentials.svg "Vegas Credentials")
+# ![Vegas Credentials](/assets/vegas-credentials.svg "Vegas Credentials - AWS credential_process utility with Yubikey MFA support to fetch, cache and refresh assumed temporary session credentials")
 
 > _Much like spending a week in Las Vegas at AWS re:Invent,_ using multiple AWS tools (SDKs, CLI, CDK, Terraform, etc) via command-line to assume IAM roles in different accounts with Multi-Factor Authentication can be an exhausting experience: `vegas-credentials` aims to simplify the credential process! 
 
