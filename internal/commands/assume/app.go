@@ -4,9 +4,9 @@ import (
 	"io"
 	"time"
 
-	"github.com/aripalo/aws-mfa-credential-process/internal/config"
-	"github.com/aripalo/aws-mfa-credential-process/internal/logger"
-	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
+	"github.com/aripalo/vegas-credentials/internal/config"
+	"github.com/aripalo/vegas-credentials/internal/logger"
+	"github.com/aripalo/vegas-credentials/internal/profile"
 	"github.com/spf13/cobra"
 )
 

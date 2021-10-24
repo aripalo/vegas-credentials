@@ -3,8 +3,8 @@ package sts
 import (
 	"time"
 
-	"github.com/aripalo/aws-mfa-credential-process/internal/data"
-	"github.com/aripalo/aws-mfa-credential-process/internal/mfa"
+	"github.com/aripalo/vegas-credentials/internal/data"
+	"github.com/aripalo/vegas-credentials/internal/mfa"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/credentials/stscreds"

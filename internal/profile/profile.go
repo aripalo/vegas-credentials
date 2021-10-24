@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/aripalo/aws-mfa-credential-process/internal/config"
+	"github.com/aripalo/vegas-credentials/internal/config"
 	"github.com/iancoleman/strcase"
 	"github.com/mitchellh/mapstructure"
 	"github.com/spf13/viper"

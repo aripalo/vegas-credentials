@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/aripalo/aws-mfa-credential-process/internal/config"
+	"github.com/aripalo/vegas-credentials/internal/config"
 )
 
 var c = &config.Config{

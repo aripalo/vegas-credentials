@@ -5,8 +5,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/aripalo/aws-mfa-credential-process/internal/cache"
-	"github.com/aripalo/aws-mfa-credential-process/internal/config"
+	"github.com/aripalo/vegas-credentials/internal/cache"
+	"github.com/aripalo/vegas-credentials/internal/config"
 )
 
 // Response defines the output format expected by AWS credential_process

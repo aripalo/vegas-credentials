@@ -7,8 +7,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/aripalo/aws-mfa-credential-process/internal/data"
-	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
+	"github.com/aripalo/vegas-credentials/internal/data"
+	"github.com/aripalo/vegas-credentials/internal/profile"
 )
 
 // yubikeyTokenFindPattern describes the regexp that will match OATH TOPT MFA token code from Yubikey

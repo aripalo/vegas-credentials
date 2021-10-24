@@ -1,4 +1,4 @@
-module github.com/aripalo/aws-mfa-credential-process
+module github.com/aripalo/vegas-credentials
 
 go 1.16
 

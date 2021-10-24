@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/aripalo/aws-mfa-credential-process/internal/utils"
+	"github.com/aripalo/vegas-credentials/internal/utils"
 )
 
 // Serialize response into pretty JSON

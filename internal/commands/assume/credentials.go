@@ -1,9 +1,9 @@
 package assume
 
 import (
-	"github.com/aripalo/aws-mfa-credential-process/internal/data"
-	"github.com/aripalo/aws-mfa-credential-process/internal/logger"
-	"github.com/aripalo/aws-mfa-credential-process/internal/response"
+	"github.com/aripalo/vegas-credentials/internal/data"
+	"github.com/aripalo/vegas-credentials/internal/logger"
+	"github.com/aripalo/vegas-credentials/internal/response"
 )
 
 // getCredentials handles everything in regards of getting Temporary Session Credentials (both from cache and STS)

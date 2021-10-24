@@ -5,7 +5,7 @@ import (
 	"os"
 	"runtime/pprof"
 
-	"github.com/aripalo/aws-mfa-credential-process/cmd"
+	"github.com/aripalo/vegas-credentials/cmd"
 )
 
 func main() {

@@ -3,7 +3,7 @@ package logger
 import (
 	"fmt"
 
-	"github.com/aripalo/aws-mfa-credential-process/internal/data"
+	"github.com/aripalo/vegas-credentials/internal/data"
 	"github.com/gookit/color"
 )
 

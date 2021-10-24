@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/aripalo/aws-mfa-credential-process/internal/data"
+	"github.com/aripalo/vegas-credentials/internal/data"
 )
 
 // Token contains the OATH TOPT MFA token value and information about which Porivder Type gave the result

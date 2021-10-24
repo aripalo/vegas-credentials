@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/aripalo/aws-mfa-credential-process/internal/config"
+	"github.com/aripalo/vegas-credentials/internal/config"
 	"github.com/spf13/cobra"
 )
 

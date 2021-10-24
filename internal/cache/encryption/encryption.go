@@ -10,7 +10,7 @@ import (
 	"os/user"
 	"strings"
 
-	"github.com/aripalo/aws-mfa-credential-process/internal/utils"
+	"github.com/aripalo/vegas-credentials/internal/utils"
 	"github.com/shirou/gopsutil/host"
 )
 

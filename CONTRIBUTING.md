@@ -2,9 +2,9 @@
 
 Contributions are very welcome, so thank you for considering on contributing!
 
-- General Discussions should take place in [project's Github discussions](https://github.com/aripalo/aws-mfa-credential-process/discussions).
-- Found a bug? [File a new _bug report_ issue](https://github.com/aripalo/aws-mfa-credential-process/issues/new?assignees=&labels=bug&template=bug_report.md&title=).
-- Have a feature request? First condiser the [goals of this project](#goals-of-this-project) if the suggested feature applies to the scope of this tool. Then create [a new _feature request_ issue](https://github.com/aripalo/aws-mfa-credential-process/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=).
+- General Discussions should take place in [project's Github discussions](https://github.com/aripalo/vegas-credentials/discussions).
+- Found a bug? [File a new _bug report_ issue](https://github.com/aripalo/vegas-credentials/issues/new?assignees=&labels=bug&template=bug_report.md&title=).
+- Have a feature request? First condiser the [goals of this project](#goals-of-this-project) if the suggested feature applies to the scope of this tool. Then create [a new _feature request_ issue](https://github.com/aripalo/vegas-credentials/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=).
 
 
 ## Goals of this project

@@ -3,8 +3,8 @@ package cmd
 import (
 	"log"
 
-	"github.com/aripalo/aws-mfa-credential-process/internal/commands/assume"
-	"github.com/aripalo/aws-mfa-credential-process/internal/config"
+	"github.com/aripalo/vegas-credentials/internal/commands/assume"
+	"github.com/aripalo/vegas-credentials/internal/config"
 	"github.com/spf13/cobra"
 )
 

@@ -1,6 +1,6 @@
 package response
 
-import "github.com/aripalo/aws-mfa-credential-process/internal/data"
+import "github.com/aripalo/vegas-credentials/internal/data"
 
 // GetCachedCredentials handles fetching cached Temporary Session Credentials from secure keyring
 func (r *Response) GetCachedCredentials(d data.Provider) error {

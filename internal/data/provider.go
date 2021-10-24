@@ -3,8 +3,8 @@ package data
 import (
 	"io"
 
-	"github.com/aripalo/aws-mfa-credential-process/internal/config"
-	"github.com/aripalo/aws-mfa-credential-process/internal/profile"
+	"github.com/aripalo/vegas-credentials/internal/config"
+	"github.com/aripalo/vegas-credentials/internal/profile"
 )
 
 type Provider interface {

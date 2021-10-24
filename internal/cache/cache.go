@@ -3,8 +3,8 @@ package cache
 import (
 	"time"
 
-	"github.com/aripalo/aws-mfa-credential-process/internal/cache/database"
-	"github.com/aripalo/aws-mfa-credential-process/internal/cache/encryption"
+	"github.com/aripalo/vegas-credentials/internal/cache/database"
+	"github.com/aripalo/vegas-credentials/internal/cache/encryption"
 )
 
 // NewCache (and its methods) describes the caching mechanism

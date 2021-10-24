@@ -1,8 +1,8 @@
 package logger
 
 import (
-	"github.com/aripalo/aws-mfa-credential-process/internal/data"
-	"github.com/aripalo/aws-mfa-credential-process/internal/utils"
+	"github.com/aripalo/vegas-credentials/internal/data"
+	"github.com/aripalo/vegas-credentials/internal/utils"
 )
 
 func DebugJSON(d data.Provider, emoji string, prefix string, message interface{}) {

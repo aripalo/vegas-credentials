@@ -1,5 +1,5 @@
 [profile my-profile]
-credential_process = aws-mfa-credential-process --profile=my-profile 
+credential_process = vegas-credentials --profile=my-profile 
 yubikey_serial=123456
 yubikey_label=foobar
 _role_arn=arn:aws:iam::123456789012:role/Demo

@@ -3,9 +3,9 @@ package response
 import (
 	"time"
 
-	"github.com/aripalo/aws-mfa-credential-process/internal/cache/cachekey"
-	"github.com/aripalo/aws-mfa-credential-process/internal/data"
-	"github.com/aripalo/aws-mfa-credential-process/internal/logger"
+	"github.com/aripalo/vegas-credentials/internal/cache/cachekey"
+	"github.com/aripalo/vegas-credentials/internal/data"
+	"github.com/aripalo/vegas-credentials/internal/logger"
 )
 
 // SaveToCache saves response to cache in cache database

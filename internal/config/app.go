@@ -2,9 +2,9 @@ package config
 
 import _ "embed"
 
-const APP_NAME = "aws-mfa-credential-process"
+const APP_NAME = "vegas-credentials"
 
-const APP_REPO = "https://github.com/aripalo/aws-mfa-credential-process"
+const APP_REPO = "https://github.com/aripalo/vegas-credentials"
 
 //go:embed data/app-description-short.txt
 var APP_DESCRIPTION_SHORT string

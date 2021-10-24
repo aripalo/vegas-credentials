@@ -3,8 +3,8 @@ package provider
 import (
 	"context"
 
-	"github.com/aripalo/aws-mfa-credential-process/internal/data"
-	"github.com/aripalo/aws-mfa-credential-process/internal/prompt"
+	"github.com/aripalo/vegas-credentials/internal/data"
+	"github.com/aripalo/vegas-credentials/internal/prompt"
 )
 
 func (t *TokenProvider) QueryCLI(ctx context.Context, d data.Provider) {

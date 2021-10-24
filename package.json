@@ -1,5 +1,5 @@
 {
-  "name": "aws-mfa-credential-process",
+  "name": "vegas-credentials",
   "version": "0.0.0",
   "engines": {
     "node": ">=14.16.1",
@@ -17,14 +17,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aripalo/aws-mfa-credential-process.git"
+    "url": "git+https://github.com/aripalo/vegas-credentials.git"
   },
   "author": "ari+opensource@aripalo.com",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/aripalo/aws-mfa-credential-process/issues"
+    "url": "https://github.com/aripalo/vegas-credentials/issues"
   },
-  "homepage": "https://github.com/aripalo/aws-mfa-credential-process#readme",
+  "homepage": "https://github.com/aripalo/vegas-credentials#readme",
   "devDependencies": {
     "@types/node": "16.11.1",
     "tsc": "2.0.3",

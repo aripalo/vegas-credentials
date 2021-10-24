@@ -230,7 +230,7 @@ vegas_yubikey_serial = 12345678
 
 |         Option         |                                                                                                      Description                                                                                                       |
 | :--------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `credential_process`   | **Required:** To enable this tool, set the value as `aws-mfa-credential-process assume --profile <my-profile>`. Value of `my-profile` must match the profile name in `ini`-section title, e.g. `[profile my-profile]`. |
+| `credential_process`   | **Required:** To enable this tool, set the value as `vegas-credentials assume --profile <my-profile>`. Value of `my-profile` must match the profile name in `ini`-section title, e.g. `[profile my-profile]`. |
 | `vegas_role_arn`       | **Required:** The target IAM Role ARN to be assumed.                                                                                                                                                                   |
 | `vegas_source_profile` | **Required:** Which credentials (profile) are to be used as a source for assuming the target role.                                                                                                                     |
 

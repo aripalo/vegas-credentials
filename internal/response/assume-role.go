@@ -1,9 +1,9 @@
 package response
 
 import (
-	"github.com/aripalo/aws-mfa-credential-process/internal/data"
-	"github.com/aripalo/aws-mfa-credential-process/internal/logger"
-	"github.com/aripalo/aws-mfa-credential-process/internal/sts"
+	"github.com/aripalo/vegas-credentials/internal/data"
+	"github.com/aripalo/vegas-credentials/internal/logger"
+	"github.com/aripalo/vegas-credentials/internal/sts"
 )
 
 // Assume IAM Role and fetch temporary session credentials to be used in credential_process
