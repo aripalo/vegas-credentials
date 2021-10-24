@@ -125,20 +125,6 @@ Vegas Credentials is an utility with smooth user experience that plugs into AWS 
     <br/>
     </details>
 
-    <details><summary><strong>Go</strong> (MacOS/Linux/Windows)</summary><br/>
-    
-    - Requires [`Go`-command](https://golang.org/) (`v1.17+`)
-    - Perform the installation outside of any Go Module
-    - Install:
-        ```shell
-        go install github.com/aripalo/vegas-credentials
-
-        # Verify installation
-        vegas-credentials --version
-        ```
-    <br/>
-    </details>
-
     <br/>
 
 2. Configure you source profile and its credentials, most often it's the `default` one which you configure into `~/.aws/credentials`:
@@ -410,7 +396,7 @@ There are many great existing solutions out there that solve similar problems an
 | Cache Invalidation on config change              |                      ✅                      |                                              ✅  ?                                               |                                 ✅  [<sup>[*8]</sup>](#note8)                                 |                                                    ✅                                                     |
 | Cached Performance                               | ⚡️ <br/>`<100ms`[<sup>[*11]</sup>](#note11) |                                         ⚡️ <br/>`<50ms`                                         |                              ⚡️ <br/> [<sup>[*9]</sup>](#note9)                              |                                🐢<br/>`>400ms`[<sup>[*11]</sup>](#note11)                                 |
 | Comprehensively Unit Tested                      |                      ✅                      |                                                ?                                                |                                              ❌                                               |                                                    ✅                                                     |
-| Installation methods                             |       `brew`, `scoop`, `npm`  , `go`        |         `brew`, `port`, `choco`, `scoop`, `pacman`, `pkg`, `zypper`, `nix-env`, `asdf`          |                                            `pip`                                             |                                              `brew`, `pip`                                               |
+| Installation methods                             |       `brew`, `scoop`, `npm`         |         `brew`, `port`, `choco`, `scoop`, `pacman`, `pkg`, `zypper`, `nix-env`, `asdf`          |                                            `pip`                                             |                                              `brew`, `pip`                                               |
 
 Please, [correct me if I'm wrong](https://github.com/aripalo/vegas-credentials/discussions) above or there's any other good alternatives!
 
