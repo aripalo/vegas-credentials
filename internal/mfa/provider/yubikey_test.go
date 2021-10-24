@@ -91,7 +91,7 @@ func TestHelperProcess(t *testing.T) {
 		return
 	}
 	result := fmt.Sprintf("%s  %s", validTestYubikeySerial, validTestYubikeyToken)
-	fmt.Fprintf(os.Stdout, result)
+	fmt.Fprint(os.Stdout, result)
 	os.Exit(0)
 }
 
