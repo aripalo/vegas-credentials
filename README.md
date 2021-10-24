@@ -45,7 +45,7 @@ It's an utility that plugs into AWS [`credential_process`](https://docs.aws.amaz
 
 <br/>
 
-### By design, this tool does not support:
+### By design, this tool _does not_ support:
 
 - AWS SSO 
 
