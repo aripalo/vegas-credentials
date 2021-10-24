@@ -5,7 +5,7 @@
 
 # ![Vegas Credentials](/assets/vegas-credentials.svg "Vegas Credentials - AWS credential_process utility with optional Yubikey MFA support and smooth user experience to fetch, cache and refresh assumed temporary session credentials")
 
-> _Much like spending a week in Las Vegas at AWS re:Invent,_ using multiple AWS tools (SDKs, CLI, CDK, Terraform, etc) via command-line to assume IAM roles in different accounts with Multi-Factor Authentication can be an exhausting experience: `vegas-credentials` aims to simplify the credential process! 
+> _Much like spending a week in Las Vegas at AWS re:Invent,_ using multiple AWS tools (SDKs, CLI, CDK, Terraform, etc) via command-line to assume IAM roles in different accounts with Multi-Factor Authentication can be an exhausting experience: `vegas-credentials` aims to simplify the credential process! And just like you shouldn't stay too long in Las Vegas at once, this tool only deals with temporary sesssion credentials.
 
 
 Vegas Credentials is an utility with smooth user experience that plugs into AWS [`credential_process`](https://docs.aws.amazon.com/sdkref/latest/guide/setting-global-credential_process.html) to assume IAM Roles with [TOPT MFA](https://en.wikipedia.org/wiki/Time-based_One-Time_Password) (with optional [Yubikey Touch](https://www.yubico.com/products/yubikey-5-overview/) support) to fetch, cache and refresh assumed temporary session credentials.
