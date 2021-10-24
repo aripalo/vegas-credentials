@@ -269,6 +269,7 @@ terraform {
   required_version = ">= 0.14.9"
 }
 
+# Again, nothing special here, just normal profile configuration…
 provider "aws" {
   profile = "frank@concerts"
   region  = "eu-west-3"
@@ -283,7 +284,7 @@ output "album_name" {
       ")",
       ""
     )
-  }!"
+  }"
 }
 ```
 
@@ -293,13 +294,34 @@ output "album_name" {
 
 ### Reasons
 
+
+
+There are already a bazillion ways to assume an IAM Role with MFA, but most existing open source tools in this scene either:
+- export the temporary session credentials to environment variables (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_SESSION_TOKEN`)
+- write new sections for “short-term” credentials into `~/.aws/credentials` (for example like [`aws-mfa`](https://github.com/broamski/aws-mfa) does)
+
+The downside with those approaches is that using most of these tools (especially the ones that export environment variables) means you lose the built-in ability to automatically refresh the temporary credentials and/or the temporary credentials are “cached” in some custom location or saved into `~/.aws/credentials`.
+
+This tool follows the concept that [you should never put temporary credentials into `~/.aws/credentials`](https://ben11kehoe.medium.com/never-put-aws-temporary-credentials-in-env-vars-or-credentials-files-theres-a-better-way-25ec45b4d73e) and also provides a mechanism to automatically refresh session credentials (if the AWS tool you use supports that).
+
+Most AWS provided tools & SDKs already support MFA & assuming a role out of the box, but what they lack is a nice integration with Yubikey Touch, requiring you to manually type in or copy-paste the MFA TOPT token code: This utility instead integrates with [`ykman` Yubikey CLI](https://developers.yubico.com/yubikey-manager/) so just a quick touch is enough!
+
+Also with this tool, even if you use Yubikey Touch, you still get the possibility to input MFA TOPT token code manually from an Authenticator App (for example if you don't have your Yubikey on your person).
+
+Then there's tools such as AWS CDK that [does not support caching of assumed temporary credentials](https://github.com/aws/aws-cdk/issues/10867), requiring the user to input the MFA TOPT token code for every operation with `cdk` CLI – which makes the developer experience really cumbersome.
+
+To recap, most existing solutions (I've seen so far) to these challenges either lack support for automatic temporary session credential refreshing, cache/write temporary session credentials to suboptimal locations and/or don't work that well with AWS tooling (i.e. requiring one to create “wrappers”):
+
+This `vegas-credentials` is _yet another tool_, but it plugs into the standard [`credential_process`](https://docs.aws.amazon.com/sdkref/latest/guide/setting-global-credential_process.html) AWS configuration so most of AWS tooling (CLI v2, SDKs and CDK) will work out-of-the-box with it and also support automatic temporary session credential refreshing.
+
+
 ### Alternatives
 
 There are many great existing solutions out there that solve similar problems and I've tried to learn from them as much as I can. This tool that I've built is definitely not better than for example [`99designs/aws-vault`](https://github.com/99designs/aws-vault) in many scenarios as it has a lot more features, more contributors and been around some time. Instead the comparison below focuses on the specific use case this tool tries to solve (i.e. providing a nice UX for assuming a role with MFA using `credential_process` to support as many AWS tools as possible without having to use wrapper scripts).
 
-|                   Feature/Info                   |    `aripalo/aws-mfa-credential-process`     |                 [`99designs/aws-vault`](https://github.com/99designs/aws-vault)                 |                  [`broamski/aws-mfa`](https://github.com/broamski/aws-mfa)                   |            [`meeuw/aws-credential-process`](https://github.com/meeuw/aws-credential-process)             |
+|                   Feature/Info                   |    `aripalo/vegas-credentials`     |                 [`99designs/aws-vault`](https://github.com/99designs/aws-vault)                 |                  [`broamski/aws-mfa`](https://github.com/broamski/aws-mfa)                   |            [`meeuw/aws-credential-process`](https://github.com/meeuw/aws-credential-process)             |
 | :----------------------------------------------- | :-----------------------------------------: | :---------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------: |
-| Gihtub Info                                      |                   `TODO`                    | ![GitHub Repo stars](https://img.shields.io/github/stars/99designs/aws-vault?style=flat) <br/> ![GitHub last commit](https://img.shields.io/github/last-commit/99designs/aws-vault) | ![GitHub Repo stars](https://img.shields.io/github/stars/broamski/aws-mfa?style=flat)  <br/> ![GitHub last commit](https://img.shields.io/github/last-commit/broamski/aws-mfa?style=flat) | ![GitHub Repo stars](https://img.shields.io/github/stars/meeuw/aws-credential-process?style=flat) <br/> ![GitHub last commit](https://img.shields.io/github/last-commit/meeuw/aws-credential-process?style=flat) |
+| Github Info                                      |                   `TODO`                    | ![GitHub Repo stars](https://img.shields.io/github/stars/99designs/aws-vault?style=flat) <br/> ![GitHub last commit](https://img.shields.io/github/last-commit/99designs/aws-vault) | ![GitHub Repo stars](https://img.shields.io/github/stars/broamski/aws-mfa?style=flat)  <br/> ![GitHub last commit](https://img.shields.io/github/last-commit/broamski/aws-mfa?style=flat) | ![GitHub Repo stars](https://img.shields.io/github/stars/meeuw/aws-credential-process?style=flat) <br/> ![GitHub last commit](https://img.shields.io/github/last-commit/meeuw/aws-credential-process?style=flat) |
 | `credential_process` <br/>with MFA + Assume Role |                      ✅                      |                                   ❌ [<sup>[*2]</sup>](#note2)                                   |                                 ❌ [<sup>[*4]</sup>](#note4)                                  |                                                    ✅                                                     |
 | Automatic Temporary Session Credential Refresh   |                      ✅                      |                                   ❌ [<sup>[*3]</sup>](#note3)                                   |                                 ❌ [<sup>[*5]</sup>](#note5)                                  |                                                    ✅                                                     |
 | Yubikey                                          |        ✅ ✅ [<sup>[*1]</sup>](#note1)        |                                   ✅ [<sup>[*1]</sup>](#note1)                                   |                                 ❌  [<sup>[*6]</sup>](#note6)                                 |                                      ✅ [<sup>[*10]</sup>](#note10)                                       |
@@ -309,7 +331,7 @@ There are many great existing solutions out there that solve similar problems an
 | Comprehensively Unit Tested                      |                      ✅                      |                                                ?                                                |                                              ❌                                               |                                                    ✅                                                     |
 | Installation methods                             |       `brew`, `scoop`, `npm`  , `go`        |         `brew`, `port`, `choco`, `scoop`, `pacman`, `pkg`, `zypper`, `nix-env`, `asdf`          |                                            `pip`                                             |                                              `brew`, `pip`                                               |
 
-Please, [correct me if I'm wrong](https://github.com/aripalo/aws-mfa-credential-process/discussions) above or there's any other good alternatives!
+Please, [correct me if I'm wrong](https://github.com/aripalo/vegas-credentials/discussions) above or there's any other good alternatives!
 
 #### Notes
 
