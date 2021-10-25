@@ -1,4 +1,4 @@
-package sourceprofile
+package source
 
 import (
 	"os"

@@ -1,4 +1,4 @@
-package sourceprofile
+package source
 
 import (
 	"fmt"
@@ -15,16 +15,16 @@ type SourceProfile struct {
 	Region        string `ini:"region"`
 }
 
-func New(profileName string) (*SourceProfile, error) {
+func New(sourceName string) (*SourceProfile, error) {
 	home, err := os.UserHomeDir()
 	if err != nil {
 		return nil, err
 	}
 	configPath := filepath.Join(home, ".aws", "config")
-	return loadWithPath(profileName, configPath)
+	return loadWithPath(sourceName, configPath)
 }
 
-func loadWithPath(profileName string, configPath string) (*SourceProfile, error) {
+func loadWithPath(sourceName string, configPath string) (*SourceProfile, error) {
 
 	sourceProfile := new(SourceProfile)
 
@@ -36,11 +36,11 @@ func loadWithPath(profileName string, configPath string) (*SourceProfile, error)
 		return sourceProfile, err
 	}
 
-	profileSection := fmt.Sprintf("profile %s", profileName)
+	profileSection := fmt.Sprintf("profile %s", sourceName)
 
 	// default profile should not have "profile " prefix in section title
-	if profileName == "default" {
-		profileSection = profileName
+	if sourceName == "default" {
+		profileSection = sourceName
 	}
 
 	section, err := cfg.GetSection(profileSection)
@@ -59,7 +59,7 @@ func loadWithPath(profileName string, configPath string) (*SourceProfile, error)
 	}
 
 	if sourceProfile.MfaSerial == "" {
-		return sourceProfile, fmt.Errorf(`Missing "mfa_serial" in profile "%s"`, profileName)
+		return sourceProfile, fmt.Errorf(`Missing "mfa_serial" in profile "%s"`, sourceName)
 	}
 
 	return sourceProfile, nil
