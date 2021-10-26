@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/aripalo/vegas-credentials/internal/interfaces"
-	"github.com/aripalo/vegas-credentials/internal/newprofile"
+	"github.com/aripalo/vegas-credentials/internal/profile"
 	"github.com/aripalo/vegas-credentials/internal/utils"
 )
 
@@ -35,7 +35,7 @@ func Get(a interfaces.AssumeCredentialProcess) (string, error) {
 }
 
 // configToString convertts profile config into stringified JSON
-func configToString(p newprofile.NewProfile) (string, error) {
+func configToString(p profile.Profile) (string, error) {
 	result, err := json.Marshal(p)
 	return string(result), err
 }

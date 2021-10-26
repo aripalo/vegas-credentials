@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/aripalo/vegas-credentials/internal/config"
-	"github.com/aripalo/vegas-credentials/internal/newprofile"
-	"github.com/aripalo/vegas-credentials/internal/newprofile/source"
+	"github.com/aripalo/vegas-credentials/internal/profile"
+	"github.com/aripalo/vegas-credentials/internal/profile/source"
 	"github.com/aripalo/vegas-credentials/internal/vegastestapp"
 )
 
@@ -34,7 +34,7 @@ const validTestYubikeyToken = "123456"
 
 func TestFoo(t *testing.T) {
 	f := config.Flags{}
-	p := newprofile.NewProfile{
+	p := profile.Profile{
 		Source: &source.SourceProfile{
 			YubikeySerial: validTestYubikeySerial,
 			YubikeyLabel:  validTestYubikeyLabel,
@@ -56,7 +56,7 @@ func TestFoo(t *testing.T) {
 
 func foo(
 	f config.Flags,
-	p newprofile.NewProfile,
+	p profile.Profile,
 	fakeExecCommandContext func(ctx context.Context, command string, args ...string) *exec.Cmd,
 ) (Token, error) {
 	execCommandContext = fakeExecCommandContext

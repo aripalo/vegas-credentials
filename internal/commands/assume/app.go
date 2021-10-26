@@ -6,7 +6,7 @@ import (
 
 	"github.com/aripalo/vegas-credentials/internal/config"
 	"github.com/aripalo/vegas-credentials/internal/logger"
-	"github.com/aripalo/vegas-credentials/internal/newprofile"
+	"github.com/aripalo/vegas-credentials/internal/profile"
 	"github.com/spf13/cobra"
 )
 
@@ -14,7 +14,7 @@ import (
 type App struct {
 	WriteStream io.Writer
 	Config      *config.Flags
-	Profile     *newprofile.NewProfile
+	Profile     *profile.Profile
 	command     string
 	version     string
 	startedAt   time.Time
@@ -31,7 +31,7 @@ func (a *App) GetFlags() *config.Flags {
 }
 
 // GetProfile implements data.Provider method
-func (a *App) GetProfile() *newprofile.NewProfile {
+func (a *App) GetProfile() *profile.Profile {
 	return a.Profile
 }
 
@@ -40,7 +40,7 @@ func New() (*App, error) {
 	a := &App{
 		WriteStream: logger.GetSafeWriter(),
 		Config:      &config.Flags{},
-		Profile:     &newprofile.NewProfile{},
+		Profile:     &profile.Profile{},
 		startedAt:   time.Now(),
 	}
 	return a, nil
@@ -53,7 +53,7 @@ func (app *App) PreRunE(cmd *cobra.Command) error {
 	if err != nil {
 		return err
 	}
-	p, err := newprofile.New(app.Config.Profile)
+	p, err := profile.New(app.Config.Profile)
 	if err != nil {
 		return err
 	}

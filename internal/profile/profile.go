@@ -1,17 +1,17 @@
-package newprofile
+package profile
 
 import (
-	"github.com/aripalo/vegas-credentials/internal/newprofile/source"
-	"github.com/aripalo/vegas-credentials/internal/newprofile/target"
+	"github.com/aripalo/vegas-credentials/internal/profile/source"
+	"github.com/aripalo/vegas-credentials/internal/profile/target"
 )
 
-type NewProfile struct {
+type Profile struct {
 	Source *source.SourceProfile
 	Target *target.TargetProfile
 }
 
-func New(targetName string) (*NewProfile, error) {
-	n := new(NewProfile)
+func New(targetName string) (*Profile, error) {
+	n := new(Profile)
 	var err error
 
 	t, err := target.New(targetName)

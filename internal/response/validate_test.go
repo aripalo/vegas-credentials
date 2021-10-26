@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/aripalo/vegas-credentials/internal/config"
-	"github.com/aripalo/vegas-credentials/internal/newprofile"
+	"github.com/aripalo/vegas-credentials/internal/profile"
 	"github.com/aripalo/vegas-credentials/internal/vegastestapp"
 )
 
@@ -20,7 +20,7 @@ func TestValidateCorrect(t *testing.T) {
 	}
 
 	var f config.Flags
-	var p newprofile.NewProfile
+	var p profile.Profile
 
 	app := vegastestapp.New(f, p)
 
@@ -41,7 +41,7 @@ func TestValidateIncorrectVersion(t *testing.T) {
 	}
 
 	var f config.Flags
-	var p newprofile.NewProfile
+	var p profile.Profile
 
 	app := vegastestapp.New(f, p)
 
@@ -64,7 +64,7 @@ func TestValidateAccesKeyIdMissing(t *testing.T) {
 	}
 
 	var f config.Flags
-	var p newprofile.NewProfile
+	var p profile.Profile
 
 	app := vegastestapp.New(f, p)
 
@@ -87,7 +87,7 @@ func TestValidateSecretAccesKeyMissing(t *testing.T) {
 	}
 
 	var f config.Flags
-	var p newprofile.NewProfile
+	var p profile.Profile
 
 	app := vegastestapp.New(f, p)
 
@@ -110,7 +110,7 @@ func TestValidateSessionTokenMissing(t *testing.T) {
 	}
 
 	var f config.Flags
-	var p newprofile.NewProfile
+	var p profile.Profile
 
 	app := vegastestapp.New(f, p)
 
@@ -134,7 +134,7 @@ func TestValidateExpired(t *testing.T) {
 	}
 
 	var f config.Flags
-	var p newprofile.NewProfile
+	var p profile.Profile
 
 	app := vegastestapp.New(f, p)
 
@@ -158,7 +158,7 @@ func TestValidateMandatoryRefreshNotRequired(t *testing.T) {
 	}
 
 	var f config.Flags
-	var p newprofile.NewProfile
+	var p profile.Profile
 
 	app := vegastestapp.New(f, p)
 
@@ -180,7 +180,7 @@ func TestValidateMandatoryRefreshRequired(t *testing.T) {
 	}
 
 	var f config.Flags
-	var p newprofile.NewProfile
+	var p profile.Profile
 
 	app := vegastestapp.New(f, p)
 
@@ -206,7 +206,7 @@ func TestValidateMandatoryRefreshDisabled(t *testing.T) {
 	f := config.Flags{
 		DisableMandatoryRefresh: true,
 	}
-	var p newprofile.NewProfile
+	var p profile.Profile
 
 	app := vegastestapp.New(f, p)
 

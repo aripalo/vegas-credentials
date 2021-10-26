@@ -4,7 +4,7 @@ import (
 	"io"
 
 	"github.com/aripalo/vegas-credentials/internal/config"
-	"github.com/aripalo/vegas-credentials/internal/newprofile"
+	"github.com/aripalo/vegas-credentials/internal/profile"
 )
 
 // AssumeCredentialProcess is an interface used by multiple different internal packages
@@ -13,5 +13,5 @@ import (
 type AssumeCredentialProcess interface {
 	GetDestination() io.Writer
 	GetFlags() *config.Flags
-	GetProfile() *newprofile.NewProfile
+	GetProfile() *profile.Profile
 }

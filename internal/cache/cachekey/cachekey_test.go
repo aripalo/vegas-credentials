@@ -6,9 +6,9 @@ import (
 	"testing"
 
 	"github.com/aripalo/vegas-credentials/internal/config"
-	"github.com/aripalo/vegas-credentials/internal/newprofile"
-	"github.com/aripalo/vegas-credentials/internal/newprofile/source"
-	"github.com/aripalo/vegas-credentials/internal/newprofile/target"
+	"github.com/aripalo/vegas-credentials/internal/profile"
+	"github.com/aripalo/vegas-credentials/internal/profile/source"
+	"github.com/aripalo/vegas-credentials/internal/profile/target"
 	"github.com/aripalo/vegas-credentials/internal/vegastestapp"
 )
 
@@ -37,7 +37,7 @@ func TestCombineStringsWithRealInput(t *testing.T) {
 
 func TestConfigToString(t *testing.T) {
 	/*
-		input := newprofile.NewProfile{
+		input := profile.NewProfile{
 			RoleArn:       "arn:aws:iam::123456789012:role/ExampleRole",
 			YubikeySerial: "123456",
 			YubikeyLabel:  "foobar",
@@ -45,7 +45,7 @@ func TestConfigToString(t *testing.T) {
 			SourceProfile: "default",
 		}
 	*/
-	input := newprofile.NewProfile{
+	input := profile.Profile{
 		Source: &source.SourceProfile{
 			YubikeySerial: "123456",
 			YubikeyLabel:  "foobar",
@@ -70,7 +70,7 @@ func TestGet(t *testing.T) {
 	f := config.Flags{
 		Profile: "my-profile",
 	}
-	p := newprofile.NewProfile{
+	p := profile.Profile{
 		Source: &source.SourceProfile{
 			YubikeySerial: "123456",
 			YubikeyLabel:  "foobar",
