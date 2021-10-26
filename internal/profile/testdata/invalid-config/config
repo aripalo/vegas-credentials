@@ -1,3 +1,0 @@
-[profile my-profile]
-source_profile=default
-mfa_serial=arn:aws:iam::123456789012:mfa/JaneDoeMFA

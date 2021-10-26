@@ -6,7 +6,7 @@ import (
 
 	"github.com/aripalo/vegas-credentials/internal/config"
 	"github.com/aripalo/vegas-credentials/internal/logger"
-	"github.com/aripalo/vegas-credentials/internal/profile"
+	"github.com/aripalo/vegas-credentials/internal/newprofile"
 	"github.com/spf13/cobra"
 )
 
@@ -14,24 +14,24 @@ import (
 type App struct {
 	WriteStream io.Writer
 	Config      *config.Flags
-	Profile     *profile.Profile
+	Profile     *newprofile.NewProfile
 	command     string
 	version     string
 	startedAt   time.Time
 }
 
-// GetWriteStream implements data.Provider method
-func (a *App) GetWriteStream() io.Writer {
+// GetDestination implements interfaces.AssumeCredentialProcess method
+func (a *App) GetDestination() io.Writer {
 	return a.WriteStream
 }
 
-// GetConfig implements data.Provider method
-func (a *App) GetConfig() *config.Flags {
+// GetFlags implements interfaces.AssumeCredentialProcess method
+func (a *App) GetFlags() *config.Flags {
 	return a.Config
 }
 
 // GetProfile implements data.Provider method
-func (a *App) GetProfile() *profile.Profile {
+func (a *App) GetProfile() *newprofile.NewProfile {
 	return a.Profile
 }
 
@@ -40,7 +40,7 @@ func New() (*App, error) {
 	a := &App{
 		WriteStream: logger.GetSafeWriter(),
 		Config:      &config.Flags{},
-		Profile:     &profile.Profile{},
+		Profile:     &newprofile.NewProfile{},
 		startedAt:   time.Now(),
 	}
 	return a, nil
@@ -53,10 +53,13 @@ func (app *App) PreRunE(cmd *cobra.Command) error {
 	if err != nil {
 		return err
 	}
-	err = app.Profile.Load(app.Config)
+	p, err := newprofile.New(app.Config.Profile)
 	if err != nil {
 		return err
 	}
+
+	app.Profile = p
+
 	app.command = cmd.CalledAs()
 	app.version = cmd.Parent().Version
 

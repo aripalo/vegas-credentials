@@ -9,6 +9,7 @@ import (
 )
 
 type SourceProfile struct {
+	Name          string
 	YubikeySerial string `ini:"vegas_yubikey_serial"`
 	YubikeyLabel  string `ini:"vegas_yubikey_label"`
 	MfaSerial     string `ini:"mfa_serial"`
@@ -27,6 +28,9 @@ func New(sourceName string) (*SourceProfile, error) {
 func loadWithPath(sourceName string, configPath string) (*SourceProfile, error) {
 
 	sourceProfile := new(SourceProfile)
+
+	// set name
+	sourceProfile.Name = sourceName
 
 	// set defaults
 	sourceProfile.Region = os.Getenv("AWS_REGION")

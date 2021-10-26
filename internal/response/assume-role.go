@@ -1,17 +1,17 @@
 package response
 
 import (
-	"github.com/aripalo/vegas-credentials/internal/data"
+	"github.com/aripalo/vegas-credentials/internal/interfaces"
 	"github.com/aripalo/vegas-credentials/internal/logger"
 	"github.com/aripalo/vegas-credentials/internal/sts"
 )
 
 // Assume IAM Role and fetch temporary session credentials to be used in credential_process
-func (r *Response) AssumeRole(d data.Provider) error {
+func (r *Response) AssumeRole(a interfaces.AssumeCredentialProcess) error {
 
 	var err error
 
-	value, expiration, err := sts.GetAssumedCredentials(d)
+	value, expiration, err := sts.GetAssumedCredentials(a)
 	if err != nil {
 		return err
 	}
@@ -22,7 +22,7 @@ func (r *Response) AssumeRole(d data.Provider) error {
 	r.SessionToken = value.SessionToken
 	r.Expiration = expiration
 
-	logger.DebugJSON(d, "🔧 ", "New Response", r)
+	logger.DebugJSON(a, "🔧 ", "New Response", r)
 
 	return nil
 }

@@ -3,7 +3,7 @@ package sts
 import (
 	"time"
 
-	"github.com/aripalo/vegas-credentials/internal/data"
+	"github.com/aripalo/vegas-credentials/internal/interfaces"
 	"github.com/aripalo/vegas-credentials/internal/mfa"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -12,15 +12,15 @@ import (
 )
 
 // GetAssumedCredentials retuns a set of temporary session credentials for the assumed role and an expiration time
-func GetAssumedCredentials(d data.Provider) (credentials.Value, time.Time, error) {
+func GetAssumedCredentials(a interfaces.AssumeCredentialProcess) (credentials.Value, time.Time, error) {
 	var value credentials.Value
 	var expiration time.Time
 
-	sess, err := getSession(d)
+	sess, err := getSession(a)
 	if err != nil {
 		return value, expiration, err
 	}
-	creds := getCredentials(d, sess)
+	creds := getCredentials(a, sess)
 
 	// Get() performs the actual assume role operation by fetching temporary session credentials
 	value, err = creds.Get()
@@ -38,28 +38,28 @@ func GetAssumedCredentials(d data.Provider) (credentials.Value, time.Time, error
 }
 
 // getSession provides AWS session used to assume the target role
-func getSession(d data.Provider) (*session.Session, error) {
-	p := d.GetProfile()
+func getSession(a interfaces.AssumeCredentialProcess) (*session.Session, error) {
+	p := a.GetProfile()
 	return session.NewSession(&aws.Config{
-		Region:      aws.String(p.Region),
-		Credentials: credentials.NewSharedCredentials("", p.SourceProfile),
+		Region:      aws.String(p.Source.Region),
+		Credentials: credentials.NewSharedCredentials("", p.Source.Name),
 	})
 }
 
 // getCredentials configures how the target role is assumed
-func getCredentials(d data.Provider, sess *session.Session) *credentials.Credentials {
-	p := d.GetProfile()
-	return stscreds.NewCredentials(sess, p.RoleArn, func(assume *stscreds.AssumeRoleProvider) {
+func getCredentials(a interfaces.AssumeCredentialProcess, sess *session.Session) *credentials.Credentials {
+	p := a.GetProfile()
+	return stscreds.NewCredentials(sess, p.Target.RoleArn, func(assume *stscreds.AssumeRoleProvider) {
 
 		// IAM MFA device ARN
-		assume.SerialNumber = aws.String(p.MfaSerial)
+		assume.SerialNumber = aws.String(p.Source.MfaSerial)
 
 		// Configures the temporary session duration
-		assume.Duration = time.Duration(p.DurationSeconds) * time.Second
+		assume.Duration = time.Duration(p.Target.DurationSeconds) * time.Second
 
 		// map our own MFA Token Provider signature to one expected by AWS Go SDK
 		assume.TokenProvider = func() (string, error) {
-			result, err := mfa.GetToken(d)
+			result, err := mfa.GetToken(a)
 			if err != nil {
 				return "", err
 			}
@@ -67,13 +67,13 @@ func getCredentials(d data.Provider, sess *session.Session) *credentials.Credent
 		}
 
 		// ExternalID may not be empty, or otherwise AWS Go SDK errors
-		if p.ExternalID != "" {
-			assume.ExternalID = aws.String(p.ExternalID)
+		if p.Target.ExternalID != "" {
+			assume.ExternalID = aws.String(p.Target.ExternalID)
 		}
 
 		// RoleSessionName may not be empty, or otherwise AWS Go SDK errors
-		if p.RoleSessionName != "" {
-			assume.RoleSessionName = p.RoleSessionName
+		if p.Target.RoleSessionName != "" {
+			assume.RoleSessionName = p.Target.RoleSessionName
 		}
 	})
 }

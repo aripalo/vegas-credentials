@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/aripalo/vegas-credentials/internal/data"
+	"github.com/aripalo/vegas-credentials/internal/interfaces"
 	"golang.org/x/term"
 )
 
@@ -36,13 +36,12 @@ func createRuler(char string) string {
 }
 
 // PrintRuler repeats a character as many times as thera are columns in the terminal (if verbose mode)
-func PrintRuler(d data.Provider, char string) {
-	c := d.GetConfig()
-	if c.Verbose {
+func PrintRuler(a interfaces.AssumeCredentialProcess, char string) {
+	f := a.GetFlags()
+	if f.Verbose {
 		ruler := createRuler(char)
-		s := d.GetWriteStream()
-		c := d.GetConfig()
-		if c.NoColor {
+		s := a.GetDestination()
+		if f.NoColor {
 			fmt.Fprintln(s, ruler)
 		} else {
 			fmt.Fprintln(s, textColorDebug.Render(ruler))

@@ -1,5 +1,0 @@
-[profile my-profile]
-credential_process = vegas-credentials --profile=my-profile 
-_role_arn=arn:aws:iam::123456789012:role/Demo
-source_profile=default
-mfa_serial=arn:aws:iam::123456789012:mfa/JaneDoeMFA

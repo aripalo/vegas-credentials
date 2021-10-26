@@ -2,12 +2,14 @@ package cachekey
 
 import (
 	"fmt"
-	"io"
 	"strings"
 	"testing"
 
 	"github.com/aripalo/vegas-credentials/internal/config"
-	"github.com/aripalo/vegas-credentials/internal/profile"
+	"github.com/aripalo/vegas-credentials/internal/newprofile"
+	"github.com/aripalo/vegas-credentials/internal/newprofile/source"
+	"github.com/aripalo/vegas-credentials/internal/newprofile/target"
+	"github.com/aripalo/vegas-credentials/internal/vegastestapp"
 )
 
 func TestCombineStringsWithSimpleInput(t *testing.T) {
@@ -34,15 +36,28 @@ func TestCombineStringsWithRealInput(t *testing.T) {
 }
 
 func TestConfigToString(t *testing.T) {
-	input := profile.Profile{
-		RoleArn:       "arn:aws:iam::123456789012:role/ExampleRole",
-		YubikeySerial: "123456",
-		YubikeyLabel:  "foobar",
-		MfaSerial:     "arn:aws:iam::123456789012:mfa/example",
-		SourceProfile: "default",
+	/*
+		input := newprofile.NewProfile{
+			RoleArn:       "arn:aws:iam::123456789012:role/ExampleRole",
+			YubikeySerial: "123456",
+			YubikeyLabel:  "foobar",
+			MfaSerial:     "arn:aws:iam::123456789012:mfa/example",
+			SourceProfile: "default",
+		}
+	*/
+	input := newprofile.NewProfile{
+		Source: &source.SourceProfile{
+			YubikeySerial: "123456",
+			YubikeyLabel:  "foobar",
+			MfaSerial:     "arn:aws:iam::123456789012:mfa/example",
+		},
+		Target: &target.TargetProfile{
+			SourceProfile: "default",
+			RoleArn:       "arn:aws:iam::123456789012:role/ExampleRole",
+		},
 	}
 
-	want := `{"YubikeySerial":"123456","YubikeyLabel":"foobar","SourceProfile":"default","RoleArn":"arn:aws:iam::123456789012:role/ExampleRole","MfaSerial":"arn:aws:iam::123456789012:mfa/example","DurationSeconds":0,"Region":"","RoleSessionName":"","ExternalID":""}`
+	want := `{"Source":{"Name":"","YubikeySerial":"123456","YubikeyLabel":"foobar","MfaSerial":"arn:aws:iam::123456789012:mfa/example","Region":""},"Target":{"SourceProfile":"default","RoleArn":"arn:aws:iam::123456789012:role/ExampleRole","DurationSeconds":0,"Region":"","RoleSessionName":"","ExternalID":""}}`
 
 	output, err := configToString(input)
 
@@ -52,52 +67,30 @@ func TestConfigToString(t *testing.T) {
 }
 
 func TestGet(t *testing.T) {
-	c := config.Flags{
+	f := config.Flags{
 		Profile: "my-profile",
 	}
-	p := profile.Profile{
-		RoleArn:       "arn:aws:iam::123456789012:role/ExampleRole",
-		YubikeySerial: "123456",
-		YubikeyLabel:  "foobar",
-		MfaSerial:     "arn:aws:iam::123456789012:mfa/example",
-		SourceProfile: "default",
+	p := newprofile.NewProfile{
+		Source: &source.SourceProfile{
+			YubikeySerial: "123456",
+			YubikeyLabel:  "foobar",
+			MfaSerial:     "arn:aws:iam::123456789012:mfa/example",
+		},
+		Target: &target.TargetProfile{
+			SourceProfile: "default",
+			RoleArn:       "arn:aws:iam::123456789012:role/ExampleRole",
+		},
 	}
 
 	// want generated with https://passwordsgenerator.net/sha1-hash-generator/
 	// with data: {"YubikeySerial":"123456","YubikeyLabel":"foobar","SourceProfile":"default","RoleArn":"arn:aws:iam::123456789012:role/ExampleRole","MfaSerial":"arn:aws:iam::123456789012:mfa/example","DurationSeconds":0,"Region":"","RoleSessionName":"","ExternalID":""}
-	want := "my-profile__3eb841cc0a378c607534bd21202ef4f9a721572a"
+	want := "my-profile__18b65be949ff29f60fb833e1326f095019115293"
 
-	foo := NewDpForTest(c, p)
+	foo := vegastestapp.New(f, p)
 
 	output, err := Get(foo)
 
 	if output != want || err != nil {
 		t.Fatalf(`configToString(input) = %q, want match for %#q`, output, want)
-	}
-}
-
-type DpForTest struct {
-	c config.Flags
-	p profile.Profile
-	w io.Writer
-}
-
-func (d *DpForTest) GetWriteStream() io.Writer {
-	return d.w
-}
-
-func (d *DpForTest) GetProfile() *profile.Profile {
-	return &d.p
-}
-
-func (d *DpForTest) GetConfig() *config.Flags {
-	return &d.c
-}
-
-func NewDpForTest(c config.Flags, p profile.Profile) *DpForTest {
-	return &DpForTest{
-		c: c,
-		p: p,
-		w: io.Discard,
 	}
 }

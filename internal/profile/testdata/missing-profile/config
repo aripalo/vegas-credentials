@@ -1,4 +1,0 @@
-[profile foo]
-_role_arn=arn:aws:iam::123456789012:role/Foo
-source_profile=default
-mfa_serial=arn:aws:iam::123456789012:mfa/Foo

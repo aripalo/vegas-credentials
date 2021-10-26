@@ -4,18 +4,18 @@ import (
 	"time"
 
 	"github.com/aripalo/vegas-credentials/internal/cache/cachekey"
-	"github.com/aripalo/vegas-credentials/internal/data"
+	"github.com/aripalo/vegas-credentials/internal/interfaces"
 	"github.com/aripalo/vegas-credentials/internal/logger"
 )
 
 // SaveToCache saves response to cache in cache database
-func (r *Response) SaveToCache(d data.Provider) error {
+func (r *Response) SaveToCache(a interfaces.AssumeCredentialProcess) error {
 	data, err := r.Serialize()
 	if err != nil {
 		return err
 	}
 
-	key, err := cachekey.Get(d)
+	key, err := cachekey.Get(a)
 	if err != nil {
 		return err
 	}
@@ -28,14 +28,14 @@ func (r *Response) SaveToCache(d data.Provider) error {
 		return err
 	}
 
-	logger.Debugln(d, "ℹ️ ", "Credentials", "Saved to cache")
+	logger.Debugln(a, "ℹ️ ", "Credentials", "Saved to cache")
 
 	return nil
 }
 
 // ReadFromCache gets the cached response from cache database
-func (r *Response) ReadFromCache(d data.Provider) error {
-	key, err := cachekey.Get(d)
+func (r *Response) ReadFromCache(a interfaces.AssumeCredentialProcess) error {
+	key, err := cachekey.Get(a)
 	if err != nil {
 		return err
 	}
@@ -45,7 +45,7 @@ func (r *Response) ReadFromCache(d data.Provider) error {
 		return err
 	}
 
-	logger.DebugJSON(d, "🔧 ", "Cached Response", data)
+	logger.DebugJSON(a, "🔧 ", "Cached Response", data)
 
 	err = r.Deserialize(data)
 	if err != nil {
@@ -56,8 +56,8 @@ func (r *Response) ReadFromCache(d data.Provider) error {
 }
 
 // DeleteFromCache deletes the cached response cache database
-func (r *Response) DeleteFromCache(d data.Provider) error {
-	key, err := cachekey.Get(d)
+func (r *Response) DeleteFromCache(a interfaces.AssumeCredentialProcess) error {
+	key, err := cachekey.Get(a)
 	if err != nil {
 		return err
 	}

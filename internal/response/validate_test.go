@@ -1,12 +1,12 @@
 package response
 
 import (
-	"io"
 	"testing"
 	"time"
 
 	"github.com/aripalo/vegas-credentials/internal/config"
-	"github.com/aripalo/vegas-credentials/internal/profile"
+	"github.com/aripalo/vegas-credentials/internal/newprofile"
+	"github.com/aripalo/vegas-credentials/internal/vegastestapp"
 )
 
 func TestValidateCorrect(t *testing.T) {
@@ -19,12 +19,12 @@ func TestValidateCorrect(t *testing.T) {
 		Expiration:      time.Now().Add(time.Minute * 5),
 	}
 
-	var c config.Flags
-	var p profile.Profile
+	var f config.Flags
+	var p newprofile.NewProfile
 
-	d := NewDpForTest(c, p)
+	app := vegastestapp.New(f, p)
 
-	err := r.Validate(d)
+	err := r.Validate(app)
 	if err != nil {
 		t.Fatalf("Got %q, expected nil", err)
 	}
@@ -40,12 +40,12 @@ func TestValidateIncorrectVersion(t *testing.T) {
 		Expiration:      time.Now().Add(time.Minute * 5),
 	}
 
-	var c config.Flags
-	var p profile.Profile
+	var f config.Flags
+	var p newprofile.NewProfile
 
-	d := NewDpForTest(c, p)
+	app := vegastestapp.New(f, p)
 
-	err := r.Validate(d)
+	err := r.Validate(app)
 	got := err.Error()
 	want := "Incorrect Version"
 
@@ -63,12 +63,12 @@ func TestValidateAccesKeyIdMissing(t *testing.T) {
 		Expiration:      time.Now().Add(time.Minute * 5),
 	}
 
-	var c config.Flags
-	var p profile.Profile
+	var f config.Flags
+	var p newprofile.NewProfile
 
-	d := NewDpForTest(c, p)
+	app := vegastestapp.New(f, p)
 
-	err := r.Validate(d)
+	err := r.Validate(app)
 	got := err.Error()
 	want := "Missing AccessKeyID"
 
@@ -86,12 +86,12 @@ func TestValidateSecretAccesKeyMissing(t *testing.T) {
 		Expiration:   time.Now().Add(time.Minute * 5),
 	}
 
-	var c config.Flags
-	var p profile.Profile
+	var f config.Flags
+	var p newprofile.NewProfile
 
-	d := NewDpForTest(c, p)
+	app := vegastestapp.New(f, p)
 
-	err := r.Validate(d)
+	err := r.Validate(app)
 	got := err.Error()
 	want := "Missing SecretAccessKey"
 
@@ -109,12 +109,12 @@ func TestValidateSessionTokenMissing(t *testing.T) {
 		Expiration:      time.Now().Add(time.Minute * 5),
 	}
 
-	var c config.Flags
-	var p profile.Profile
+	var f config.Flags
+	var p newprofile.NewProfile
 
-	d := NewDpForTest(c, p)
+	app := vegastestapp.New(f, p)
 
-	err := r.Validate(d)
+	err := r.Validate(app)
 	got := err.Error()
 	want := "Missing SessionToken"
 
@@ -133,12 +133,12 @@ func TestValidateExpired(t *testing.T) {
 		Expiration:      time.Now().Add(time.Minute * -5),
 	}
 
-	var c config.Flags
-	var p profile.Profile
+	var f config.Flags
+	var p newprofile.NewProfile
 
-	d := NewDpForTest(c, p)
+	app := vegastestapp.New(f, p)
 
-	err := r.Validate(d)
+	err := r.Validate(app)
 	got := err.Error()
 	want := "Expired 5 minutes ago"
 
@@ -157,12 +157,12 @@ func TestValidateMandatoryRefreshNotRequired(t *testing.T) {
 		Expiration:      time.Now().Add(time.Duration(-1*9*60) * time.Second),
 	}
 
-	var c config.Flags
-	var p profile.Profile
+	var f config.Flags
+	var p newprofile.NewProfile
 
-	d := NewDpForTest(c, p)
+	app := vegastestapp.New(f, p)
 
-	err := r.ValidateForMandatoryRefresh(d)
+	err := r.ValidateForMandatoryRefresh(app)
 
 	if err != nil {
 		t.Fatalf("Got %q, expected nil", err)
@@ -179,12 +179,12 @@ func TestValidateMandatoryRefreshRequired(t *testing.T) {
 		Expiration:      time.Now().Add(time.Duration(-1*11*60) * time.Second),
 	}
 
-	var c config.Flags
-	var p profile.Profile
+	var f config.Flags
+	var p newprofile.NewProfile
 
-	d := NewDpForTest(c, p)
+	app := vegastestapp.New(f, p)
 
-	err := r.ValidateForMandatoryRefresh(d)
+	err := r.ValidateForMandatoryRefresh(app)
 	got := err.Error()
 	want := "Mandatory refresh required because expiration in 11 minutes ago"
 
@@ -203,42 +203,16 @@ func TestValidateMandatoryRefreshDisabled(t *testing.T) {
 		Expiration:      time.Now().Add(time.Duration(-1*11*60) * time.Second),
 	}
 
-	c := config.Flags{
+	f := config.Flags{
 		DisableMandatoryRefresh: true,
 	}
-	var p profile.Profile
+	var p newprofile.NewProfile
 
-	d := NewDpForTest(c, p)
+	app := vegastestapp.New(f, p)
 
-	err := r.ValidateForMandatoryRefresh(d)
+	err := r.ValidateForMandatoryRefresh(app)
 
 	if err != nil {
 		t.Fatalf("Got %q, expected nil", err)
-	}
-}
-
-type DpForTest struct {
-	c config.Flags
-	p profile.Profile
-	w io.Writer
-}
-
-func (d *DpForTest) GetWriteStream() io.Writer {
-	return d.w
-}
-
-func (d *DpForTest) GetProfile() *profile.Profile {
-	return &d.p
-}
-
-func (d *DpForTest) GetConfig() *config.Flags {
-	return &d.c
-}
-
-func NewDpForTest(c config.Flags, p profile.Profile) *DpForTest {
-	return &DpForTest{
-		c: c,
-		p: p,
-		w: io.Discard,
 	}
 }

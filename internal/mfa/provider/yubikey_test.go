@@ -3,14 +3,15 @@ package provider
 import (
 	"context"
 	"fmt"
-	"io"
 	"os"
 	"os/exec"
 	"testing"
 	"time"
 
 	"github.com/aripalo/vegas-credentials/internal/config"
-	"github.com/aripalo/vegas-credentials/internal/profile"
+	"github.com/aripalo/vegas-credentials/internal/newprofile"
+	"github.com/aripalo/vegas-credentials/internal/newprofile/source"
+	"github.com/aripalo/vegas-credentials/internal/vegastestapp"
 )
 
 const GO_WANT_HELPER_PROCESS string = "GO_WANT_HELPER_PROCESS"
@@ -32,13 +33,15 @@ const validTestYubikeyLabel = "arn:aws:iam::123456789012:mfa/JaneDoe"
 const validTestYubikeyToken = "123456"
 
 func TestFoo(t *testing.T) {
-	c := config.Flags{}
-	p := profile.Profile{
-		YubikeySerial: validTestYubikeySerial,
-		YubikeyLabel:  validTestYubikeyLabel,
+	f := config.Flags{}
+	p := newprofile.NewProfile{
+		Source: &source.SourceProfile{
+			YubikeySerial: validTestYubikeySerial,
+			YubikeyLabel:  validTestYubikeyLabel,
+		},
 	}
 
-	token, err := foo(c, p, gen("TestHelperProcess"))
+	token, err := foo(f, p, gen("TestHelperProcess"))
 
 	if err != nil {
 		t.Errorf("Expected nil error, got %#v", err)
@@ -52,14 +55,14 @@ func TestFoo(t *testing.T) {
 }
 
 func foo(
-	c config.Flags,
-	p profile.Profile,
+	f config.Flags,
+	p newprofile.NewProfile,
 	fakeExecCommandContext func(ctx context.Context, command string, args ...string) *exec.Cmd,
 ) (Token, error) {
 	execCommandContext = fakeExecCommandContext
 	defer func() { execCommandContext = exec.CommandContext }()
 
-	d := NewDpForTest(c, p)
+	d := vegastestapp.New(f, p)
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
@@ -93,30 +96,4 @@ func TestHelperProcess(t *testing.T) {
 	result := fmt.Sprintf("%s  %s", validTestYubikeySerial, validTestYubikeyToken)
 	fmt.Fprint(os.Stdout, result)
 	os.Exit(0)
-}
-
-type DpForTest struct {
-	c config.Flags
-	p profile.Profile
-	w io.Writer
-}
-
-func (d *DpForTest) GetWriteStream() io.Writer {
-	return d.w
-}
-
-func (d *DpForTest) GetProfile() *profile.Profile {
-	return &d.p
-}
-
-func (d *DpForTest) GetConfig() *config.Flags {
-	return &d.c
-}
-
-func NewDpForTest(c config.Flags, p profile.Profile) *DpForTest {
-	return &DpForTest{
-		c: c,
-		p: p,
-		w: io.Discard,
-	}
 }

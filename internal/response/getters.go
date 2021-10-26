@@ -1,23 +1,25 @@
 package response
 
-import "github.com/aripalo/vegas-credentials/internal/data"
+import (
+	"github.com/aripalo/vegas-credentials/internal/interfaces"
+)
 
 // GetCachedCredentials handles fetching cached Temporary Session Credentials from secure keyring
-func (r *Response) GetCachedCredentials(d data.Provider) error {
+func (r *Response) GetCachedCredentials(a interfaces.AssumeCredentialProcess) error {
 
 	var err error
 
-	err = r.ReadFromCache(d)
+	err = r.ReadFromCache(a)
 	if err != nil {
 		return err
 	}
 
-	err = r.Validate(d)
+	err = r.Validate(a)
 	if err != nil {
 		return err
 	}
 
-	err = r.ValidateForMandatoryRefresh(d)
+	err = r.ValidateForMandatoryRefresh(a)
 	if err != nil {
 		return err
 	}
@@ -26,21 +28,21 @@ func (r *Response) GetCachedCredentials(d data.Provider) error {
 }
 
 // GetNewCredentials handles fetching new Temporary Session Credentials from STS
-func (r *Response) GetNewCredentials(d data.Provider) error {
+func (r *Response) GetNewCredentials(a interfaces.AssumeCredentialProcess) error {
 
 	var err error
 
-	err = r.AssumeRole(d)
+	err = r.AssumeRole(a)
 	if err != nil {
 		return err
 	}
 
-	err = r.Validate(d)
+	err = r.Validate(a)
 	if err != nil {
 		return err
 	}
 
-	err = r.SaveToCache(d)
+	err = r.SaveToCache(a)
 	if err != nil {
 		return err
 	}

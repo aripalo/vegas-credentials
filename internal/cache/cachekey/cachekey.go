@@ -4,17 +4,17 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/aripalo/vegas-credentials/internal/data"
-	"github.com/aripalo/vegas-credentials/internal/profile"
+	"github.com/aripalo/vegas-credentials/internal/interfaces"
+	"github.com/aripalo/vegas-credentials/internal/newprofile"
 	"github.com/aripalo/vegas-credentials/internal/utils"
 )
 
 const Separator = "__"
 
 // Get is responsible for creating a unique cache key for given profile configuration, therefore ensuring mutated profile configuration will not use previous cached data
-func Get(d data.Provider) (string, error) {
-	c := d.GetConfig()
-	p := d.GetProfile()
+func Get(a interfaces.AssumeCredentialProcess) (string, error) {
+	f := a.GetFlags()
+	p := a.GetProfile()
 
 	configString, err := configToString(*p)
 	if err != nil {
@@ -27,7 +27,7 @@ func Get(d data.Provider) (string, error) {
 	}
 
 	var key strings.Builder
-	key.WriteString(c.Profile)
+	key.WriteString(f.Profile)
 	key.WriteString(Separator)
 	key.WriteString(hash)
 
@@ -35,7 +35,7 @@ func Get(d data.Provider) (string, error) {
 }
 
 // configToString convertts profile config into stringified JSON
-func configToString(p profile.Profile) (string, error) {
+func configToString(p newprofile.NewProfile) (string, error) {
 	result, err := json.Marshal(p)
 	return string(result), err
 }

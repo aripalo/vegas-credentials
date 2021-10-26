@@ -1,13 +1,13 @@
 package assume
 
 import (
-	"github.com/aripalo/vegas-credentials/internal/data"
+	"github.com/aripalo/vegas-credentials/internal/interfaces"
 	"github.com/aripalo/vegas-credentials/internal/logger"
 	"github.com/aripalo/vegas-credentials/internal/response"
 )
 
 // getCredentials handles everything in regards of getting Temporary Session Credentials (both from cache and STS)
-func getCredentials(d data.Provider) error {
+func getCredentials(a interfaces.AssumeCredentialProcess) error {
 
 	r := response.New()
 	var err error
@@ -19,26 +19,26 @@ func getCredentials(d data.Provider) error {
 		}
 	}()
 
-	p := d.GetProfile()
-	logger.Debugln(d, "👷", "Role", p.RoleArn)
+	p := a.GetProfile()
+	logger.Debugln(a, "👷", "Role", p.Target.RoleArn)
 
-	err = r.GetCachedCredentials(d)
+	err = r.GetCachedCredentials(a)
 	if err != nil {
-		logger.Debugf(d, "ℹ️ ", "Credentials", "Cached: %s\n", err.Error())
-		err = r.GetNewCredentials(d)
+		logger.Debugf(a, "ℹ️ ", "Credentials", "Cached: %s\n", err.Error())
+		err = r.GetNewCredentials(a)
 		if err != nil {
-			logger.Errorln(d, "ℹ️ ", "Credentials", err.Error())
+			logger.Errorln(a, "ℹ️ ", "Credentials", err.Error())
 			return err
 		} else {
-			logger.Debugln(d, "ℹ️ ", "Credentials", "Received from STS")
-			logger.PrintRuler(d, "=")
+			logger.Debugln(a, "ℹ️ ", "Credentials", "Received from STS")
+			logger.PrintRuler(a, "=")
 			err = r.Output()
 			return err
 
 		}
 	} else {
-		logger.Debugln(d, "ℹ️ ", "Credentials", "Received from Cache")
-		logger.PrintRuler(d, "=")
+		logger.Debugln(a, "ℹ️ ", "Credentials", "Received from Cache")
+		logger.PrintRuler(a, "=")
 		err = r.Output()
 		return err
 	}

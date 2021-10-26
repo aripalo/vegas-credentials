@@ -3,11 +3,11 @@ package provider
 import (
 	"context"
 
-	"github.com/aripalo/vegas-credentials/internal/data"
+	"github.com/aripalo/vegas-credentials/internal/interfaces"
 	"github.com/aripalo/vegas-credentials/internal/prompt"
 )
 
-func (t *TokenProvider) QueryGUI(ctx context.Context, d data.Provider) {
+func (t *TokenProvider) QueryGUI(ctx context.Context, a interfaces.AssumeCredentialProcess) {
 	var token Token
 	var err error
 

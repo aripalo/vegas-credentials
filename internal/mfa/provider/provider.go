@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/aripalo/vegas-credentials/internal/data"
+	"github.com/aripalo/vegas-credentials/internal/interfaces"
 )
 
 // Token contains the OATH TOPT MFA token value and information about which Porivder Type gave the result
@@ -38,7 +38,7 @@ type TokenProvider struct {
 // MFA_TIMEOUT_SECONDS configures global timeout for the Provide method
 const MFA_TIMEOUT_SECONDS = 60
 
-func New(d data.Provider, enableYubikey bool) *TokenProvider {
+func New(a interfaces.AssumeCredentialProcess, enableYubikey bool) *TokenProvider {
 	var provider TokenProvider
 
 	provider.tokenChan = make(chan *Token, 1)
@@ -48,7 +48,7 @@ func New(d data.Provider, enableYubikey bool) *TokenProvider {
 }
 
 // Provide OATH TOPT MFA Token from supported providers
-func (t *TokenProvider) Provide(d data.Provider, enableYubikey bool) (Token, error) {
+func (t *TokenProvider) Provide(a interfaces.AssumeCredentialProcess, enableYubikey bool) (Token, error) {
 
 	var token Token
 	var err error
@@ -57,13 +57,13 @@ func (t *TokenProvider) Provide(d data.Provider, enableYubikey bool) (Token, err
 	defer cancel()
 
 	if enableYubikey {
-		go t.QueryYubikey(ctx, d)
+		go t.QueryYubikey(ctx, a)
 	}
 
-	if UseGui(d) {
-		go t.QueryGUI(ctx, d)
+	if UseGui(a) {
+		go t.QueryGUI(ctx, a)
 	} else {
-		go t.QueryCLI(ctx, d)
+		go t.QueryCLI(ctx, a)
 	}
 
 	select {
@@ -77,7 +77,7 @@ func (t *TokenProvider) Provide(d data.Provider, enableYubikey bool) (Token, err
 }
 
 // UseGui tells if GUI Dialog Prompt should be used or not (and fallback to CLI stdin input)
-func UseGui(d data.Provider) bool {
-	c := d.GetConfig()
-	return !c.DisableDialog
+func UseGui(a interfaces.AssumeCredentialProcess) bool {
+	f := a.GetFlags()
+	return !f.DisableDialog
 }

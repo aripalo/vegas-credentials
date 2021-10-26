@@ -28,6 +28,11 @@ func New(targetName string) (*NewProfile, error) {
 
 	n.Source = s
 
+	// Set region from source if not given for target
+	if n.Target.Region == "" {
+		n.Target.Region = n.Source.Region
+	}
+
 	return n, err
 
 }

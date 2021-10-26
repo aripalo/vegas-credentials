@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/aripalo/vegas-credentials/internal/data"
+	"github.com/aripalo/vegas-credentials/internal/interfaces"
 	"github.com/dustin/go-humanize"
 )
 
 // Validate ensures the response is of correct format
-func (r *Response) Validate(d data.Provider) error {
+func (r *Response) Validate(a interfaces.AssumeCredentialProcess) error {
 
 	if r.Version != AWS_CREDENTIAL_PROCESS_VERSION {
 		return errors.New("Incorrect Version")
@@ -39,11 +39,11 @@ func (r *Response) Validate(d data.Provider) error {
 
 // ValidateForMandatoryRefresh ensures response is within "mandatory refresh" duration as per BotoCore
 // https://github.com/boto/botocore/blob/221ffa67a567df99ee78d7ae308c0e12d7eeeea7/botocore/credentials.py#L350-L355
-func (r *Response) ValidateForMandatoryRefresh(d data.Provider) error {
+func (r *Response) ValidateForMandatoryRefresh(a interfaces.AssumeCredentialProcess) error {
 
-	c := d.GetConfig()
+	f := a.GetFlags()
 
-	if c.DisableMandatoryRefresh {
+	if f.DisableMandatoryRefresh {
 		return nil
 	}
 
