@@ -14,25 +14,7 @@ import (
 	"github.com/aripalo/vegas-credentials/internal/vegastestapp"
 )
 
-const GO_WANT_HELPER_PROCESS string = "GO_WANT_HELPER_PROCESS"
-
-func gen(helper string) func(ctx context.Context, command string, args ...string) *exec.Cmd {
-	return func(ctx context.Context, command string, args ...string) *exec.Cmd {
-		cs := []string{fmt.Sprintf("-test.run=%s", helper), "--", command}
-		cs = append(cs, args...)
-		cmd := exec.CommandContext(ctx, os.Args[0], cs...)
-		cmd.Env = []string{fmt.Sprintf("%s=1", GO_WANT_HELPER_PROCESS)}
-		return cmd
-	}
-}
-
-// Based on https://npf.io/2015/06/testing-exec-command/
-
-const validTestYubikeySerial = "12345678"
-const validTestYubikeyLabel = "arn:aws:iam::123456789012:mfa/JaneDoe"
-const validTestYubikeyToken = "123456"
-
-func TestFoo(t *testing.T) {
+func TestYkmanSuccess(t *testing.T) {
 	f := config.Flags{}
 	p := profile.Profile{
 		Source: &source.SourceProfile{
@@ -41,7 +23,9 @@ func TestFoo(t *testing.T) {
 		},
 	}
 
-	token, err := foo(f, p, gen("TestHelperProcess"))
+	a := vegastestapp.New(f, p)
+
+	token, err := getYubikeyTokenFromMock(a, setupMock("TestYkmanMockSuccess"))
 
 	if err != nil {
 		t.Errorf("Expected nil error, got %#v", err)
@@ -54,22 +38,39 @@ func TestFoo(t *testing.T) {
 	}
 }
 
-func foo(
-	f config.Flags,
-	p profile.Profile,
-	fakeExecCommandContext func(ctx context.Context, command string, args ...string) *exec.Cmd,
-) (Token, error) {
-	execCommandContext = fakeExecCommandContext
-	defer func() { execCommandContext = exec.CommandContext }()
+// Ykman test helpers
+// Based on https://npf.io/2015/06/testing-exec-command/
+// ------------------
 
-	d := vegastestapp.New(f, p)
+const GO_WANT_HELPER_PROCESS string = "GO_WANT_HELPER_PROCESS"
+
+func setupMock(helper string) func(ctx context.Context, command string, args ...string) *exec.Cmd {
+	return func(ctx context.Context, command string, args ...string) *exec.Cmd {
+		cs := []string{fmt.Sprintf("-test.run=%s", helper), "--", command}
+		cs = append(cs, args...)
+		cmd := exec.CommandContext(ctx, os.Args[0], cs...)
+		cmd.Env = []string{fmt.Sprintf("%s=1", GO_WANT_HELPER_PROCESS)}
+		return cmd
+	}
+}
+
+const validTestYubikeySerial = "12345678"
+const validTestYubikeyLabel = "arn:aws:iam::123456789012:mfa/JaneDoe"
+const validTestYubikeyToken = "123456"
+
+func getYubikeyTokenFromMock(
+	a *vegastestapp.AssumeAppForTesting,
+	mock func(ctx context.Context, command string, args ...string) *exec.Cmd,
+) (Token, error) {
+	execCommandContext = mock
+	defer func() { execCommandContext = exec.CommandContext }()
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	provider := New(d, true)
+	provider := New(a, true)
 
-	go provider.QueryYubikey(ctx, d)
+	go provider.QueryYubikey(ctx, a)
 
 	var token Token
 	var err error
@@ -77,19 +78,19 @@ func foo(
 	select {
 	case e := <-provider.errorChan:
 		err = *e
-		//return token, err
 	case i := <-provider.tokenChan:
 		token = *i
-		//return token, err
 	case <-ctx.Done():
 		err = ctx.Err()
-		//return token, err
 	}
 
 	return token, err
 }
 
-func TestHelperProcess(t *testing.T) {
+// Ykman Mocks
+// -----------
+
+func TestYkmanMockSuccess(t *testing.T) {
 	if os.Getenv(GO_WANT_HELPER_PROCESS) != "1" {
 		return
 	}
