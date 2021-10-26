@@ -4,7 +4,7 @@ import (
 	"github.com/aripalo/vegas-credentials/internal/interfaces"
 )
 
-// GetCachedCredentials handles fetching cached Temporary Session Credentials from secure keyring
+// GetCachedCredentials handles fetching cached Temporary Session Credentials
 func (r *Response) GetCachedCredentials(a interfaces.AssumeCredentialProcess) error {
 
 	var err error
