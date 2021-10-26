@@ -3,6 +3,7 @@ package provider
 import (
 	"context"
 	"errors"
+	"fmt"
 	"os/exec"
 	"regexp"
 	"strings"
@@ -24,12 +25,19 @@ func (t *TokenProvider) QueryYubikey(ctx context.Context, a interfaces.AssumeCre
 
 	cmd := execCommandContext(ctx, "ykman", "--device", p.Source.YubikeySerial, "oath", "accounts", "code", p.Source.YubikeyLabel)
 	stdout, err := cmd.Output()
+
 	if err != nil {
 		t.errorChan <- &err
 	} else {
 		value := yubikeyTokenFindPattern.FindString(strings.TrimSpace(string(stdout)))
-		token.Value = value
-		t.tokenChan <- &token
+		if value != "" {
+			token.Value = value
+			t.tokenChan <- &token
+		} else {
+			err = fmt.Errorf("Could not get OATH account %s token for Yubikey device %s", p.Source.YubikeyLabel, p.Source.YubikeySerial)
+			t.errorChan <- &err
+		}
+
 	}
 }
 

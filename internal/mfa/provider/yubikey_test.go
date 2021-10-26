@@ -38,6 +38,54 @@ func TestYkmanSuccess(t *testing.T) {
 	}
 }
 
+func TestYkmanInvalidSerial(t *testing.T) {
+	f := config.Flags{}
+	p := profile.Profile{
+		Source: &source.SourceProfile{
+			YubikeySerial: "00000000",
+			YubikeyLabel:  validTestYubikeyLabel,
+		},
+	}
+
+	a := vegastestapp.New(f, p)
+
+	token, err := getYubikeyTokenFromMock(a, setupMock("TestYkmanMockInvalidSerial"))
+
+	if err == nil {
+		t.Error("Expected error, got nil")
+	}
+
+	want := ""
+
+	if token.Value != want {
+		t.Errorf("Got %q, want %q", token.Value, want)
+	}
+}
+
+func TestYkmanInvalidLabel(t *testing.T) {
+	f := config.Flags{}
+	p := profile.Profile{
+		Source: &source.SourceProfile{
+			YubikeySerial: validTestYubikeySerial,
+			YubikeyLabel:  "invalid",
+		},
+	}
+
+	a := vegastestapp.New(f, p)
+
+	token, err := getYubikeyTokenFromMock(a, setupMock("TestYkmanMockInvalidLabel"))
+
+	if err == nil {
+		t.Error("Expected error, got nil")
+	}
+
+	want := ""
+
+	if token.Value != want {
+		t.Errorf("Got %q, want %q", token.Value, want)
+	}
+}
+
 // Ykman test helpers
 // Based on https://npf.io/2015/06/testing-exec-command/
 // ------------------
@@ -96,5 +144,21 @@ func TestYkmanMockSuccess(t *testing.T) {
 	}
 	result := fmt.Sprintf("%s  %s", validTestYubikeySerial, validTestYubikeyToken)
 	fmt.Fprint(os.Stdout, result)
+	os.Exit(0)
+}
+
+func TestYkmanMockInvalidSerial(t *testing.T) {
+	if os.Getenv(GO_WANT_HELPER_PROCESS) != "1" {
+		return
+	}
+	fmt.Fprint(os.Stderr, "OSError: Failed to open device for communication: -536870174")
+	os.Exit(0)
+}
+
+func TestYkmanMockInvalidLabel(t *testing.T) {
+	if os.Getenv(GO_WANT_HELPER_PROCESS) != "1" {
+		return
+	}
+	fmt.Fprint(os.Stdout, "")
 	os.Exit(0)
 }
