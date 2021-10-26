@@ -52,7 +52,7 @@ func TestConfigToString(t *testing.T) {
 }
 
 func TestGet(t *testing.T) {
-	c := config.Config{
+	c := config.Flags{
 		Profile: "my-profile",
 	}
 	p := profile.Profile{
@@ -77,7 +77,7 @@ func TestGet(t *testing.T) {
 }
 
 type DpForTest struct {
-	c config.Config
+	c config.Flags
 	p profile.Profile
 	w io.Writer
 }
@@ -90,11 +90,11 @@ func (d *DpForTest) GetProfile() *profile.Profile {
 	return &d.p
 }
 
-func (d *DpForTest) GetConfig() *config.Config {
+func (d *DpForTest) GetConfig() *config.Flags {
 	return &d.c
 }
 
-func NewDpForTest(c config.Config, p profile.Profile) *DpForTest {
+func NewDpForTest(c config.Flags, p profile.Profile) *DpForTest {
 	return &DpForTest{
 		c: c,
 		p: p,

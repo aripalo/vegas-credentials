@@ -9,6 +9,6 @@ import (
 
 type Provider interface {
 	GetWriteStream() io.Writer
-	GetConfig() *config.Config
+	GetConfig() *config.Flags
 	GetProfile() *profile.Profile
 }

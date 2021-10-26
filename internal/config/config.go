@@ -10,12 +10,12 @@ import (
 	"github.com/spf13/viper"
 )
 
-// Config provides global/shared configuration passed downstream
-type Config struct {
+// Flags provides global/shared configuration passed downstream
+type Flags struct {
 	Profile                 string `mapstructure:"profile"`
-	DurationSeconds         int    `mapstructure:"duration_seconds"`
-	YubikeySerial           string `mapstructure:"yubikey_serial"`
-	YubikeyLabel            string `mapstructure:"yubikey_label"`
+	DurationSeconds         int    `mapstructure:"duration_seconds"` // TODO remove
+	YubikeySerial           string `mapstructure:"yubikey_serial"`   // TODO remove
+	YubikeyLabel            string `mapstructure:"yubikey_label"`    // TODO remove
 	Debug                   bool   `mapstructure:"debug"`
 	Verbose                 bool   `mapstructure:"verbose"`
 	HideArns                bool   `mapstructure:"hide_arns"`
@@ -25,7 +25,7 @@ type Config struct {
 }
 
 // TODO how to support testing with temp file etc? (e.g. in profile_test.go)
-func (c *Config) Load(cmd *cobra.Command) error {
+func (c *Flags) Load(cmd *cobra.Command) error {
 
 	var err error
 

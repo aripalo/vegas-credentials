@@ -9,7 +9,7 @@ import (
 	"github.com/aripalo/vegas-credentials/internal/config"
 )
 
-var c = &config.Config{
+var c = &config.Flags{
 	Profile:         "my-profile",
 	DurationSeconds: 3600,
 }

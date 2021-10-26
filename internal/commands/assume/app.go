@@ -13,7 +13,7 @@ import (
 // App declaration
 type App struct {
 	WriteStream io.Writer
-	Config      *config.Config
+	Config      *config.Flags
 	Profile     *profile.Profile
 	command     string
 	version     string
@@ -26,7 +26,7 @@ func (a *App) GetWriteStream() io.Writer {
 }
 
 // GetConfig implements data.Provider method
-func (a *App) GetConfig() *config.Config {
+func (a *App) GetConfig() *config.Flags {
 	return a.Config
 }
 
@@ -39,7 +39,7 @@ func (a *App) GetProfile() *profile.Profile {
 func New() (*App, error) {
 	a := &App{
 		WriteStream: logger.GetSafeWriter(),
-		Config:      &config.Config{},
+		Config:      &config.Flags{},
 		Profile:     &profile.Profile{},
 		startedAt:   time.Now(),
 	}

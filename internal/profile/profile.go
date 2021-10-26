@@ -12,7 +12,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-func (p *Profile) Load(config *config.Config) error {
+func (p *Profile) Load(config *config.Flags) error {
 	var profileConfig Profile
 	home, err := os.UserHomeDir()
 	if err != nil {
@@ -28,7 +28,7 @@ func (p *Profile) Load(config *config.Config) error {
 	return nil
 }
 
-func loadWithPath(profileConfig Profile, config *config.Config, configPath string) (Profile, error) {
+func loadWithPath(profileConfig Profile, config *config.Flags, configPath string) (Profile, error) {
 
 	v := viper.New()
 	v.SetConfigName("config")

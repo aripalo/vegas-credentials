@@ -32,7 +32,7 @@ const validTestYubikeyLabel = "arn:aws:iam::123456789012:mfa/JaneDoe"
 const validTestYubikeyToken = "123456"
 
 func TestFoo(t *testing.T) {
-	c := config.Config{}
+	c := config.Flags{}
 	p := profile.Profile{
 		YubikeySerial: validTestYubikeySerial,
 		YubikeyLabel:  validTestYubikeyLabel,
@@ -52,7 +52,7 @@ func TestFoo(t *testing.T) {
 }
 
 func foo(
-	c config.Config,
+	c config.Flags,
 	p profile.Profile,
 	fakeExecCommandContext func(ctx context.Context, command string, args ...string) *exec.Cmd,
 ) (Token, error) {
@@ -96,7 +96,7 @@ func TestHelperProcess(t *testing.T) {
 }
 
 type DpForTest struct {
-	c config.Config
+	c config.Flags
 	p profile.Profile
 	w io.Writer
 }
@@ -109,11 +109,11 @@ func (d *DpForTest) GetProfile() *profile.Profile {
 	return &d.p
 }
 
-func (d *DpForTest) GetConfig() *config.Config {
+func (d *DpForTest) GetConfig() *config.Flags {
 	return &d.c
 }
 
-func NewDpForTest(c config.Config, p profile.Profile) *DpForTest {
+func NewDpForTest(c config.Flags, p profile.Profile) *DpForTest {
 	return &DpForTest{
 		c: c,
 		p: p,

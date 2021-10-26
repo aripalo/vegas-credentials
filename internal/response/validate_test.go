@@ -19,7 +19,7 @@ func TestValidateCorrect(t *testing.T) {
 		Expiration:      time.Now().Add(time.Minute * 5),
 	}
 
-	var c config.Config
+	var c config.Flags
 	var p profile.Profile
 
 	d := NewDpForTest(c, p)
@@ -40,7 +40,7 @@ func TestValidateIncorrectVersion(t *testing.T) {
 		Expiration:      time.Now().Add(time.Minute * 5),
 	}
 
-	var c config.Config
+	var c config.Flags
 	var p profile.Profile
 
 	d := NewDpForTest(c, p)
@@ -63,7 +63,7 @@ func TestValidateAccesKeyIdMissing(t *testing.T) {
 		Expiration:      time.Now().Add(time.Minute * 5),
 	}
 
-	var c config.Config
+	var c config.Flags
 	var p profile.Profile
 
 	d := NewDpForTest(c, p)
@@ -86,7 +86,7 @@ func TestValidateSecretAccesKeyMissing(t *testing.T) {
 		Expiration:   time.Now().Add(time.Minute * 5),
 	}
 
-	var c config.Config
+	var c config.Flags
 	var p profile.Profile
 
 	d := NewDpForTest(c, p)
@@ -109,7 +109,7 @@ func TestValidateSessionTokenMissing(t *testing.T) {
 		Expiration:      time.Now().Add(time.Minute * 5),
 	}
 
-	var c config.Config
+	var c config.Flags
 	var p profile.Profile
 
 	d := NewDpForTest(c, p)
@@ -133,7 +133,7 @@ func TestValidateExpired(t *testing.T) {
 		Expiration:      time.Now().Add(time.Minute * -5),
 	}
 
-	var c config.Config
+	var c config.Flags
 	var p profile.Profile
 
 	d := NewDpForTest(c, p)
@@ -157,7 +157,7 @@ func TestValidateMandatoryRefreshNotRequired(t *testing.T) {
 		Expiration:      time.Now().Add(time.Duration(-1*9*60) * time.Second),
 	}
 
-	var c config.Config
+	var c config.Flags
 	var p profile.Profile
 
 	d := NewDpForTest(c, p)
@@ -179,7 +179,7 @@ func TestValidateMandatoryRefreshRequired(t *testing.T) {
 		Expiration:      time.Now().Add(time.Duration(-1*11*60) * time.Second),
 	}
 
-	var c config.Config
+	var c config.Flags
 	var p profile.Profile
 
 	d := NewDpForTest(c, p)
@@ -203,7 +203,7 @@ func TestValidateMandatoryRefreshDisabled(t *testing.T) {
 		Expiration:      time.Now().Add(time.Duration(-1*11*60) * time.Second),
 	}
 
-	c := config.Config{
+	c := config.Flags{
 		DisableMandatoryRefresh: true,
 	}
 	var p profile.Profile
@@ -218,7 +218,7 @@ func TestValidateMandatoryRefreshDisabled(t *testing.T) {
 }
 
 type DpForTest struct {
-	c config.Config
+	c config.Flags
 	p profile.Profile
 	w io.Writer
 }
@@ -231,11 +231,11 @@ func (d *DpForTest) GetProfile() *profile.Profile {
 	return &d.p
 }
 
-func (d *DpForTest) GetConfig() *config.Config {
+func (d *DpForTest) GetConfig() *config.Flags {
 	return &d.c
 }
 
-func NewDpForTest(c config.Config, p profile.Profile) *DpForTest {
+func NewDpForTest(c config.Flags, p profile.Profile) *DpForTest {
 	return &DpForTest{
 		c: c,
 		p: p,
