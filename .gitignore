@@ -30,3 +30,6 @@ node_modules
 # Build output from TSC
 **/*.js
 **/*.d.ts
+
+# Ignore Sonarcloud Scanner Github Action temp files
+.scannerwork/
