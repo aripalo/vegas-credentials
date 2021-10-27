@@ -7,13 +7,15 @@ import (
 	"github.com/aripalo/vegas-credentials/internal/prompt"
 )
 
+var cliPrompt = prompt.Cli
+
 func (t *TokenProvider) QueryCLI(ctx context.Context, a interfaces.AssumeCredentialProcess) {
 	var token Token
 	var err error
 
 	token.Provider = TOKEN_PROVIDER_CLI_INPUT
 
-	value, err := prompt.Cli(ctx, "")
+	value, err := cliPrompt(ctx, "")
 	if err != nil {
 		t.errorChan <- &err
 	} else {
