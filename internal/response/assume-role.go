@@ -6,12 +6,14 @@ import (
 	"github.com/aripalo/vegas-credentials/internal/sts"
 )
 
+var getAssumedCredentials = sts.GetAssumedCredentials
+
 // Assume IAM Role and fetch temporary session credentials to be used in credential_process
 func (r *Response) AssumeRole(a interfaces.AssumeCredentialProcess) error {
 
 	var err error
 
-	value, expiration, err := sts.GetAssumedCredentials(a)
+	value, expiration, err := getAssumedCredentials(a)
 	if err != nil {
 		return err
 	}
