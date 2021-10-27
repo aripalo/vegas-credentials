@@ -62,8 +62,8 @@ brews:
     # Git author used to commit to the repository.
     # Defaults are shown.
     commit_author:
-      name: aripalo-homebrew
-      email: ari+github-homebrew-taps@aripalo.com
+      name: aripalo-releaser
+      email: ari+github-releaser@aripalo.com
 
     # The project name and current git tag are used in the format string.
     commit_msg_template: "Brew formula update for {{ .ProjectName }} version {{ .Tag }}"
@@ -164,8 +164,8 @@ scoop:
   # Git author used to commit to the repository.
   # Defaults are shown.
   commit_author:
-      name: aripalo-scoop
-      email: ari+github-scoop@aripalo.com
+      name: aripalo-releaser
+      email: ari+github-releaser@aripalo.com
 
   # The project name and current git tag are used in the format string.
   commit_msg_template: "Scoop update for {{ .ProjectName }} version {{ .Tag }}"
