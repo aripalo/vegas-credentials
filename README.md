@@ -285,6 +285,8 @@ Often times you may not want to define the `profile` within the application code
 AWS_PROFILE=frank@concerts ts-node src/index.ts
 ```
 
+> _By default, the SDK checks the `AWS_PROFILE` environment variable to determine which profile to use. If the `AWS_PROFILE` variable is not set in your environment, the SDK uses the credentials for the `[default]` profile. To use one of the alternate profiles, set or change the value of the `AWS_PROFILE` environment variable. For example, given the configuration file shown, to use the credentials from the work account, set the `AWS_PROFILE` environment variable to work-account (as appropriate for your operating system)._
+
 ### Role Chaining
 
 This tool also supports role chaining - **given that the specific AWS tool your using supports it** - which means assuming an initial role and then using it to assume another role. An example with 3 different AWS accounts would look like:
