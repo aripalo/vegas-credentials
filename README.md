@@ -278,6 +278,13 @@ vegas-credentials assume --profile=frank@concerts --verbose --no-color
 
 ## Examples
 
+### Using with AWS SDKs
+
+Often times you may not want to define the `profile` within the application code, since the application code most often will be ran without profile in cloud. You may circumvent this by setting the profile via environment variable:
+```shell
+AWS_PROFILE=frank@concerts ts-node src/index.ts
+```
+
 ### Role Chaining
 
 This tool also supports role chaining - **given that the specific AWS tool your using supports it** - which means assuming an initial role and then using it to assume another role. An example with 3 different AWS accounts would look like:
