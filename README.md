@@ -280,12 +280,14 @@ vegas-credentials assume --profile=frank@concerts --verbose --no-color
 
 ### Using with AWS SDKs
 
-Often times you may not want to define the `profile` within the application code, since the application code most often will be ran without profile in cloud. You may circumvent this by setting the profile via environment variable:
+Often times you may not want to define the `profile` within the application code, since the application code most often will be ran without profile in cloud. You may circumvent this by setting the profile via `AWS_PROFILE` environment variable. Most AWS SDKs should support this. Example with running a NodeJS based script (that does something with AWS SDK):
 ```shell
 AWS_PROFILE=frank@concerts ts-node src/index.ts
 ```
 
 > _By default, the SDK checks the `AWS_PROFILE` environment variable to determine which profile to use. If the `AWS_PROFILE` variable is not set in your environment, the SDK uses the credentials for the `[default]` profile. To use one of the alternate profiles, set or change the value of the `AWS_PROFILE` environment variable. For example, given the configuration file shown, to use the credentials from the work account, set the `AWS_PROFILE` environment variable to work-account (as appropriate for your operating system)._
+>
+> – [AWS SDK v3 docs](https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/loading-node-credentials-shared.html)
 
 ### Role Chaining
 
