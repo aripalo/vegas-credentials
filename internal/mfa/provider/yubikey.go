@@ -44,7 +44,12 @@ func (t *TokenProvider) QueryYubikey(ctx context.Context, a interfaces.AssumeCre
 // VerifyYubikey tells if Yubikey serial+label configured and given device available, which means we can query Yubikey for token
 func VerifyYubikey(ctx context.Context, a interfaces.AssumeCredentialProcess) error {
 	var err error
+
 	p := a.GetProfile()
+
+	if p.Source.YubikeySerial == "" {
+		return errors.New(YubikeyErrorNotConfigured)
+	}
 
 	// if configured, check if given device is available
 	cmd := execCommandContext(ctx, "ykman", "list")
