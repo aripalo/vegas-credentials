@@ -2,6 +2,7 @@ package logger
 
 import (
 	"io"
+	"os"
 	"testing"
 
 	"github.com/aripalo/vegas-credentials/internal/config"
@@ -65,6 +66,17 @@ func TestFormat(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.description, func(t *testing.T) {
+
+			// Handle terminal env (i.e. in CI)
+			nocolor := os.Getenv("NO_COLOR")
+			term := os.Getenv("TERM")
+			os.Unsetenv("NO_COLOR")
+			os.Setenv("TERM", "xterm-256color")
+			defer func() {
+				os.Setenv("NO_COLOR", nocolor)
+				os.Setenv("TERM", term)
+			}()
+
 			a := &vegastestapp.AssumeAppForTesting{
 				Flags:       tc.flags,
 				Profile:     profile.Profile{},
