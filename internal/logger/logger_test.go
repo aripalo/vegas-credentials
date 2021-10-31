@@ -72,7 +72,7 @@ func TestFormat(t *testing.T) {
 			term := os.Getenv("TERM")
 			os.Unsetenv("NO_COLOR")
 			os.Setenv("TERM", "xterm-256color")
-			os.Setenv("FORCE_COLOR", "true")
+			os.Setenv("FORCE_COLOR", "on")
 			defer func() {
 				os.Setenv("NO_COLOR", nocolor)
 				os.Setenv("TERM", term)
