@@ -72,9 +72,11 @@ func TestFormat(t *testing.T) {
 			term := os.Getenv("TERM")
 			os.Unsetenv("NO_COLOR")
 			os.Setenv("TERM", "xterm-256color")
+			os.Setenv("FORCE_COLOR", "true")
 			defer func() {
 				os.Setenv("NO_COLOR", nocolor)
 				os.Setenv("TERM", term)
+				os.Unsetenv("FORCE_COLOR")
 			}()
 
 			a := &vegastestapp.AssumeAppForTesting{
