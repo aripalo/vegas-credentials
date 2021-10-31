@@ -153,6 +153,75 @@ func TestLogger(t *testing.T) {
 			fnF:         Successf,
 			want:        "🚧 \x1b[32m\x1b[1mTest:\x1b[0m\x1b[0m \x1b[32mMessage formatted\x1b[0m",
 		},
+
+		{
+			description: "non-verbose Titleln",
+			flags: config.Flags{
+				Verbose: false,
+			},
+			emoji:   "🚧",
+			prefix:  "Test",
+			message: "Message",
+			fn:      Titleln,
+			want:    "",
+		},
+		{
+			description: "verbose Titleln",
+			flags: config.Flags{
+				Verbose: true,
+			},
+			emoji:   "🚧",
+			prefix:  "Test",
+			message: "Message",
+			fn:      Titleln,
+			want:    "🚧 \x1b[95m\x1b[1mTest:\x1b[0m\x1b[0m \x1b[95mMessage\x1b[0m\n",
+		},
+		{
+			description: "non-verbose Title",
+			flags: config.Flags{
+				Verbose: false,
+			},
+			emoji:   "🚧",
+			prefix:  "Test",
+			message: "Message",
+			fn:      Title,
+			want:    "",
+		},
+		{
+			description: "verbose Title",
+			flags: config.Flags{
+				Verbose: true,
+			},
+			emoji:   "🚧",
+			prefix:  "Test",
+			message: "Message",
+			fn:      Title,
+			want:    "🚧 \x1b[95m\x1b[1mTest:\x1b[0m\x1b[0m \x1b[95mMessage\x1b[0m",
+		},
+		{
+			description: "non-verbose Titlef",
+			flags: config.Flags{
+				Verbose: false,
+			},
+			emoji:   "🚧",
+			prefix:  "Test",
+			message: "Message %s",
+			args:    []string{"formatted"},
+			fnF:     Titlef,
+			want:    "",
+		},
+		{
+			description: "verbose Titlef",
+			flags: config.Flags{
+				Verbose: true,
+			},
+			emoji:   "🚧",
+			prefix:  "Test",
+			message: "Message %s",
+			args:    []string{"formatted"},
+			fnF:     Titlef,
+			want:    "🚧 \x1b[95m\x1b[1mTest:\x1b[0m\x1b[0m \x1b[95mMessage formatted\x1b[0m",
+		},
 	}
 
 	for _, tc := range tests {
