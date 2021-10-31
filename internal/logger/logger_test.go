@@ -77,7 +77,7 @@ func TestLogger(t *testing.T) {
 				Destination: &output,
 			}
 
-			tc.fn(a, tc.emoji, tc.prefix, tc.message)
+			tc.fn(a, tc.emoji, tc.prefix, tc.message, tc.args...)
 
 			got := output.String()
 
