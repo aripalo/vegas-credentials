@@ -34,13 +34,13 @@ func format(a interfaces.AssumeCredentialProcess, colorize color.Color, emoji st
 		} else {
 			p = colorize.Render(textBold.Render(fmt.Sprintf("%s:", prefix)))
 		}
-		output = fmt.Sprintf("%s%s", output, p)
+		output = fmt.Sprintf("%s%s ", output, p)
 	}
 
 	if f.NoColor {
-		output = fmt.Sprintf("%s %s", output, message)
+		output = fmt.Sprintf("%s%s", output, message)
 	} else {
-		output = fmt.Sprintf("%s %s", output, colorize.Render(message))
+		output = fmt.Sprintf("%s%s", output, colorize.Render(message))
 	}
 
 	return output
