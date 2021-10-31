@@ -65,19 +65,20 @@ func TestFormat(t *testing.T) {
 	}
 
 	for _, tc := range tests {
-		t.Run(tc.description, func(t *testing.T) {
 
-			// Handle terminal env (i.e. in CI)
-			nocolor := os.Getenv("NO_COLOR")
-			term := os.Getenv("TERM")
-			os.Unsetenv("NO_COLOR")
-			os.Setenv("TERM", "xterm-256color")
-			os.Setenv("FORCE_COLOR", "on")
-			defer func() {
-				os.Setenv("NO_COLOR", nocolor)
-				os.Setenv("TERM", term)
-				os.Unsetenv("FORCE_COLOR")
-			}()
+		// Handle terminal env (i.e. in CI)
+		nocolor := os.Getenv("NO_COLOR")
+		term := os.Getenv("TERM")
+		os.Unsetenv("NO_COLOR")
+		os.Setenv("TERM", "xterm-256color")
+		os.Setenv("FORCE_COLOR", "on")
+		defer func() {
+			os.Setenv("NO_COLOR", nocolor)
+			os.Setenv("TERM", term)
+			os.Unsetenv("FORCE_COLOR")
+		}()
+
+		t.Run(tc.description, func(t *testing.T) {
 
 			a := &vegastestapp.AssumeAppForTesting{
 				Flags:       tc.flags,
