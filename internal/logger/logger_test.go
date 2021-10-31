@@ -8,6 +8,7 @@ import (
 	"github.com/aripalo/vegas-credentials/internal/config"
 	"github.com/aripalo/vegas-credentials/internal/profile"
 	"github.com/aripalo/vegas-credentials/internal/vegastestapp"
+	"github.com/gookit/color"
 )
 
 type formatTestCase struct {
@@ -69,13 +70,17 @@ func TestFormat(t *testing.T) {
 		// Handle terminal env (i.e. in CI)
 		nocolor := os.Getenv("NO_COLOR")
 		term := os.Getenv("TERM")
+		level := color.TermColorLevel()
 		os.Unsetenv("NO_COLOR")
 		os.Setenv("TERM", "xterm-256color")
 		os.Setenv("FORCE_COLOR", "on")
+		_ = color.ForceSetColorLevel(color.Level256)
+
 		defer func() {
 			os.Setenv("NO_COLOR", nocolor)
 			os.Setenv("TERM", term)
 			os.Unsetenv("FORCE_COLOR")
+			color.ForceSetColorLevel(level)
 		}()
 
 		t.Run(tc.description, func(t *testing.T) {
