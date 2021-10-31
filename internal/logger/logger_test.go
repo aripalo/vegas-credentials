@@ -23,7 +23,9 @@ func TestFormat(t *testing.T) {
 	tests := []formatTestCase{
 		{
 			"with all formatting",
-			config.Flags{},
+			config.Flags{
+				NoColor: false,
+			},
 			"🚧",
 			"Test",
 			"Message",
@@ -31,7 +33,9 @@ func TestFormat(t *testing.T) {
 		},
 		{
 			"witout emoji",
-			config.Flags{},
+			config.Flags{
+				NoColor: false,
+			},
 			"",
 			"Test",
 			"Message",
@@ -39,7 +43,9 @@ func TestFormat(t *testing.T) {
 		},
 		{
 			"witout prefix",
-			config.Flags{},
+			config.Flags{
+				NoColor: false,
+			},
 			"🚧",
 			"",
 			"Message",
