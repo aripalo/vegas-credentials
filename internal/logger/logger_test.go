@@ -2,6 +2,7 @@ package logger
 
 import (
 	"bytes"
+	"errors"
 	"os"
 	"testing"
 
@@ -19,7 +20,8 @@ type LoggerTestCase struct {
 	prefix      string
 	message     string
 	args        []interface{}
-	fn          func(a interfaces.AssumeCredentialProcess, emoji string, prefix string, message string, args ...interface{})
+	fn          func(a interfaces.AssumeCredentialProcess, emoji string, prefix string, message string)
+	fnF         func(a interfaces.AssumeCredentialProcess, emoji string, prefix string, message string, args ...interface{})
 	want        string
 }
 
@@ -34,7 +36,7 @@ func TestLogger(t *testing.T) {
 			emoji:   "🚧",
 			prefix:  "Test",
 			message: "Message",
-			fn:      Debugf,
+			fnF:     Debugf,
 			want:    "",
 		},
 		{
@@ -45,7 +47,7 @@ func TestLogger(t *testing.T) {
 			emoji:   "🚧",
 			prefix:  "Test",
 			message: "Message",
-			fn:      Debugf,
+			fnF:     Debugf,
 			want:    "🚧 \x1b[90m\x1b[1mTest:\x1b[0m\x1b[0m \x1b[90mMessage\x1b[0m",
 		},
 	}
@@ -77,7 +79,17 @@ func TestLogger(t *testing.T) {
 				Destination: &output,
 			}
 
-			tc.fn(a, tc.emoji, tc.prefix, tc.message, tc.args...)
+			if tc.fnF == nil && tc.fn == nil {
+				panic(errors.New("No test function defined"))
+			}
+
+			if tc.fnF != nil {
+				tc.fnF(a, tc.emoji, tc.prefix, tc.message, tc.args...)
+			}
+
+			if tc.fn != nil {
+				tc.fn(a, tc.emoji, tc.prefix, tc.message)
+			}
 
 			got := output.String()
 
