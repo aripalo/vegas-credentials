@@ -63,4 +63,4 @@ jobs:
           SCOOP_BUCKET_GITHUB_TOKEN: ${{ secrets.SCOOP_BUCKET_GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Debug package.json
-        run: cat package.json | jq
+        run: cat package.json | jq | cat
