@@ -187,7 +187,7 @@ scoop:
   # If set to auto, the release will not be uploaded to the scoop bucket
   # in case there is an indicator for prerelease in the tag e.g. v1.0.0-rc1
   # Default is false.
-  skip_upload: true #TODO
+  #skip_upload: true #TODO
 
   # Persist data between application updates
   #persist:
@@ -201,3 +201,7 @@ scoop:
   # An array of commands to be executed after an application is installed.
   # Default is empty.
   #post_install: ["Write-Host 'Running postinstall command'"]
+
+publishers:
+  - name: npm-publisher
+    cmd: ./utils/set-npm-version.sh {{ .Version }}
