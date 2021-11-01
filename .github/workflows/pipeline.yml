@@ -41,7 +41,7 @@ jobs:
       - name: Test
         run: make test
       - name: Test Build
-        run: go build main.go 
+        run: go build main.go
       - name: Test Invocation
         run: ./main --version
       - name: Test Build Cleanup
@@ -60,3 +60,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           HOMEBREW_TAP_GITHUB_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
+      - name: Get the version
+        if: startsWith(github.ref, 'refs/tags/')
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+      - name: NPM Release
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          ./utils/set-npm-version.sh ${{ steps.get_version.outputs.VERSION }}
+          cat package.json
