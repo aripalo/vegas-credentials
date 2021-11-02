@@ -63,4 +63,5 @@ jobs:
           SCOOP_BUCKET_GITHUB_TOKEN: ${{ secrets.SCOOP_BUCKET_GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Debug package.json
+        if: startsWith(github.ref, 'refs/tags/')
         run: cat package.json | jq &> /dev/stdout
