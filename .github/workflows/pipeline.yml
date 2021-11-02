@@ -68,4 +68,5 @@ jobs:
         run: echo '::set-output name=VERSION::$(cat package.json | jq -r ".version")'
         id: debug-version
       - name: Debug Version
-        run: echo 'VERSION: ${{ steps.debug-version.outputs.VERSION }}'
+        run: |
+          echo 'VERSION: ${{ steps.debug-version.outputs.VERSION }}'
