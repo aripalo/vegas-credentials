@@ -65,7 +65,9 @@ jobs:
 
 
       - name: Read Version
-        run: echo '::set-output name=VERSION::$(cat package.json | jq -r ".version")'
+        run: |
+          VERSION=$(cat package.json | jq -r '.version')
+          echo '::set-output name=VERSION::$VERSION'
         id: debug-version
       - name: Debug Version
         run: |
