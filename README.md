@@ -39,9 +39,9 @@ Vegas Credentials is an utility with smooth user experience that plugs into AWS 
 
 - **Encrypted Caching of session credentials** to speed things up & to avoid having to input MFA token code for each operation
 
-- **Supports both Yubikey Touch or Authenticator App TOPT MFA _simultaneously_**: 
-    
-    - For example you can default to using Yubikey, but if don't have the Yubikey with you all the time and also have MFA codes in an Authenticator App (such as [Authy](https://authy.com/) for example) 
+- **Supports both Yubikey Touch or Authenticator App TOPT MFA _simultaneously_**:
+
+    - For example you can default to using Yubikey, but if don't have the Yubikey with you all the time and also have MFA codes in an Authenticator App (such as [Authy](https://authy.com/) for example)
     - You may just touch the Yubikey or manually type the token code (via GUI Prompt Dialog or CLI `stdin`) – which ever input is given first will be used
 
 - **Smooth Yubikey integration**:
@@ -55,14 +55,14 @@ Vegas Credentials is an utility with smooth user experience that plugs into AWS 
 
 ### By design, this tool _does not_ support:
 
-- AWS SSO 
+- AWS SSO
 
     → See [`benkehoe/aws-sso-util`](https://github.com/benkehoe/aws-sso-util) for that
 
 - Encrypting of master/source (long-term user) credentials in `~/.aws/credentials`
 
     → You may implement this quite easily [with few lines of bash & `credential_process`](https://www.youtube.com/watch?v=W8IyScUGuGI&t=1260s)
-    
+
     → … or use a tool such as [`99designs/aws-vault`](https://github.com/99designs/aws-vault)
 
 - SAML or OpenID Connect federated authentication
@@ -85,7 +85,7 @@ Vegas Credentials is an utility with smooth user experience that plugs into AWS 
 1. Install `vegas-credentials` via one of the following:
 
     <details><summary><strong>Homebrew</strong> (MacOS/Linux)</summary><br/>
-        
+
     - Requires [`brew`-command](https://brew.sh/#install)
     - Install:
         ```shell
@@ -95,11 +95,11 @@ Vegas Credentials is an utility with smooth user experience that plugs into AWS 
         # Verify installation
         vegas-credentials --version
         ```
-    <br/> 
+    <br/>
     </details>
 
     <details><summary><strong>Scoop</strong> (Windows)</summary><br/>
-    
+
     - Requires [`scoop`-command](https://scoop.sh#installs-in-seconds)
     - Install:
         ```shell
@@ -111,8 +111,10 @@ Vegas Credentials is an utility with smooth user experience that plugs into AWS 
         ```
     <br/>
     </details>
-    
+
     <details><summary><strong>NPM</strong> (MacOS/Linux/Windows)</summary><br/>
+
+    **DOES NOT CURRENTLY WORK!**
 
     - Requires [`node`-command](https://nodejs.org) (`v14+`)
     - Install:
@@ -180,7 +182,7 @@ To use Yubikeys:
 4. Think of backup strategy in case you lose your Yubikey device, you should do at least one of the following:
     - During `Virtual MFA device` setup also assign Authenticator App such as [Authy](https://authy.com/) for backup
     - If you own multiple Yubikey devices, during `Virtual MFA device` setup also configure the second Yubikey and once done, store it securely
-    - Print the QR-code (and store & lock it very securely) 
+    - Print the QR-code (and store & lock it very securely)
     - Save the QR-code or secret key in some secure & encrypted location
 5. When configuring your Yubikey, use `arn:aws:iam::<ACCOUNT_ID>:mfa/<IAM_USERNAME>` (i.e. MFA device ARN) as the Yubikey OATH account label:
     ```shell
@@ -311,18 +313,18 @@ Assuming correct IAM roles exists with valid permissions and trust policies:
     # ~/.aws/config
     [default]
     aws_mfa_device = arn:aws:iam::111111111111:mfa/FrankSinatra
-    
+
     [profile frank@concerts]
     credential_process = vegas-credentials assume --profile=frank@concerts
-    vegas_role_arn=arn:aws:iam::222222222222:role/SingerRole    
-    vegas_source_profile=default 
+    vegas_role_arn=arn:aws:iam::222222222222:role/SingerRole
+    vegas_source_profile=default
     ```
 
 2. Configure another role with standard `role_arn` and `source_profile`:
     ```ini
     # ~/.aws/config
     [profile frank@movies]
-    role_arn=arn:aws:iam::333333333333:role/ActorRole # Important: NO prefix here!   
+    role_arn=arn:aws:iam::333333333333:role/ActorRole # Important: NO prefix here!
     source_profile=frank@concerts # Important: NO prefix here!
     ```
 
@@ -421,10 +423,10 @@ Please, [correct me if I'm wrong](https://github.com/aripalo/vegas-credentials/d
     - See also [point 2](#note2) about `credential_process`, assumed roles and Yubikeys.
 
 2. <a id="note2"></a>Does not seem to play well with `credential_process`:
-    - **At least I haven't figured out how to succesfully configure it to use `credential_process`, assume a role, use Yubikey for MFA and to provide temporary session credentials.** 
+    - **At least I haven't figured out how to succesfully configure it to use `credential_process`, assume a role, use Yubikey for MFA and to provide temporary session credentials.**
     - They themselves [claim that _“`credential_process` is designed for retrieving master credentials”_](https://github.com/99designs/aws-vault/blob/master/USAGE.md#using-credential_proce) - which is NOT true since this tool does work with temporary credentials via `credential_process` just fine and even the [AWS docs on `credential_process` show `SessionToken` and `Expiration` on the expected output from the credentials program](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sourcing-external.html).
     - There's further indication that [`99designs/aws-vault` is not designed for `credential_process`](https://github.com/99designs/aws-vault/issues/641#issuecomment-681346113):
-       
+
         > _**Using credentials_process isn't the way I use aws-vault**, it was a contributed addition, so feels like we should emphasise this is not the recommended path._
         >
         > – Michael Tibben, VP Technology, 99designs
