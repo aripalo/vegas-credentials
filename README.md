@@ -129,7 +129,7 @@ Vegas Credentials is an utility with smooth user experience that plugs into AWS 
 
     <br/>
 
-2. Configure you source profile and its credentials, most often it's the `default` one which you configure into `~/.aws/credentials`:
+2. Configure your source profile and its credentials, most often it's the `default` one which you configure into `~/.aws/credentials`:
 
     ```ini
     # ~/.aws/credentials
@@ -138,13 +138,15 @@ Vegas Credentials is an utility with smooth user experience that plugs into AWS 
     aws_secret_access_key = wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
     ```
 
-3. TODO
+3. Configure your source profile in config:
 
     ```ini
     # ~/.aws/config
     [default]
     mfa_serial = arn:aws:iam::111111111111:mfa/FrankSinatra
     ```
+
+    Note: if your source profile is not `default`, remember to add `profile` as prefix (`profile foo`)
 
 4. Configure your target profile with `credential_process` into `~/.aws/config`:
 
