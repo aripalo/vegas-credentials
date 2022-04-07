@@ -8,6 +8,10 @@ before:
     - go generate ./...
 builds:
   - main: ./main.go
+    # Custom ldflags templates.
+    # Default is `-s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}} -X main.builtBy=goreleaser`.
+    ldflags:
+      - -s -w -X cmd.version={{.Version}}
     env:
       - CGO_ENABLED=0
     goos:
