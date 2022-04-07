@@ -7,25 +7,25 @@ import (
 	"github.com/aripalo/vegas-credentials/internal/interfaces"
 )
 
-// Token contains the OATH TOPT MFA token value and information about which Porivder Type gave the result
+// Token contains the OATH TOTP MFA token value and information about which Porivder Type gave the result
 type Token struct {
-	// OATH TOPT MFA Token Code received from MFA Provider
+	// OATH TOTP MFA Token Code received from MFA Provider
 	Value string
-	// OATH TOPT MFA Provider Type that provided the Token Code Value
+	// OATH TOTP MFA Provider Type that provided the Token Code Value
 	Provider Type
 }
 
-// Type defines which MFA OATH TOPT Provider used
+// Type defines which MFA OATH TOTP Provider used
 type Type string
 
 const (
 	// Yubikey Touch OATH TOTP Hardware Token.
 	TOKEN_PROVIDER_YUBIKEY_TOUCH Type = "Yubikey Touch"
 
-	// User provided OATH TOPT Token via CLI stdin: Copy-paste or manual input from Authenticator App.
+	// User provided OATH TOTP Token via CLI stdin: Copy-paste or manual input from Authenticator App.
 	TOKEN_PROVIDER_CLI_INPUT Type = "CLI input"
 
-	// User provided OATH TOPT Token via GUI Dialog Prompt stdin: Copy-paste or manual input from Authenticator App.
+	// User provided OATH TOTP Token via GUI Dialog Prompt stdin: Copy-paste or manual input from Authenticator App.
 	TOKEN_PROVIDER_GUI_DIALOG_PROMPT Type = "GUI Dialog Prompt"
 )
 
@@ -47,7 +47,7 @@ func New(a interfaces.AssumeCredentialProcess, enableYubikey bool) *TokenProvide
 	return &provider
 }
 
-// Provide OATH TOPT MFA Token from supported providers
+// Provide OATH TOTP MFA Token from supported providers
 func (t *TokenProvider) Provide(a interfaces.AssumeCredentialProcess, enableYubikey bool) (Token, error) {
 
 	var token Token

@@ -34,7 +34,7 @@ func GetToken(a interfaces.AssumeCredentialProcess) (provider.Token, error) {
 		return token, err
 	}
 
-	logger.Successf(a, "🔓", "MFA", "OATH TOPT MFA Token %s received from %s\n", token.Value, token.Provider)
+	logger.Successf(a, "🔓", "MFA", "OATH TOTP MFA Token %s received from %s\n", token.Value, token.Provider)
 	return token, err
 }
 

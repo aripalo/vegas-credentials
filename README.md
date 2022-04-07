@@ -8,7 +8,7 @@
 > _Much like spending a week in Las Vegas at AWS re:Invent,_ using multiple AWS tools (SDKs, CLI, CDK, Terraform, etc) via command-line to assume IAM roles in different accounts with Multi-Factor Authentication can be an exhausting experience: `vegas-credentials` aims to simplify the credential process! _And just like you shouldn't stay too long in Las Vegas at once,_ this tool only deals with temporary sesssion credentials.
 
 
-Vegas Credentials is an utility with smooth user experience that plugs into AWS [`credential_process`](https://docs.aws.amazon.com/sdkref/latest/guide/setting-global-credential_process.html) to assume IAM Roles with [TOPT MFA](https://en.wikipedia.org/wiki/Time-based_One-Time_Password) (with optional [Yubikey Touch](https://www.yubico.com/products/yubikey-5-overview/) support) to fetch, cache and refresh assumed temporary session credentials.
+Vegas Credentials is an utility with smooth user experience that plugs into AWS [`credential_process`](https://docs.aws.amazon.com/sdkref/latest/guide/setting-global-credential_process.html) to assume IAM Roles with [TOTP MFA](https://en.wikipedia.org/wiki/Time-based_One-Time_Password) (with optional [Yubikey Touch](https://www.yubico.com/products/yubikey-5-overview/) support) to fetch, cache and refresh assumed temporary session credentials.
 
 <br/>
 
@@ -39,7 +39,7 @@ Vegas Credentials is an utility with smooth user experience that plugs into AWS 
 
 - **Encrypted Caching of session credentials** to speed things up & to avoid having to input MFA token code for each operation
 
-- **Supports both Yubikey Touch or Authenticator App TOPT MFA _simultaneously_**:
+- **Supports both Yubikey Touch or Authenticator App TOTP MFA _simultaneously_**:
 
     - For example you can default to using Yubikey, but if don't have the Yubikey with you all the time and also have MFA codes in an Authenticator App (such as [Authy](https://authy.com/) for example)
     - You may just touch the Yubikey or manually type the token code (via GUI Prompt Dialog or CLI `stdin`) – which ever input is given first will be used
@@ -178,7 +178,7 @@ Vegas Credentials is an utility with smooth user experience that plugs into AWS 
 
 To use Yubikeys:
 
-1. You must have at least one [Yubikey Touch device](https://www.yubico.com/products/yubikey-5-overview/) with [OATH TOPT](https://en.wikipedia.org/wiki/Time-based_One-Time_Password) support (Yubikey 5 or 5C recommended).
+1. You must have at least one [Yubikey Touch device](https://www.yubico.com/products/yubikey-5-overview/) with [OATH TOTP](https://en.wikipedia.org/wiki/Time-based_One-Time_Password) support (Yubikey 5 or 5C recommended).
 2. Install [`ykman` CLI](https://developers.yubico.com/yubikey-manager/)
 3. Set up Yubikey as [**`Virtual MFA device`** in AWS IAM](https://aws.amazon.com/blogs/security/enhance-programmatic-access-for-iam-users-using-yubikey-for-multi-factor-authentication/) - Not ~~`U2F MFA`~~!
 4. Think of backup strategy in case you lose your Yubikey device, you should do at least one of the following:
@@ -211,9 +211,9 @@ Configuration for the most part happens in `~/.aws/config` ini-file, but there a
 
 |         Option         |                                                                                                                           Description                                                                                                                           |
 | :--------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `mfa_serial`           | **Required:** The ARN of the Virtual (OATH TOPT) MFA device used in Multi-Factor Authentication.                                                                                                                                                                |
+| `mfa_serial`           | **Required:** The ARN of the Virtual (OATH TOTP) MFA device used in Multi-Factor Authentication.                                                                                                                                                                |
 | `vegas_yubikey_serial` | **Required if using Yubikey:** Yubikey Device Serial to use. You can see the serial(s) with `ykman list` command. This enforces the use of a specific Yubikey and also enables the support for using multiple Yubikeys (for different profiles)!                |
-| `vegas_yubikey_label`  | Use only if you have any other value than the AWS MFA Device ARN as `oath` account label! Yubikey `oath` Account Label to use. You can see the available accounts with `ykman oath accounts list` command. Set the account label which you have configured your AWS TOPT MFA! |
+| `vegas_yubikey_label`  | Use only if you have any other value than the AWS MFA Device ARN as `oath` account label! Yubikey `oath` Account Label to use. You can see the available accounts with `ykman oath accounts list` command. Set the account label which you have configured your AWS TOTP MFA! |
 
 Example:
 ```ini
@@ -386,11 +386,11 @@ The downside with those approaches is that using most of these tools (especially
 
 This tool follows the concept that [you should never put temporary credentials into `~/.aws/credentials`](https://ben11kehoe.medium.com/never-put-aws-temporary-credentials-in-env-vars-or-credentials-files-theres-a-better-way-25ec45b4d73e) and also provides a mechanism to automatically refresh session credentials (if the AWS tool you use supports that).
 
-Most AWS provided tools & SDKs already support MFA & assuming a role out of the box, but what they lack is a nice integration with Yubikey Touch, requiring you to manually type in or copy-paste the MFA TOPT token code: This utility instead integrates with [`ykman` Yubikey CLI](https://developers.yubico.com/yubikey-manager/) so just a quick touch is enough!
+Most AWS provided tools & SDKs already support MFA & assuming a role out of the box, but what they lack is a nice integration with Yubikey Touch, requiring you to manually type in or copy-paste the MFA TOTP token code: This utility instead integrates with [`ykman` Yubikey CLI](https://developers.yubico.com/yubikey-manager/) so just a quick touch is enough!
 
-Also with this tool, even if you use Yubikey Touch, you still get the possibility to input MFA TOPT token code manually from an Authenticator App (for example if you don't have your Yubikey on your person).
+Also with this tool, even if you use Yubikey Touch, you still get the possibility to input MFA TOTP token code manually from an Authenticator App (for example if you don't have your Yubikey on your person).
 
-Then there's tools such as AWS CDK that [does not support caching of assumed temporary credentials](https://github.com/aws/aws-cdk/issues/10867), requiring the user to input the MFA TOPT token code for every operation with `cdk` CLI – which makes the developer experience really cumbersome.
+Then there's tools such as AWS CDK that [does not support caching of assumed temporary credentials](https://github.com/aws/aws-cdk/issues/10867), requiring the user to input the MFA TOTP token code for every operation with `cdk` CLI – which makes the developer experience really cumbersome.
 
 To recap, most existing solutions (I've seen so far) to these challenges either lack support for automatic temporary session credential refreshing, cache/write temporary session credentials to suboptimal locations and/or don't work that well with AWS tooling (i.e. requiring one to create “wrappers”):
 

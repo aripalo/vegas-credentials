@@ -11,7 +11,7 @@ import (
 	"github.com/aripalo/vegas-credentials/internal/interfaces"
 )
 
-// yubikeyTokenFindPattern describes the regexp that will match OATH TOPT MFA token code from Yubikey
+// yubikeyTokenFindPattern describes the regexp that will match OATH TOTP MFA token code from Yubikey
 var yubikeyTokenFindPattern = regexp.MustCompile(`\d{6}\d*$`)
 
 var execCommandContext = exec.CommandContext

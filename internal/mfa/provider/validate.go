@@ -8,7 +8,7 @@ import (
 func validateToken(token string) error {
 	result := tokenValidatePattern.MatchString(token)
 	if !result {
-		return fmt.Errorf("Invalid OATH TOPT MFA Token Code: %q", token)
+		return fmt.Errorf("Invalid OATH TOTP MFA Token Code: %q", token)
 	}
 	return nil
 }

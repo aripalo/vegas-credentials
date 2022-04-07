@@ -15,7 +15,7 @@ func (t *TokenProvider) QueryGUI(ctx context.Context, a interfaces.AssumeCredent
 
 	token.Provider = TOKEN_PROVIDER_GUI_DIALOG_PROMPT
 
-	value, err := guiPrompt(ctx, "Multifactor Authentication", "Enter TOPT MFA Token Code:")
+	value, err := guiPrompt(ctx, "Multifactor Authentication", "Enter TOTP MFA Token Code:")
 	if err != nil {
 		t.errorChan <- &err
 	} else {
