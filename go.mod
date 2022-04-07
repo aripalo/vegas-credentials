@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	github.com/StackExchange/wmi v1.2.1 // indirect
+	github.com/alexflint/go-filemutex v1.2.0
 	github.com/aws/aws-sdk-go v1.40.59
 	github.com/dgraph-io/badger/v3 v3.2103.2
 	github.com/dustin/go-humanize v1.0.0

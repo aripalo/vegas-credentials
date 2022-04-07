@@ -33,3 +33,6 @@ node_modules
 
 # Ignore Sonarcloud Scanner Github Action temp files
 .scannerwork/
+
+# Ignore local build file
+main
