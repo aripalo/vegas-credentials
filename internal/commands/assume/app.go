@@ -2,6 +2,7 @@ package assume
 
 import (
 	"io"
+	"log"
 	"time"
 
 	"github.com/aripalo/vegas-credentials/internal/cache"
@@ -80,11 +81,11 @@ func (app *App) Run() {
 
 	unlockErr := unlock()
 	if unlockErr != nil {
-		panic(unlockErr) // TODO handle better
+		log.Fatalln("could not release the directory lock")
 	}
 
 	if err != nil {
-		panic(err) // TODO handle better
+		log.Fatalln(err)
 	}
 
 }
