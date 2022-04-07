@@ -15,7 +15,7 @@ type NewCache struct {
 	db *database.Database
 }
 
-// Lock helps with parallel executions (e.g. with Terraform --concurrent)
+// Lock helps with parallel executions (e.g. with Terraform parallelism=n)
 // ensuring only a single process at a time can interact with AWS and
 // the internal cache – as the BadgerDB requires a filelock:
 // https://github.com/dgraph-io/badger/blob/69926151f6532f2fe97a9b11ee9281519c8ec5e6/dir_unix.go#L45
