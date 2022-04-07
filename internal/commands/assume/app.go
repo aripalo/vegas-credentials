@@ -2,8 +2,10 @@ package assume
 
 import (
 	"io"
+	"log"
 	"time"
 
+	"github.com/aripalo/vegas-credentials/internal/cache"
 	"github.com/aripalo/vegas-credentials/internal/config"
 	"github.com/aripalo/vegas-credentials/internal/logger"
 	"github.com/aripalo/vegas-credentials/internal/profile"
@@ -73,10 +75,17 @@ func (app *App) PreRunE(cmd *cobra.Command) error {
 // Run executes the cobra command (but does not directly depend on cobra)
 func (app *App) Run() {
 
+	unlock := cache.Lock()
+
 	err := getCredentials(app)
 
+	unlockErr := unlock()
+	if unlockErr != nil {
+		log.Fatalln("could not release the directory lock")
+	}
+
 	if err != nil {
-		panic(err)
+		log.Fatalln(err)
 	}
 
 }
