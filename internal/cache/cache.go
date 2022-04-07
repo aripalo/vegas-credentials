@@ -31,7 +31,10 @@ func Lock() func() error {
 		log.Fatalln("Directory did not exist or file could not created")
 	}
 
-	m.Lock() // Will block until lock can be acquired
+	err = m.Lock() // Will block until lock can be acquired
+	if err != nil {
+		log.Fatalln("Directory lock could not be made")
+	}
 
 	// return the unlock function which user can call
 	return m.Unlock
