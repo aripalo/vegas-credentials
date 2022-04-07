@@ -370,6 +370,10 @@ output "album_name" {
 }
 ```
 
+#### Parallelism
+
+Terraform [performs operations in parallel](https://www.terraform.io/cli/commands/apply#parallelism-n) which means that it ends up invoking the `credential_process` (and therefore `vegas-credentials assume` command) multiple times concurrently; This is okay, as this tool now has [support for parallelism](https://github.com/aripalo/vegas-credentials/pull/13) where each process invocation uses [`go-filemutex`](https://github.com/alexflint/go-filemutex) to obtain a file lock or wait until a lock can be acquired (i.e. wait until another process invocation has finished): This results into a queued authentication flow where the first invocation of `vegas-credentials assume` prompting for MFA token (unless valid temporary session credentials were already available from cache) and consecutive invocations receiving the temporary session credentials from cache.
+
 <br/>
 
 ## Why yet another tool?
