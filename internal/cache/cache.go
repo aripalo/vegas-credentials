@@ -2,6 +2,7 @@ package cache
 
 import (
 	"log"
+	"os"
 	"time"
 
 	"github.com/alexflint/go-filemutex"
@@ -26,6 +27,14 @@ func Lock() func() error {
 	// as we can't lock the BadgerDB directory (since BadgerDB has its own lock),
 	// we use this "lock-control" directory to achieve the desired result
 	cachePath := CachePath(config.APP_NAME, "lock-control")
+
+	// the base directory must exists before hand so use MkdirAll
+	err := os.MkdirAll(cachePath, os.ModePerm)
+	if err != nil {
+		log.Fatalln("Could not create cache lock-control file")
+	}
+
+	// create the filemutex
 	m, err := filemutex.New(cachePath)
 	if err != nil {
 		log.Fatalln("Directory did not exist or file could not created")
