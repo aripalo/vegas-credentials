@@ -1,13 +1,14 @@
 package assume
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"time"
 
-	"github.com/aripalo/vegas-credentials/internal/cache"
 	"github.com/aripalo/vegas-credentials/internal/config"
 	"github.com/aripalo/vegas-credentials/internal/logger"
+	"github.com/aripalo/vegas-credentials/internal/mutex"
 	"github.com/aripalo/vegas-credentials/internal/profile"
 	"github.com/spf13/cobra"
 )
@@ -75,11 +76,20 @@ func (app *App) PreRunE(cmd *cobra.Command) error {
 // Run executes the cobra command (but does not directly depend on cobra)
 func (app *App) Run() {
 
-	unlock := cache.Lock()
+	mutexPath := config.MutexLockFile
+	//msg.Message.Debugln("🔧", fmt.Sprintf("Path: Mutex: %s", mutexPath))
+	mc, err := mutex.New(mutexPath)
+	if err != nil {
+		log.Fatalln(fmt.Sprintf("configuration error: %v", err))
+	}
+	err = mc.Lock()
+	if err != nil {
+		log.Fatalln(fmt.Sprintf("mutex error: %v", err))
+	}
 
-	err := getCredentials(app)
+	err = getCredentials(app)
 
-	unlockErr := unlock()
+	unlockErr := mc.Unlock()
 	if unlockErr != nil {
 		log.Fatalln("could not release the directory lock")
 	}
