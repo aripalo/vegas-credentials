@@ -82,7 +82,10 @@ func (app *App) Run() {
 	if err != nil {
 		log.Fatalln(fmt.Sprintf("configuration error: %v", err))
 	}
-	mc.Lock()
+	err = mc.Lock()
+	if err != nil {
+		log.Fatalln(fmt.Sprintf("mutex error: %v", err))
+	}
 
 	err = getCredentials(app)
 
