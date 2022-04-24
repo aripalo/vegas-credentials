@@ -2,12 +2,13 @@ package passcache
 
 import (
 	"fmt"
+	"path/filepath"
 	"time"
 
 	"github.com/aripalo/vegas-credentials/internal/cache"
-	"github.com/aripalo/vegas-credentials/internal/config"
 	"github.com/aripalo/vegas-credentials/internal/database"
 	"github.com/aripalo/vegas-credentials/internal/encryption"
+	"github.com/aripalo/vegas-credentials/internal/locations"
 	"github.com/aripalo/vegas-credentials/internal/msg"
 )
 
@@ -23,9 +24,11 @@ func New(serial string) *YubikeyPasswordCache {
 	}
 }
 
+const cacheName string = "yubikey-oath-access"
+
 // Open new database where to store yubikey password
 func initCache() *cache.Cache {
-	yubikeyCache := config.YubikeyOathPasswordCacheFile
+	yubikeyCache := filepath.Join(locations.CacheDir, cacheName)
 	msg.Message.Debugln("🔧", fmt.Sprintf("Path: Yubikey OATH Cache: %s", yubikeyCache))
 	db, err := database.Open(yubikeyCache, database.DatabaseOptions{})
 	if err != nil {
