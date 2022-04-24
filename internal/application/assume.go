@@ -47,7 +47,7 @@ func (app *App) Assume(flags AssumeFlags) error {
 		t := totp.New(totp.TotpOptions{
 			YubikeySerial: a.YubikeySerial,
 			YubikeyLabel:  a.YubikeyLabel,
-			EnableGui:     true,
+			EnableGui:     !app.NoGui,
 		})
 
 		err = creds.FetchFromAWS(t.Get)
