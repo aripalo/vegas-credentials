@@ -67,21 +67,20 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/')
     name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: website
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v3
         with:
           node-version: 16.x
           cache: npm
-
       - name: Install dependencies
-        run: |
-          cd website
-          npm ci
+        run: npm ci
       - name: Build website
-        run: |
-          cd website
-          npm run build
+        run: npm run build
 
       # Popular action to deploy to GitHub Pages:
       # Docs: https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-docusaurus
