@@ -1,6 +1,6 @@
 🚧 🚧 🚧  **Important:** 🚧 🚧 🚧
 
-Currently `main` branch points to rewritten next version of `vegas-credentials` which may not yet have been released. If you're looking for the currently released version, see [`original`-branch](https://github.com/aripalo/vegas-credentials/tree/original).
+Currently this branch points to rewritten next version of `vegas-credentials` which may not yet have been released. If you're looking for the currently released version, see [`original`-branch](https://github.com/aripalo/vegas-credentials/tree/original).
 
 ---
 
