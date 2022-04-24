@@ -79,10 +79,6 @@ jobs:
     # TODO add this back: needs: release
     name: Deploy Website
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-        working-directory: website
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v3
@@ -90,8 +86,10 @@ jobs:
           node-version: 16.x
           cache: npm
       - name: Install dependencies
+        working-directory: website
         run: npm ci
       - name: Build website
+        working-directory: website
         run: npm run build
 
       # Popular action to deploy to GitHub Pages:
