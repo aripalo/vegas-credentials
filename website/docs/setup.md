@@ -6,7 +6,7 @@ sidebar_position: 3
 
 In this document we're only setting up the necessary configuration changes into `~/.aws/config` to get started using `vegas-credentials` as a credential source.
 
-As in most use cases you do not invoke `vegas-credentials` commands yourself but instead configure it as a credential source for [`credential_process`](https://docs.aws.amazon.com/sdkref/latest/guide/feature-process-credentials.html) in AWS configuration at `~/.aws/config`. If you're interested in the different commands & configuration options passed directly to `vegas-credentials` command, see [manual](/manual).
+As in most use cases you do not invoke `vegas-credentials` commands yourself but instead configure it as a credential source for [`credential_process`](https://docs.aws.amazon.com/sdkref/latest/guide/feature-process-credentials.html) in AWS configuration at `~/.aws/config`. If you're interested in the different commands & configuration options passed directly to `vegas-credentials` command, see [CLI](/docs/cli).
 
 
 
