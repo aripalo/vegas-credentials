@@ -84,8 +84,8 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16.x
-          working-directory: website
           cache: npm
+          cache-dependency-path: website/package-lock.json
       - name: Install dependencies
         working-directory: website
         run: npm ci
