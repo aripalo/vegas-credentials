@@ -18,7 +18,7 @@ type VersionFlags struct {
 	Full bool `mapstructure:"full"`
 }
 
-func (a *App) Version(flags VersionFlags) error {
+func (app *App) Version(flags VersionFlags) error {
 	v := versionData{
 		Version: config.Version,
 		Name:    config.AppName,
@@ -27,7 +27,7 @@ func (a *App) Version(flags VersionFlags) error {
 	}
 
 	if flags.Full {
-		return utils.PrintTemplate(a.dest, "version-long", config.VersionLongTmpl, v)
+		return utils.PrintTemplate(app.dest, "version-long", config.VersionLongTmpl, v)
 	}
-	return utils.PrintTemplate(a.dest, "version-short", config.VersionShortTmpl, v)
+	return utils.PrintTemplate(app.dest, "version-short", config.VersionShortTmpl, v)
 }

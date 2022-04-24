@@ -20,7 +20,7 @@ type configData struct {
 	YkmanInstalled bool
 }
 
-func (a *App) ConfigList() error {
+func (app *App) ConfigList() error {
 	v := configData{
 		AwsConfig: locations.AwsConfig,
 		YkmanPath: getYkmanPath(),
@@ -29,7 +29,7 @@ func (a *App) ConfigList() error {
 		ExecDir:   locations.ExecDir,
 	}
 
-	return utils.PrintTemplate(a.dest, "config", ConfigTmpl, v)
+	return utils.PrintTemplate(app.dest, "config", ConfigTmpl, v)
 }
 
 func getYkmanPath() string {

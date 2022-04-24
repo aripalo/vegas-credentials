@@ -7,7 +7,7 @@ type CacheFlags struct {
 	Credential bool `mapstructure:"credential"`
 }
 
-func (a *App) CacheClean(flags CacheFlags) error {
+func (app *App) CacheClean(flags CacheFlags) error {
 
 	if flags.Password {
 		fmt.Println("TODO: DELETE PASSWORDS")
