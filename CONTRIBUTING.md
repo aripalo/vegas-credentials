@@ -19,7 +19,7 @@ The CLI itself tries to follow guidelines for [“12 Factor CLI Apps”](https:/
 
 **By design, this tool does not support:**
 
-- AWS SSO 
+- AWS SSO
 
     → See [`benkehoe/aws-sso-util`](https://github.com/benkehoe/aws-sso-util) for that
 
@@ -33,7 +33,7 @@ The CLI itself tries to follow guidelines for [“12 Factor CLI Apps”](https:/
 
 ## Development
 
-1. You must have [Go](https://golang.org) `v1.17+` installed.
+1. You must have [Go](https://golang.org) `v1.18+` installed.
 
 2. Fork this repository and clone it
 
@@ -45,7 +45,7 @@ The CLI itself tries to follow guidelines for [“12 Factor CLI Apps”](https:/
 
 6. Add/modify tests for the new code
 
-7. Run tests: `go test ./..` 
+7. Run tests: `go test ./..`
 
 8. Document the new feature
 
