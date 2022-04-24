@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"path/filepath"
 
 	"github.com/aripalo/vegas-credentials/internal/assumable"
 	"github.com/aripalo/vegas-credentials/internal/credentials"
@@ -18,8 +17,6 @@ import (
 type AssumeFlags struct {
 	Profile string `mapstructure:"profile"`
 }
-
-var cacheLocation string = filepath.Join(locations.CacheDir, "session-cache")
 
 func (app *App) Assume(flags AssumeFlags) error {
 
@@ -62,7 +59,5 @@ func (app *App) Assume(flags AssumeFlags) error {
 
 	msg.Message.HorizontalRuler()
 
-	creds.Output()
-
-	return nil
+	return creds.Output()
 }

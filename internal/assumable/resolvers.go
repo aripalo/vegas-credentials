@@ -2,7 +2,6 @@ package assumable
 
 import (
 	"os"
-	"path/filepath"
 )
 
 const DurationSecondsDefault int = 3600
@@ -29,13 +28,4 @@ func resolveDurationSeconds(durationSeconds int) int {
 		return durationSeconds
 	}
 	return DurationSecondsDefault
-}
-
-func resolveConfigPath() (string, error) {
-	home, err := os.UserHomeDir()
-	if err != nil {
-		return "", err
-	}
-	configPath := filepath.Join(home, ".aws", "config")
-	return configPath, nil
 }

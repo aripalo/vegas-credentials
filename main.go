@@ -18,8 +18,17 @@ func main() {
 	if err != nil {
 		utils.Bail(fmt.Sprintf("Configuration Error: %s", err))
 	}
-	mc.Lock()
-	defer mc.Unlock()
+	err = mc.Lock()
+	if err != nil {
+		utils.Bail(fmt.Sprintf("Configuration Error: %s", err))
+	}
+
+	defer func() {
+		err := mc.Unlock()
+		if err != nil {
+			utils.Bail(fmt.Sprintf("Configuration Error: %s", err))
+		}
+	}()
 
 	cmd.Execute()
 }
