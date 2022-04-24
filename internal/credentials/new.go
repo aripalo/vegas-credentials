@@ -2,7 +2,8 @@ package credentials
 
 import (
 	"os"
-	"vegas3/internal/assumable"
+
+	"github.com/aripalo/vegas-credentials/internal/assumable"
 )
 
 // AWS_CREDENTIAL_PROCESS_VERSION defines the supported AWS credential_process version

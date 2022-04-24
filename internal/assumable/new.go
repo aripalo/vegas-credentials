@@ -2,7 +2,8 @@ package assumable
 
 import (
 	"errors"
-	"vegas3/internal/awsini"
+
+	"github.com/aripalo/vegas-credentials/internal/awsini"
 )
 
 func New(iniConfig any, profileName string) (Assumable, error) {

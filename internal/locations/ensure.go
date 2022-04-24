@@ -1,9 +1,10 @@
 package locations
 
 import (
-	"demo/internal/config"
 	"os"
 	"path/filepath"
+
+	"github.com/aripalo/vegas-credentials/internal/config"
 )
 
 // Ensure a directory with app name exists in given baseDir path.

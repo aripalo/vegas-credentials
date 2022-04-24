@@ -2,9 +2,10 @@ package credentials
 
 import (
 	"time"
-	"vegas3/internal/assumable"
-	"vegas3/internal/cache"
-	"vegas3/internal/utils"
+
+	"github.com/aripalo/vegas-credentials/internal/assumable"
+	"github.com/aripalo/vegas-credentials/internal/cache"
+	"github.com/aripalo/vegas-credentials/internal/utils"
 )
 
 func resolveKey(options assumable.Assumable) (string, error) {

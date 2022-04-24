@@ -2,8 +2,9 @@ package resolver
 
 import (
 	"context"
-	"vegas3/internal/multinput"
-	"vegas3/internal/yubikey"
+
+	"github.com/aripalo/vegas-credentials/internal/multinput"
+	"github.com/aripalo/vegas-credentials/internal/yubikey"
 )
 
 func ConfigureYubikey(options yubikey.Options) multinput.InputResolver {

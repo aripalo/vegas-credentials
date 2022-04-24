@@ -9,7 +9,8 @@ import (
 	"os"
 	"os/user"
 	"strings"
-	"vegas3/internal/utils"
+
+	"github.com/aripalo/vegas-credentials/internal/utils"
 
 	"github.com/shirou/gopsutil/host"
 )

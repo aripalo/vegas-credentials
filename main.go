@@ -1,6 +1,6 @@
 package main
 
-import "demo/cmd"
+import "github.com/aripalo/vegas-credentials/cmd"
 
 func main() {
 	cmd.Execute()

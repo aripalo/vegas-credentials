@@ -2,7 +2,8 @@ package utils
 
 import (
 	"os"
-	"vegas3/internal/msg"
+
+	"github.com/aripalo/vegas-credentials/internal/msg"
 )
 
 func Bail(message string) {

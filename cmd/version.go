@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"demo/internal/application"
-	"demo/internal/utils"
+	"github.com/aripalo/vegas-credentials/internal/application"
+	"github.com/aripalo/vegas-credentials/internal/utils"
 
 	"github.com/spf13/cobra"
 )

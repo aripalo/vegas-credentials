@@ -1,1 +1,1 @@
-go build -ldflags="-X 'demo/internal/config.Version=v1.0.0'" main.go
+go build -ldflags="-X 'github.com/aripalo/vegas-credentials/internal/config.Version=v1.0.0'" main.go

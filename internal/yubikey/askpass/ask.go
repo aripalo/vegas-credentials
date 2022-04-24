@@ -2,9 +2,10 @@ package askpass
 
 import (
 	"context"
-	"vegas3/internal/msg"
-	"vegas3/internal/multinput"
-	"vegas3/internal/prompt"
+
+	"github.com/aripalo/vegas-credentials/internal/msg"
+	"github.com/aripalo/vegas-credentials/internal/multinput"
+	"github.com/aripalo/vegas-credentials/internal/prompt"
 )
 
 // Assign CLI Prompt to variable (useful for testing).

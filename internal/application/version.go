@@ -1,9 +1,10 @@
 package application
 
 import (
-	"demo/internal/config"
-	"demo/internal/utils"
 	"runtime"
+
+	"github.com/aripalo/vegas-credentials/internal/config"
+	"github.com/aripalo/vegas-credentials/internal/utils"
 )
 
 type versionData struct {

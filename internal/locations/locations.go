@@ -1,9 +1,10 @@
 package locations
 
 import (
-	"demo/internal/utils"
 	"os"
 	"path/filepath"
+
+	"github.com/aripalo/vegas-credentials/internal/utils"
 
 	"github.com/adrg/xdg"
 )

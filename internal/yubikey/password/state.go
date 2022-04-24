@@ -4,8 +4,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"vegas3/internal/msg"
-	"vegas3/internal/yubikey/askpass"
+
+	"github.com/aripalo/vegas-credentials/internal/msg"
+	"github.com/aripalo/vegas-credentials/internal/yubikey/askpass"
 )
 
 type machineStateName string

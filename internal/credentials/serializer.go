@@ -3,7 +3,8 @@ package credentials
 import (
 	"encoding/json"
 	"fmt"
-	"vegas3/internal/utils"
+
+	"github.com/aripalo/vegas-credentials/internal/utils"
 )
 
 // Serialize response into pretty JSON

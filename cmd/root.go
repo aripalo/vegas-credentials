@@ -1,9 +1,10 @@
 package cmd
 
 import (
-	"demo/internal/config"
 	"fmt"
 	"os"
+
+	"github.com/aripalo/vegas-credentials/internal/config"
 
 	"github.com/spf13/cobra"
 )

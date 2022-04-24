@@ -2,7 +2,8 @@ package cache
 
 import (
 	"time"
-	"vegas3/internal/encryption"
+
+	"github.com/aripalo/vegas-credentials/internal/encryption"
 )
 
 // Cache (and its methods) describes the caching mechanism

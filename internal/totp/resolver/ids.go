@@ -1,6 +1,6 @@
 package resolver
 
-import "vegas3/internal/multinput"
+import "github.com/aripalo/vegas-credentials/internal/multinput"
 
 const (
 	ResolverIdYubikey   multinput.ResolverID = "Yubikey Touch"

@@ -1,4 +1,4 @@
-module demo
+module github.com/aripalo/vegas-credentials
 
 go 1.18
 

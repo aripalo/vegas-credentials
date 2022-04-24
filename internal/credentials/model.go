@@ -3,7 +3,8 @@ package credentials
 import (
 	"io"
 	"time"
-	"vegas3/internal/assumable"
+
+	"github.com/aripalo/vegas-credentials/internal/assumable"
 )
 
 type StsCache interface {

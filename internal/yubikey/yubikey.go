@@ -5,8 +5,9 @@ import (
 	"errors"
 	"fmt"
 	"time"
-	"vegas3/internal/yubikey/passcache"
-	"vegas3/internal/yubikey/password"
+
+	"github.com/aripalo/vegas-credentials/internal/yubikey/passcache"
+	"github.com/aripalo/vegas-credentials/internal/yubikey/password"
 )
 
 // Struct to hold internal configuration

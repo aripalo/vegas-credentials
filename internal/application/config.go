@@ -1,10 +1,11 @@
 package application
 
 import (
-	"demo/internal/locations"
-	"demo/internal/utils"
 	_ "embed"
 	"os/exec"
+
+	"github.com/aripalo/vegas-credentials/internal/locations"
+	"github.com/aripalo/vegas-credentials/internal/utils"
 )
 
 //go:embed data/config.tmpl

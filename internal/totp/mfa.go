@@ -6,10 +6,11 @@ import (
 	"regexp"
 	"strings"
 	"time"
-	"vegas3/internal/msg"
-	"vegas3/internal/multinput"
-	"vegas3/internal/totp/resolver"
-	"vegas3/internal/yubikey"
+
+	"github.com/aripalo/vegas-credentials/internal/msg"
+	"github.com/aripalo/vegas-credentials/internal/multinput"
+	"github.com/aripalo/vegas-credentials/internal/totp/resolver"
+	"github.com/aripalo/vegas-credentials/internal/yubikey"
 )
 
 type TotpOptions struct {

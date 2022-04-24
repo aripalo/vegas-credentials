@@ -3,11 +3,12 @@ package passcache
 import (
 	"fmt"
 	"time"
-	"vegas3/internal/cache"
-	"vegas3/internal/config"
-	"vegas3/internal/database"
-	"vegas3/internal/encryption"
-	"vegas3/internal/msg"
+
+	"github.com/aripalo/vegas-credentials/internal/cache"
+	"github.com/aripalo/vegas-credentials/internal/config"
+	"github.com/aripalo/vegas-credentials/internal/database"
+	"github.com/aripalo/vegas-credentials/internal/encryption"
+	"github.com/aripalo/vegas-credentials/internal/msg"
 )
 
 type YubikeyPasswordCache struct {

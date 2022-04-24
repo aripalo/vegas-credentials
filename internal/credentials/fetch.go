@@ -4,7 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"time"
-	"vegas3/internal/sts"
+
+	"github.com/aripalo/vegas-credentials/internal/sts"
 
 	"github.com/dgraph-io/badger/v3"
 	"github.com/dustin/go-humanize"
