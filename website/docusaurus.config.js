@@ -96,6 +96,10 @@ const config = {
                 label: 'Issues',
                 href: 'https://github.com/aripalo/vegas-credentials/issues',
               },
+              {
+                label: 'Discussions',
+                href: 'https://github.com/aripalo/vegas-credentials/discussions',
+              },
             ],
           },
           {
