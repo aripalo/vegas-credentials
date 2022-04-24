@@ -7,9 +7,7 @@ import (
 	"path/filepath"
 
 	"github.com/aripalo/vegas-credentials/internal/assumable"
-	"github.com/aripalo/vegas-credentials/internal/cache"
 	"github.com/aripalo/vegas-credentials/internal/credentials"
-	"github.com/aripalo/vegas-credentials/internal/database"
 	"github.com/aripalo/vegas-credentials/internal/locations"
 	"github.com/aripalo/vegas-credentials/internal/msg"
 	"github.com/aripalo/vegas-credentials/internal/totp"
@@ -32,12 +30,9 @@ func (app *App) Assume(flags AssumeFlags) error {
 
 	msg.Message.Debugln("ℹ️", fmt.Sprintf("Credentials: Role: %s", a.RoleArn))
 
-	db, err := database.Open(cacheLocation, database.DatabaseOptions{})
-	if err != nil {
-		utils.Bail(fmt.Sprintf("Configuration Error: %s", err))
-	}
+	credentialsCache := credentials.NewCredentialCache()
 
-	creds := credentials.New(cache.New(db), a)
+	creds := credentials.New(credentialsCache, a)
 
 	if err = creds.FetchFromCache(); err != nil {
 		msg.Message.Debugln("ℹ️", fmt.Sprintf("Credentials: Cached: %s", err))

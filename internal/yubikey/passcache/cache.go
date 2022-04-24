@@ -20,17 +20,18 @@ type YubikeyPasswordCache struct {
 func New(serial string) *YubikeyPasswordCache {
 	return &YubikeyPasswordCache{
 		serial: serial,
-		cache:  initCache(),
+		cache:  InitCache(),
 	}
 }
 
 const cacheName string = "yubikey-oath-access"
 
+var CacheLocation string = filepath.Join(locations.CacheDir, cacheName)
+
 // Open new database where to store yubikey password
-func initCache() *cache.Cache {
-	yubikeyCache := filepath.Join(locations.CacheDir, cacheName)
-	msg.Message.Debugln("🔧", fmt.Sprintf("Path: Yubikey OATH Cache: %s", yubikeyCache))
-	db, err := database.Open(yubikeyCache, database.DatabaseOptions{})
+func InitCache() *cache.Cache {
+	msg.Message.Debugln("🔧", fmt.Sprintf("Path: Yubikey OATH Cache: %s", CacheLocation))
+	db, err := database.Open(CacheLocation, database.DatabaseOptions{})
 	if err != nil {
 		panic(err)
 	}

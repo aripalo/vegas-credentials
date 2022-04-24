@@ -1,6 +1,12 @@
 package application
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/aripalo/vegas-credentials/internal/credentials"
+	"github.com/aripalo/vegas-credentials/internal/utils"
+	"github.com/aripalo/vegas-credentials/internal/yubikey/passcache"
+)
 
 type CacheFlags struct {
 	Password   bool `mapstructure:"password"`
@@ -10,16 +16,42 @@ type CacheFlags struct {
 func (app *App) CacheClean(flags CacheFlags) error {
 
 	if flags.Password {
-		fmt.Println("TODO: DELETE PASSWORDS")
+		err := cleanPasswords()
+		if err != nil {
+			utils.Bail(fmt.Sprintf("error cleaning password cache:%v", err))
+		}
+		fmt.Println("password cache cleaned")
 	}
 
 	if flags.Credential {
-		fmt.Println("TODO: DELETE CREDENTIALS")
+		err := cleanCredentials()
+		if err != nil {
+			utils.Bail(fmt.Sprintf("error cleaning credential cache:%v", err))
+		}
+		fmt.Println("credential cache cleaned")
 	}
 
 	if !flags.Password && !flags.Credential {
-		fmt.Println("TODO: DELETE ALL")
+		err := cleanPasswords()
+		if err != nil {
+			utils.Bail(fmt.Sprintf("error cleaning password cache:%v", err))
+		}
+		err = cleanCredentials()
+		if err != nil {
+			utils.Bail(fmt.Sprintf("error cleaning credential cache:%v", err))
+		}
+		fmt.Println("cache cleaned")
 	}
 
 	return nil
+}
+
+func cleanPasswords() error {
+	cache := passcache.InitCache()
+	return cache.RemoveAll()
+}
+
+func cleanCredentials() error {
+	cache := credentials.NewCredentialCache()
+	return cache.RemoveAll()
 }
