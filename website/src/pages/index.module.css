@@ -204,6 +204,13 @@ puna #F1491C
 
 .installTabPrefix {
   color: #747C86;
+  display: none;
+}
+
+@media screen and (min-width: 720px) {
+  .installTabPrefix {
+    display: inline;
+  }
 }
 
 .installTab[aria-selected='true'] {

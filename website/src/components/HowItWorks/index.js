@@ -36,7 +36,7 @@ export default function HowItWorks() {
             </CodeBlock>
           </TabItem>
 
-          <TabItem value="awssdkboto3" label="AWS Python SDK (Boto3)">
+          <TabItem value="awssdkboto3" label="AWS SDK">
             <CodeBlock language="bash">
             $ AWS_PROFILE=my-profile python3 create-bucket.py
             </CodeBlock>

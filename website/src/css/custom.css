@@ -27,7 +27,7 @@
   --ifm-color-primary-lightest: #bf8ff4;
 
 
-  --ifm-code-font-size: 95%;
+
   --ifm-font-family-base: 'Rubik', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 
   --ifm-heading-margin-top: 4rem;
@@ -61,4 +61,21 @@
 
 [data-theme='dark'] .docusaurus-highlight-code-line {
   background-color: rgba(0, 0, 0, 0.3);
+}
+
+:root {
+  --ifm-code-font-size: 0.70rem;
+}
+
+@media screen and (min-width: 480px) {
+  :root {
+    --ifm-code-font-size: 0.80rem;
+  }
+}
+
+
+@media screen and (min-width: 720px) {
+  :root {
+    --ifm-code-font-size: 1rem;
+  }
 }
