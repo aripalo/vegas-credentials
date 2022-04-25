@@ -29,8 +29,14 @@
 
 
 .heroTitle {
-  font-size: 3rem;
+  font-size: 2.5rem;
   position: relative;
+  text-shadow: none;
+}
+@media screen and (min-width: 480px) {
+  .heroTitle {
+    font-size: 3rem;
+  }
 }
 @media screen and (min-width: 996px) {
   .heroTitle {
@@ -51,7 +57,7 @@
   color: #F1491C;
 
   text-shadow:
-    #C70F10 0 0 20px,
+
     #C70F10 1px 1px 0,
     #C70F10 -1px -1px 0,
     #C70F10 -1px 1px 0,
@@ -65,7 +71,7 @@
 .textCredentials {
   color: #38B9F7;
   text-shadow:
-    #2743CB 0 0 20px,
+
     #2743CB 1px 1px 0,
     #2743CB -1px -1px 0,
     #2743CB -1px 1px 0,
@@ -74,6 +80,27 @@
   -webkit-text-stroke: 2px #2743CB;
   text-transform: uppercase;
   font-weight: 600;
+}
+
+@media screen and (min-width: 720px) {
+  .textVegas {
+    text-shadow:
+    #C70F10 1px 1px 20px,
+    #C70F10 1px 1px 0,
+    #C70F10 -1px -1px 0,
+      #C70F10 -1px 1px 0,
+      #C70F10 1px -1px 0
+      ;
+  }
+  .textCredentials {
+    text-shadow:
+      #2743CB 1px 1px 20px,
+      #2743CB 1px 1px 0,
+      #2743CB -1px -1px 0,
+      #2743CB -1px 1px 0,
+      #2743CB 1px -1px 0
+      ;
+  }
 }
 
 .heroTitle:before {
