@@ -60,7 +60,7 @@ func (ypc *YubikeyPasswordCache) Write(password string) error {
 		return err
 	}
 
-	return ypc.cache.Set(ypc.serial, []byte(encrypted), time.Duration(24*time.Hour))
+	return ypc.cache.Set(ypc.serial, []byte(encrypted), time.Duration(12*time.Hour))
 }
 
 // Removes a password from Cache Database
