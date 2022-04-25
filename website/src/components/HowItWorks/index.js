@@ -24,19 +24,19 @@ export default function HowItWorks() {
 
         <Tabs>
 
-          <TabItem value="awscli" label="AWS CLI">
+          <TabItem value="awscli" label="CLI">
             <CodeBlock language="bash">
             $ aws aws s3api create-bucket --bucket=my-bucket --profile=my-profile
             </CodeBlock>
           </TabItem>
 
-          <TabItem value="awscdk" label="AWS CDK">
+          <TabItem value="awscdk" label="CDK">
             <CodeBlock language="bash">
             $ npx cdk deploy --profile=my-profile
             </CodeBlock>
           </TabItem>
 
-          <TabItem value="awssdkboto3" label="AWS SDK">
+          <TabItem value="awssdkboto3" label="SDK">
             <CodeBlock language="bash">
             $ AWS_PROFILE=my-profile python3 create-bucket.py
             </CodeBlock>
