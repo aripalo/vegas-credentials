@@ -79,7 +79,7 @@ const FeatureList = [
     title: 'Fast',
     Svg: require('@site/static/img/features/blazing-fast.svg').default,
     description: (
-      <><code>50-100ms</code> for Cached Credentials</>
+      <><code>~50ms</code> for Cached Credentials</>
     ),
     details: (<>... does that count as <code>blazing</code>?</>),
   },
