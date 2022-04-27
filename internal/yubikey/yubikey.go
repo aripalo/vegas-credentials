@@ -36,6 +36,11 @@ func New(options Options) (Yubikey, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(time.Hour))
 	defer cancel()
 
+	available, _ := y.IsAvailable()
+	if !available {
+		return y, errors.New("Yubikey: Not available")
+	}
+
 	err := password.Resolve(ctx, y.serial, y.passwordCache, y.enableGui)
 	if err != nil {
 		return y, err

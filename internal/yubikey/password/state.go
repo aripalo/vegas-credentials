@@ -165,6 +165,16 @@ func stateMachine(ctx context.Context, state machineState, device string, cache 
 		}
 
 	case INITIALIZE:
+
+		isPasswordProtected, err := check(ctx, device)
+		if err == nil && !isPasswordProtected {
+			return machineState{
+				Name:     SAVE_TO_CACHE,
+				Password: "",
+			}
+
+		}
+
 		return machineState{
 			Name: GET_PASSWORD_FROM_CACHE,
 		}
