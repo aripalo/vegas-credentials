@@ -1,9 +1,12 @@
 package cache
 
 import (
+	"fmt"
 	"time"
 
+	"github.com/aripalo/vegas-credentials/internal/database"
 	"github.com/aripalo/vegas-credentials/internal/encryption"
+	"github.com/aripalo/vegas-credentials/internal/utils"
 )
 
 // Cache (and its methods) describes the caching mechanism
@@ -20,8 +23,11 @@ type Database interface {
 	Close() error
 }
 
-// New instantiates a cache
-func New(db Database) *Cache {
+func New(databasePath string) *Cache {
+	db, err := database.Open(databasePath, database.DatabaseOptions{})
+	if err != nil {
+		utils.Bail(fmt.Sprintf("Configuration Error: %s", err))
+	}
 	return &Cache{db}
 }
 

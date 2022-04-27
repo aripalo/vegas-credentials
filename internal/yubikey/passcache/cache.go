@@ -7,7 +7,6 @@ import (
 
 	"github.com/aripalo/vegas-credentials/internal/cache"
 	"github.com/aripalo/vegas-credentials/internal/config/locations"
-	"github.com/aripalo/vegas-credentials/internal/database"
 	"github.com/aripalo/vegas-credentials/internal/encryption"
 	"github.com/aripalo/vegas-credentials/internal/msg"
 )
@@ -31,11 +30,7 @@ var CacheLocation string = filepath.Join(locations.CacheDir, cacheName)
 // Open new database where to store yubikey password
 func InitCache() *cache.Cache {
 	msg.Message.Debugln("🔧", fmt.Sprintf("Path: Yubikey OATH Cache: %s", CacheLocation))
-	db, err := database.Open(CacheLocation, database.DatabaseOptions{})
-	if err != nil {
-		panic(err)
-	}
-	return cache.New(db)
+	return cache.New(CacheLocation)
 }
 
 // Read password (if any) from Cache Database

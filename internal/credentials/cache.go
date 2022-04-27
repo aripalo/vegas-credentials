@@ -1,24 +1,17 @@
 package credentials
 
 import (
-	"fmt"
 	"path/filepath"
 	"time"
 
 	"github.com/aripalo/vegas-credentials/internal/cache"
 	"github.com/aripalo/vegas-credentials/internal/config/locations"
-	"github.com/aripalo/vegas-credentials/internal/database"
-	"github.com/aripalo/vegas-credentials/internal/utils"
 )
 
 var cacheLocation string = filepath.Join(locations.CacheDir, "session-cache")
 
 func NewCredentialCache() *cache.Cache {
-	db, err := database.Open(cacheLocation, database.DatabaseOptions{})
-	if err != nil {
-		utils.Bail(fmt.Sprintf("Configuration Error: %s", err))
-	}
-	return cache.New(db)
+	return cache.New(cacheLocation)
 }
 
 func resolveKey(profileName string, checksum string) (string, error) {
