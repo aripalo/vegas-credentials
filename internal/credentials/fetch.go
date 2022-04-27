@@ -41,12 +41,12 @@ func (c *Credentials) FetchFromCache() error {
 
 func (c *Credentials) FetchFromAWS() error {
 
-	r, err := sts.GetCredentials(
-		c.options.SourceProfile,
-		c.options.Region,
-		c.options.RoleArn,
-		c.options.AssumeRoleProvider,
-	)
+	r, err := sts.GetCredentials(sts.Request{
+		Profile:  c.opts.SourceProfile,
+		Region:   c.opts.Region,
+		RoleArn:  c.opts.RoleArn,
+		Provider: c.opts.AssumeRoleProvider,
+	})
 
 	if err != nil {
 		return err

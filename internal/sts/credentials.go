@@ -9,34 +9,42 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 )
 
-type TokenProvider func() (string, error)
+// Function responsible of assuming the IAM Role.
 type AssumeRoleProvider func(assume *stscreds.AssumeRoleProvider)
 
-type GetCredentialsResponse struct {
+// Function called once STS requires OATH TOTP MFA Token
+// during the AssumeRoleProvider execution.
+type TokenProvider func() (string, error)
+
+// Required configuration to request STS Credentials.
+type Request struct {
+	Profile  string
+	Region   string
+	RoleArn  string
+	Provider AssumeRoleProvider
+}
+
+// STS Credentials response.
+type Response struct {
 	AccessKeyID     string
 	SecretAccessKey string
 	SessionToken    string
 	Expiration      time.Time
 }
 
-func GetCredentials(
-	profile string,
-	region string,
-	roleArn string,
-	provider AssumeRoleProvider,
-
-) (GetCredentialsResponse, error) {
-	var response GetCredentialsResponse
+// Request STS Credentials.
+func GetCredentials(request Request) (Response, error) {
+	var response Response
 
 	sess, err := session.NewSession(&aws.Config{
-		Region:      aws.String(region),
-		Credentials: credentials.NewSharedCredentials("", profile),
+		Region:      aws.String(request.Region),
+		Credentials: credentials.NewSharedCredentials("", request.Profile),
 	})
 	if err != nil {
 		return response, err
 	}
 
-	creds := stscreds.NewCredentials(sess, roleArn, provider)
+	creds := stscreds.NewCredentials(sess, request.RoleArn, request.Provider)
 
 	// Get() performs the actual assume role operation by fetching temporary session credentials
 	value, err := creds.Get()
@@ -50,7 +58,7 @@ func GetCredentials(
 		return response, err
 	}
 
-	response = GetCredentialsResponse{
+	response = Response{
 		AccessKeyID:     value.AccessKeyID,
 		SecretAccessKey: value.SecretAccessKey,
 		SessionToken:    value.SessionToken,

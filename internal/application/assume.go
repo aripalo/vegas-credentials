@@ -40,7 +40,7 @@ func (app *App) Assume(flags AssumeFlags) error {
 
 	assumeRoleProvider := opts.BuildAssumeRoleProvider(t.Get)
 
-	creds := credentials.New(credentials.CredentialOptions{
+	creds := credentials.New(credentials.Options{
 		Name:               opts.ProfileName,
 		SourceProfile:      opts.SourceProfile,
 		Region:             opts.Region,
