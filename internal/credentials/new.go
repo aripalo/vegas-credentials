@@ -8,11 +8,11 @@ import (
 const AWS_CREDENTIAL_PROCESS_VERSION int = 1
 
 // New defines a response waiting to be fulfilled
-func New(cache StsCache, options CredentialOptions) *Credentials {
+func New(options CredentialOptions) *Credentials {
 	r := &Credentials{
 		options: options,
 		output:  os.Stdout,
-		cache:   cache,
+		cache:   NewCredentialCache(),
 		Version: AWS_CREDENTIAL_PROCESS_VERSION,
 	}
 	return r

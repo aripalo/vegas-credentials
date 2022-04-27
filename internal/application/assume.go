@@ -27,8 +27,6 @@ func (app *App) Assume(flags AssumeFlags) error {
 
 	msg.Message.Debugln("ℹ️", fmt.Sprintf("Credentials: Role: %s", opts.RoleArn))
 
-	credentialsCache := credentials.NewCredentialCache() // TODO maybe set this in constructor?
-
 	checksum, err := opts.Checksum()
 	if err != nil {
 		utils.Bail(fmt.Sprintf("Credentials: Error: %s", err))
@@ -42,7 +40,7 @@ func (app *App) Assume(flags AssumeFlags) error {
 
 	assumeRoleProvider := opts.BuildAssumeRoleProvider(t.Get)
 
-	creds := credentials.New(credentialsCache, credentials.CredentialOptions{
+	creds := credentials.New(credentials.CredentialOptions{
 		Name:               opts.ProfileName,
 		SourceProfile:      opts.SourceProfile,
 		Region:             opts.Region,
