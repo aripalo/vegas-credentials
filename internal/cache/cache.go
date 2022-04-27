@@ -8,10 +8,10 @@ import (
 
 // Cache (and its methods) describes the caching mechanism
 type Cache struct {
-	db DB
+	db Database
 }
 
-type DB interface {
+type Database interface {
 	Write(key string, value []byte, ttl time.Duration) error
 	Read(key string) ([]byte, error)
 	Delete(key string) error
@@ -21,7 +21,7 @@ type DB interface {
 }
 
 // New instantiates a cache
-func New(db DB) *Cache {
+func New(db Database) *Cache {
 	return &Cache{db}
 }
 
