@@ -34,7 +34,7 @@ func (app *App) Assume(flags AssumeFlags) error {
 		EnableGui:     !app.NoGui,
 	})
 
-	creds := credentials.New(credentials.Opts(opts), t.Get)
+	creds := credentials.New(opts, t.Get)
 
 	if err = creds.FetchFromCache(); err != nil {
 		msg.Message.Debugln("ℹ️", fmt.Sprintf("Credentials: Cached: %s", err))

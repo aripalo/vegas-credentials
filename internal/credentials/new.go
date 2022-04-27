@@ -3,6 +3,7 @@ package credentials
 import (
 	"os"
 
+	"github.com/aripalo/vegas-credentials/internal/assumable"
 	"github.com/aripalo/vegas-credentials/internal/sts"
 )
 
@@ -10,7 +11,7 @@ import (
 const AWS_CREDENTIAL_PROCESS_VERSION int = 1
 
 // New defines a response waiting to be fulfilled
-func New(opts Opts, tokenProvider sts.TokenProvider) *Credentials {
+func New(opts assumable.Opts, tokenProvider sts.TokenProvider) *Credentials {
 	r := &Credentials{
 		opts:    opts,
 		output:  os.Stdout,
