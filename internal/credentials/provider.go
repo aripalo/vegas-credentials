@@ -8,7 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials/stscreds"
 )
 
-func (c *Credentials) buildProvider(tokenProvider sts.TokenProvider) sts.Provider {
+func (c *Credentials) BuildProvider(tokenProvider sts.TokenProvider) sts.Provider {
 	return func(assume *stscreds.AssumeRoleProvider) {
 
 		// IAM MFA device ARN

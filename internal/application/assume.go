@@ -27,21 +27,21 @@ func (app *App) Assume(flags AssumeFlags) error {
 
 	msg.Message.Debugln("ℹ️", fmt.Sprintf("Credentials: Role: %s", opts.RoleArn))
 
-	// TODO refactor this
-	t := totp.New(totp.TotpOptions{
-		YubikeySerial: opts.YubikeySerial,
-		YubikeyLabel:  opts.YubikeyLabel,
-		EnableGui:     !app.NoGui,
-	})
-
-	creds := credentials.New(opts, t.Get)
+	creds := credentials.New(opts)
 
 	if err = creds.FetchFromCache(); err != nil {
 		msg.Message.Debugln("ℹ️", fmt.Sprintf("Credentials: Cached: %s", err))
 		msg.Message.Debugln("ℹ️", "Credentials: STS: Fetching...")
 		msg.Message.Debugln("ℹ️", fmt.Sprintf("MFA: TOTP: %s", opts.MfaSerial))
 
-		err = creds.FetchFromAWS()
+		// TODO refactor this
+		t := totp.New(totp.TotpOptions{
+			YubikeySerial: opts.YubikeySerial,
+			YubikeyLabel:  opts.YubikeyLabel,
+			EnableGui:     !app.NoGui,
+		})
+
+		err = creds.FetchFromAWS(creds.BuildProvider(t.Get))
 		if err != nil {
 			if errors.Is(err, context.DeadlineExceeded) {
 				utils.Bail(fmt.Sprintf("Operation Timeout"))
