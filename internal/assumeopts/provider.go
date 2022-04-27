@@ -3,14 +3,12 @@ package assumeopts
 import (
 	"time"
 
+	"github.com/aripalo/vegas-credentials/internal/sts"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials/stscreds"
 )
 
-type TokenProvider func() (string, error)
-type AssumeRoleProvider func(assume *stscreds.AssumeRoleProvider)
-
-func (a *AssumeOpts) BuildAssumeRoleProvider(tokenProvider TokenProvider) AssumeRoleProvider {
+func (a *AssumeOpts) BuildAssumeRoleProvider(tokenProvider sts.TokenProvider) sts.AssumeRoleProvider {
 	return func(assume *stscreds.AssumeRoleProvider) {
 
 		// IAM MFA device ARN

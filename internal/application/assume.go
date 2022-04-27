@@ -29,20 +29,34 @@ func (app *App) Assume(flags AssumeFlags) error {
 
 	credentialsCache := credentials.NewCredentialCache()
 
-	creds := credentials.New(credentialsCache, a)
+	checksum, err := a.Checksum()
+	if err != nil {
+		utils.Bail(fmt.Sprintf("Credentials: Error: %s", err))
+	}
+
+	t := totp.New(totp.TotpOptions{
+		YubikeySerial: a.YubikeySerial,
+		YubikeyLabel:  a.YubikeyLabel,
+		EnableGui:     !app.NoGui,
+	})
+
+	assumeRoleProvider := a.BuildAssumeRoleProvider(t.Get)
+
+	creds := credentials.New(credentialsCache, credentials.CredentialOptions{
+		Name:               a.ProfileName,
+		SourceProfile:      a.SourceProfile,
+		Region:             a.Region,
+		RoleArn:            a.RoleArn,
+		Checksum:           checksum,
+		AssumeRoleProvider: assumeRoleProvider,
+	})
 
 	if err = creds.FetchFromCache(); err != nil {
 		msg.Message.Debugln("ℹ️", fmt.Sprintf("Credentials: Cached: %s", err))
 		msg.Message.Debugln("ℹ️", "Credentials: STS: Fetching...")
 		msg.Message.Debugln("ℹ️", fmt.Sprintf("MFA: TOTP: %s", a.MfaSerial))
 
-		t := totp.New(totp.TotpOptions{
-			YubikeySerial: a.YubikeySerial,
-			YubikeyLabel:  a.YubikeyLabel,
-			EnableGui:     !app.NoGui,
-		})
-
-		err = creds.FetchFromAWS(t.Get)
+		err = creds.FetchFromAWS()
 		if err != nil {
 			if errors.Is(err, context.DeadlineExceeded) {
 				utils.Bail(fmt.Sprintf("Operation Timeout"))

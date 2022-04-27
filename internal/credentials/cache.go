@@ -5,7 +5,6 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/aripalo/vegas-credentials/internal/assumeopts"
 	"github.com/aripalo/vegas-credentials/internal/cache"
 	"github.com/aripalo/vegas-credentials/internal/database"
 	"github.com/aripalo/vegas-credentials/internal/locations"
@@ -22,12 +21,8 @@ func NewCredentialCache() *cache.Cache {
 	return cache.New(db)
 }
 
-func resolveKey(options assumeopts.AssumeOpts) (string, error) {
-	checksum, err := utils.CalculateChecksum(options)
-	if err != nil {
-		return "", err
-	}
-	key := cache.Key(options.ProfileName, checksum)
+func resolveKey(profileName string, checksum string) (string, error) {
+	key := cache.Key(profileName, checksum)
 	return key, nil
 }
 
@@ -38,7 +33,7 @@ func (c *Credentials) saveToCache() error {
 		return err
 	}
 
-	key, err := resolveKey(c.options)
+	key, err := resolveKey(c.options.Name, c.options.Checksum)
 	if err != nil {
 		return err
 	}
@@ -58,7 +53,7 @@ func (c *Credentials) saveToCache() error {
 
 // ReadFromCache gets the cached response from cache database
 func (c *Credentials) readFromCache() error {
-	key, err := resolveKey(c.options)
+	key, err := resolveKey(c.options.Name, c.options.Checksum)
 	if err != nil {
 		return err
 	}
@@ -80,7 +75,7 @@ func (c *Credentials) readFromCache() error {
 
 // DeleteFromCache deletes the cached response cache database
 func (c *Credentials) deleteFromCache() error {
-	key, err := resolveKey(c.options)
+	key, err := resolveKey(c.options.Name, c.options.Checksum)
 	if err != nil {
 		return err
 	}

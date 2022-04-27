@@ -9,6 +9,9 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 )
 
+type TokenProvider func() (string, error)
+type AssumeRoleProvider func(assume *stscreds.AssumeRoleProvider)
+
 type GetCredentialsResponse struct {
 	AccessKeyID     string
 	SecretAccessKey string
@@ -20,7 +23,7 @@ func GetCredentials(
 	profile string,
 	region string,
 	roleArn string,
-	provider func(assume *stscreds.AssumeRoleProvider),
+	provider AssumeRoleProvider,
 
 ) (GetCredentialsResponse, error) {
 	var response GetCredentialsResponse

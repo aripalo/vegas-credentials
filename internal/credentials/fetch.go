@@ -39,13 +39,13 @@ func (c *Credentials) FetchFromCache() error {
 	return nil
 }
 
-func (c *Credentials) FetchFromAWS(mfaProvider func() (string, error)) error {
+func (c *Credentials) FetchFromAWS() error {
 
 	r, err := sts.GetCredentials(
 		c.options.SourceProfile,
 		c.options.Region,
 		c.options.RoleArn,
-		c.options.BuildAssumeRoleProvider(mfaProvider),
+		c.options.AssumeRoleProvider,
 	)
 
 	if err != nil {
