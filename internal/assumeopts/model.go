@@ -1,6 +1,6 @@
 package assumeopts
 
-type AssumeOpts struct {
+type Opts struct {
 	// ProfileName of the profile in AWS Configuration file.
 	//  "frank@concerts"
 	ProfileName string

@@ -11,26 +11,26 @@ import (
 // IAM role with MFA. Effectively it parses the given dataSource
 // (either file name with string type or raw data in []byte) and finds the
 // correct configuration by looking up the given profileName.
-func New[D awsini.DataSource](dataSource D, profileName string) (AssumeOpts, error) {
-	var assumable AssumeOpts
+func New[D awsini.DataSource](dataSource D, profileName string) (Opts, error) {
+	var opts Opts
 	var role awsini.Role
 	var user awsini.User
 
 	err := awsini.LoadProfile(dataSource, profileName, &role)
 	if err != nil {
-		return assumable, err
+		return opts, err
 	}
 
 	if role.SourceProfile == "" {
-		return assumable, errors.New("vegas_source_profile not configured")
+		return opts, errors.New("vegas_source_profile not configured")
 	}
 
 	err = awsini.LoadProfile(dataSource, role.SourceProfile, &user)
 	if err != nil {
-		return assumable, err
+		return opts, err
 	}
 
-	assumable = AssumeOpts{
+	opts = Opts{
 		ProfileName:     profileName,
 		MfaSerial:       user.MfaSerial,
 		YubikeySerial:   user.YubikeySerial,
@@ -43,16 +43,16 @@ func New[D awsini.DataSource](dataSource D, profileName string) (AssumeOpts, err
 		ExternalID:      role.ExternalID,
 	}
 
-	if assumable.MfaSerial == "" {
-		return assumable, errors.New("mfa_serial not configured")
+	if opts.MfaSerial == "" {
+		return opts, errors.New("mfa_serial not configured")
 	}
 
-	checksum, err := utils.CalculateChecksum(assumable)
+	checksum, err := utils.CalculateChecksum(opts)
 	if err != nil {
-		return assumable, err
+		return opts, err
 	}
 
-	assumable.Checksum = checksum
+	opts.Checksum = checksum
 
-	return assumable, nil
+	return opts, nil
 }
