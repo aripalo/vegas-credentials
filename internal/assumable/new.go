@@ -6,34 +6,40 @@ import (
 	"github.com/aripalo/vegas-credentials/internal/awsini"
 )
 
-func New(iniConfig any, profileName string) (Assumable, error) {
+// New returns a struct representing all the information required to assume an
+// IAM role with MFA. Effectively it parses the given dataSource
+// (either file name with string type or raw data in []byte) and finds the
+// correct configuration by looking up the given profileName.
+func New[D awsini.DataSource](dataSource D, profileName string) (Assumable, error) {
 	var assumable Assumable
+	var role awsini.Role
+	var user awsini.User
 
-	target, err := awsini.NewTargetProfile(iniConfig, profileName)
+	err := awsini.LoadProfile(dataSource, profileName, &role)
 	if err != nil {
 		return assumable, err
 	}
 
-	if target.SourceProfile == "" {
+	if role.SourceProfile == "" {
 		return assumable, errors.New("vegas_source_profile not configured")
 	}
 
-	source, err := awsini.NewSourceProfile(iniConfig, target.SourceProfile)
+	err = awsini.LoadProfile(dataSource, role.SourceProfile, &user)
 	if err != nil {
 		return assumable, err
 	}
 
 	assumable = Assumable{
 		ProfileName:     profileName,
-		MfaSerial:       source.MfaSerial,
-		YubikeySerial:   source.YubikeySerial,
-		YubikeyLabel:    resolveYubikeyLabel(source.YubikeyLabel, source.MfaSerial),
-		Region:          resolveRegion(target.Region, source.Region),
-		SourceProfile:   target.SourceProfile,
-		RoleArn:         target.RoleArn,
-		DurationSeconds: resolveDurationSeconds(target.DurationSeconds),
-		RoleSessionName: target.RoleSessionName,
-		ExternalID:      target.ExternalID,
+		MfaSerial:       user.MfaSerial,
+		YubikeySerial:   user.YubikeySerial,
+		YubikeyLabel:    resolveYubikeyLabel(user.YubikeyLabel, user.MfaSerial),
+		Region:          resolveRegion(role.Region, user.Region),
+		SourceProfile:   role.SourceProfile,
+		RoleArn:         role.RoleArn,
+		DurationSeconds: resolveDurationSeconds(role.DurationSeconds),
+		RoleSessionName: role.RoleSessionName,
+		ExternalID:      role.ExternalID,
 	}
 
 	if assumable.MfaSerial == "" {
