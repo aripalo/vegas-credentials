@@ -4,7 +4,7 @@ import (
 	"io"
 	"time"
 
-	"github.com/aripalo/vegas-credentials/internal/assumable"
+	"github.com/aripalo/vegas-credentials/internal/assumeopts"
 )
 
 type StsCache interface {
@@ -19,7 +19,7 @@ type StsCache interface {
 // Credentials defines the output format expected by AWS credential_process
 // https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sourcing-external.html
 type Credentials struct {
-	options         assumable.Assumable
+	options         assumeopts.AssumeOpts
 	cache           StsCache
 	output          io.Writer
 	Version         int       `json:"Version"`

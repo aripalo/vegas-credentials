@@ -1,4 +1,4 @@
-package assumable
+package assumeopts
 
 import (
 	"time"
@@ -10,7 +10,7 @@ import (
 type TokenProvider func() (string, error)
 type AssumeRoleProvider func(assume *stscreds.AssumeRoleProvider)
 
-func (a *Assumable) BuildAssumeRoleProvider(tokenProvider TokenProvider) AssumeRoleProvider {
+func (a *AssumeOpts) BuildAssumeRoleProvider(tokenProvider TokenProvider) AssumeRoleProvider {
 	return func(assume *stscreds.AssumeRoleProvider) {
 
 		// IAM MFA device ARN

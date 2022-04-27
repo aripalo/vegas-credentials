@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/aripalo/vegas-credentials/internal/assumable"
+	"github.com/aripalo/vegas-credentials/internal/assumeopts"
 	"github.com/aripalo/vegas-credentials/internal/credentials"
 	"github.com/aripalo/vegas-credentials/internal/locations"
 	"github.com/aripalo/vegas-credentials/internal/msg"
@@ -20,7 +20,7 @@ type AssumeFlags struct {
 
 func (app *App) Assume(flags AssumeFlags) error {
 
-	a, err := assumable.New(locations.AwsConfig, flags.Profile)
+	a, err := assumeopts.New(locations.AwsConfig, flags.Profile)
 	if err != nil {
 		utils.Bail(fmt.Sprintf("Credentials: Error: %s", err))
 	}

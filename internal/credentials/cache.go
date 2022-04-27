@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/aripalo/vegas-credentials/internal/assumable"
+	"github.com/aripalo/vegas-credentials/internal/assumeopts"
 	"github.com/aripalo/vegas-credentials/internal/cache"
 	"github.com/aripalo/vegas-credentials/internal/database"
 	"github.com/aripalo/vegas-credentials/internal/locations"
@@ -22,7 +22,7 @@ func NewCredentialCache() *cache.Cache {
 	return cache.New(db)
 }
 
-func resolveKey(options assumable.Assumable) (string, error) {
+func resolveKey(options assumeopts.AssumeOpts) (string, error) {
 	checksum, err := utils.CalculateChecksum(options)
 	if err != nil {
 		return "", err

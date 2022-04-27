@@ -1,4 +1,4 @@
-package assumable
+package assumeopts
 
 import (
 	"errors"
@@ -10,8 +10,8 @@ import (
 // IAM role with MFA. Effectively it parses the given dataSource
 // (either file name with string type or raw data in []byte) and finds the
 // correct configuration by looking up the given profileName.
-func New[D awsini.DataSource](dataSource D, profileName string) (Assumable, error) {
-	var assumable Assumable
+func New[D awsini.DataSource](dataSource D, profileName string) (AssumeOpts, error) {
+	var assumable AssumeOpts
 	var role awsini.Role
 	var user awsini.User
 
@@ -29,7 +29,7 @@ func New[D awsini.DataSource](dataSource D, profileName string) (Assumable, erro
 		return assumable, err
 	}
 
-	assumable = Assumable{
+	assumable = AssumeOpts{
 		ProfileName:     profileName,
 		MfaSerial:       user.MfaSerial,
 		YubikeySerial:   user.YubikeySerial,

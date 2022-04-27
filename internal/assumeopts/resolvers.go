@@ -1,4 +1,4 @@
-package assumable
+package assumeopts
 
 import (
 	"os"
