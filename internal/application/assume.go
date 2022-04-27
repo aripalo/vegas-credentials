@@ -32,6 +32,7 @@ func (app *App) Assume(flags AssumeFlags) error {
 		utils.Bail(fmt.Sprintf("Credentials: Error: %s", err))
 	}
 
+	// TODO refactor this
 	t := totp.New(totp.TotpOptions{
 		YubikeySerial: opts.YubikeySerial,
 		YubikeyLabel:  opts.YubikeyLabel,
