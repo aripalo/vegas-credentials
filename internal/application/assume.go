@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/aripalo/vegas-credentials/internal/assumeopts"
 	"github.com/aripalo/vegas-credentials/internal/credentials"
 	"github.com/aripalo/vegas-credentials/internal/locations"
 	"github.com/aripalo/vegas-credentials/internal/msg"

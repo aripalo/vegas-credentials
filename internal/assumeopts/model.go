@@ -1,4 +1,4 @@
-package assumeopts
+package assumable
 
 type Opts struct {
 	// ProfileName of the profile in AWS Configuration file.
