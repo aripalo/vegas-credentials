@@ -3,7 +3,7 @@ package assumable
 import (
 	"errors"
 
-	"github.com/aripalo/vegas-credentials/internal/awsini"
+	"github.com/aripalo/vegas-credentials/internal/assumable/awsini"
 	"github.com/aripalo/vegas-credentials/internal/utils"
 )
 
