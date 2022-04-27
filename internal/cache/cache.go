@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/aripalo/vegas-credentials/internal/database"
-	"github.com/aripalo/vegas-credentials/internal/encryption"
+	"github.com/aripalo/vegas-credentials/internal/cache/database"
+	"github.com/aripalo/vegas-credentials/internal/cache/encryption"
 	"github.com/aripalo/vegas-credentials/internal/utils"
 )
 
