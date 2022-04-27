@@ -27,11 +27,6 @@ func (app *App) Assume(flags AssumeFlags) error {
 
 	msg.Message.Debugln("ℹ️", fmt.Sprintf("Credentials: Role: %s", opts.RoleArn))
 
-	checksum, err := opts.Checksum()
-	if err != nil {
-		utils.Bail(fmt.Sprintf("Credentials: Error: %s", err))
-	}
-
 	// TODO refactor this
 	t := totp.New(totp.TotpOptions{
 		YubikeySerial: opts.YubikeySerial,
@@ -39,16 +34,7 @@ func (app *App) Assume(flags AssumeFlags) error {
 		EnableGui:     !app.NoGui,
 	})
 
-	assumeRoleProvider := opts.BuildAssumeRoleProvider(t.Get)
-
-	creds := credentials.New(credentials.Options{
-		Name:               opts.ProfileName,
-		SourceProfile:      opts.SourceProfile,
-		Region:             opts.Region,
-		RoleArn:            opts.RoleArn,
-		Checksum:           checksum,
-		AssumeRoleProvider: assumeRoleProvider,
-	})
+	creds := credentials.New(credentials.Opts(opts), t.Get)
 
 	if err = creds.FetchFromCache(); err != nil {
 		msg.Message.Debugln("ℹ️", fmt.Sprintf("Credentials: Cached: %s", err))

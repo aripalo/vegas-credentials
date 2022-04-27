@@ -1,4 +1,4 @@
-package assumeopts
+package credentials
 
 import (
 	"time"
@@ -8,26 +8,26 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials/stscreds"
 )
 
-func (a *AssumeOpts) BuildAssumeRoleProvider(tokenProvider sts.TokenProvider) sts.AssumeRoleProvider {
+func (c *Credentials) buildProvider(tokenProvider sts.TokenProvider) sts.Provider {
 	return func(assume *stscreds.AssumeRoleProvider) {
 
 		// IAM MFA device ARN
-		assume.SerialNumber = aws.String(a.MfaSerial)
+		assume.SerialNumber = aws.String(c.opts.MfaSerial)
 
 		// Configures the temporary session duration
-		assume.Duration = time.Duration(a.DurationSeconds) * time.Second
+		assume.Duration = time.Duration(c.opts.DurationSeconds) * time.Second
 
 		// map our own MFA Token Provider signature to one expected by AWS Go SDK
 		assume.TokenProvider = tokenProvider
 
 		// ExternalID may not be empty string, or otherwise AWS Go SDK errors
-		if a.ExternalID != "" {
-			assume.ExternalID = aws.String(a.ExternalID)
+		if c.opts.ExternalID != "" {
+			assume.ExternalID = aws.String(c.opts.ExternalID)
 		}
 
 		// RoleSessionName may not be empty string, or otherwise AWS Go SDK errors
-		if a.RoleSessionName != "" {
-			assume.RoleSessionName = a.RoleSessionName
+		if c.opts.RoleSessionName != "" {
+			assume.RoleSessionName = c.opts.RoleSessionName
 		}
 	}
 }

@@ -45,7 +45,7 @@ func (c *Credentials) FetchFromAWS() error {
 		Profile:  c.opts.SourceProfile,
 		Region:   c.opts.Region,
 		RoleArn:  c.opts.RoleArn,
-		Provider: c.opts.AssumeRoleProvider,
+		Provider: c.provider,
 	})
 
 	if err != nil {

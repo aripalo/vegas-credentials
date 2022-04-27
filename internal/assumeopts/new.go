@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/aripalo/vegas-credentials/internal/awsini"
+	"github.com/aripalo/vegas-credentials/internal/utils"
 )
 
 // New returns a struct representing all the information required to assume an
@@ -45,6 +46,13 @@ func New[D awsini.DataSource](dataSource D, profileName string) (AssumeOpts, err
 	if assumable.MfaSerial == "" {
 		return assumable, errors.New("mfa_serial not configured")
 	}
+
+	checksum, err := utils.CalculateChecksum(assumable)
+	if err != nil {
+		return assumable, err
+	}
+
+	assumable.Checksum = checksum
 
 	return assumable, nil
 }

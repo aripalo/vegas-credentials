@@ -10,7 +10,7 @@ import (
 )
 
 // Function responsible of assuming the IAM Role.
-type AssumeRoleProvider func(assume *stscreds.AssumeRoleProvider)
+type Provider func(assume *stscreds.AssumeRoleProvider)
 
 // Function called once STS requires OATH TOTP MFA Token
 // during the AssumeRoleProvider execution.
@@ -21,7 +21,7 @@ type Request struct {
 	Profile  string
 	Region   string
 	RoleArn  string
-	Provider AssumeRoleProvider
+	Provider Provider
 }
 
 // STS Credentials response.

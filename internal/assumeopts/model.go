@@ -44,4 +44,8 @@ type AssumeOpts struct {
 	// External ID
 	//  "0093624694724"
 	ExternalID string
+
+	// SHA1 hash checksum calculated from the current configuration.
+	// Useful for detecting configuration changes e.g. for caching purposes.
+	Checksum string
 }
