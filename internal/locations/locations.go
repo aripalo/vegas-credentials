@@ -24,3 +24,7 @@ var ExecDir = filepath.Dir(utils.Must(os.Executable))
 // unless user has set $AWS_CONFIG_FILE environment variable.
 // https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html#cli-configure-files-where
 var AwsConfig = utils.Must(getAwsConfigFile)
+
+// Location of the Yubikey Manager CLI (ykman) executable.
+// Empty if not available.
+var YkmanPath = getYkmanPath()

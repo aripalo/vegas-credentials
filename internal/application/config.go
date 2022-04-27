@@ -2,7 +2,6 @@ package application
 
 import (
 	_ "embed"
-	"os/exec"
 
 	"github.com/aripalo/vegas-credentials/internal/locations"
 	"github.com/aripalo/vegas-credentials/internal/utils"
@@ -23,19 +22,11 @@ type configData struct {
 func (app *App) ConfigList() error {
 	v := configData{
 		AwsConfig: locations.AwsConfig,
-		YkmanPath: getYkmanPath(),
+		YkmanPath: locations.YkmanPath,
 		CacheDir:  locations.CacheDir,
 		StateDir:  locations.StateDir,
 		ExecDir:   locations.ExecDir,
 	}
 
 	return utils.PrintTemplate(app.dest, "config", ConfigTmpl, v)
-}
-
-func getYkmanPath() string {
-	if ykmanPath, err := exec.LookPath("ykman"); err != nil {
-		return ""
-	} else {
-		return ykmanPath
-	}
 }
