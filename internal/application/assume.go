@@ -6,8 +6,8 @@ import (
 	"fmt"
 
 	"github.com/aripalo/vegas-credentials/internal/assumable"
+	"github.com/aripalo/vegas-credentials/internal/config/locations"
 	"github.com/aripalo/vegas-credentials/internal/credentials"
-	"github.com/aripalo/vegas-credentials/internal/locations"
 	"github.com/aripalo/vegas-credentials/internal/msg"
 	"github.com/aripalo/vegas-credentials/internal/totp"
 	"github.com/aripalo/vegas-credentials/internal/utils"

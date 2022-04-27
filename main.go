@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 
 	"github.com/aripalo/vegas-credentials/cmd"
-	"github.com/aripalo/vegas-credentials/internal/locations"
+	"github.com/aripalo/vegas-credentials/internal/config/locations"
 	"github.com/aripalo/vegas-credentials/internal/mutex"
 	"github.com/aripalo/vegas-credentials/internal/utils"
 )

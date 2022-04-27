@@ -3,7 +3,7 @@ package application
 import (
 	_ "embed"
 
-	"github.com/aripalo/vegas-credentials/internal/locations"
+	"github.com/aripalo/vegas-credentials/internal/config/locations"
 	"github.com/aripalo/vegas-credentials/internal/utils"
 )
 

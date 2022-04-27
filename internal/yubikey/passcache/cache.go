@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"github.com/aripalo/vegas-credentials/internal/cache"
+	"github.com/aripalo/vegas-credentials/internal/config/locations"
 	"github.com/aripalo/vegas-credentials/internal/database"
 	"github.com/aripalo/vegas-credentials/internal/encryption"
-	"github.com/aripalo/vegas-credentials/internal/locations"
 	"github.com/aripalo/vegas-credentials/internal/msg"
 )
 
