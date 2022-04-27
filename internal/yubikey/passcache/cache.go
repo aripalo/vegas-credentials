@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/aripalo/vegas-credentials/internal/cache"
-	"github.com/aripalo/vegas-credentials/internal/cache/encryption"
 	"github.com/aripalo/vegas-credentials/internal/config/locations"
 	"github.com/aripalo/vegas-credentials/internal/msg"
 )
@@ -39,23 +38,12 @@ func (ypc *YubikeyPasswordCache) Read() (string, error) {
 	if err != nil {
 		return "", err
 	}
-
-	decrypted, err := encryption.Decrypt(cached)
-	if err != nil {
-		return "", err
-	}
-
-	return string(decrypted), err
+	return string(cached), err
 }
 
 // Save password to Cache Database
 func (ypc *YubikeyPasswordCache) Write(password string) error {
-	encrypted, err := encryption.Encrypt([]byte(password))
-	if err != nil {
-		return err
-	}
-
-	return ypc.cache.Set(ypc.serial, []byte(encrypted), time.Duration(12*time.Hour))
+	return ypc.cache.Set(ypc.serial, []byte(password), time.Duration(12*time.Hour))
 }
 
 // Removes a password from Cache Database
