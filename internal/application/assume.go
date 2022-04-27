@@ -20,33 +20,33 @@ type AssumeFlags struct {
 
 func (app *App) Assume(flags AssumeFlags) error {
 
-	a, err := assumeopts.New(locations.AwsConfig, flags.Profile)
+	opts, err := assumeopts.New(locations.AwsConfig, flags.Profile)
 	if err != nil {
 		utils.Bail(fmt.Sprintf("Credentials: Error: %s", err))
 	}
 
-	msg.Message.Debugln("ℹ️", fmt.Sprintf("Credentials: Role: %s", a.RoleArn))
+	msg.Message.Debugln("ℹ️", fmt.Sprintf("Credentials: Role: %s", opts.RoleArn))
 
-	credentialsCache := credentials.NewCredentialCache()
+	credentialsCache := credentials.NewCredentialCache() // TODO maybe set this in constructor?
 
-	checksum, err := a.Checksum()
+	checksum, err := opts.Checksum()
 	if err != nil {
 		utils.Bail(fmt.Sprintf("Credentials: Error: %s", err))
 	}
 
 	t := totp.New(totp.TotpOptions{
-		YubikeySerial: a.YubikeySerial,
-		YubikeyLabel:  a.YubikeyLabel,
+		YubikeySerial: opts.YubikeySerial,
+		YubikeyLabel:  opts.YubikeyLabel,
 		EnableGui:     !app.NoGui,
 	})
 
-	assumeRoleProvider := a.BuildAssumeRoleProvider(t.Get)
+	assumeRoleProvider := opts.BuildAssumeRoleProvider(t.Get)
 
 	creds := credentials.New(credentialsCache, credentials.CredentialOptions{
-		Name:               a.ProfileName,
-		SourceProfile:      a.SourceProfile,
-		Region:             a.Region,
-		RoleArn:            a.RoleArn,
+		Name:               opts.ProfileName,
+		SourceProfile:      opts.SourceProfile,
+		Region:             opts.Region,
+		RoleArn:            opts.RoleArn,
 		Checksum:           checksum,
 		AssumeRoleProvider: assumeRoleProvider,
 	})
@@ -54,7 +54,7 @@ func (app *App) Assume(flags AssumeFlags) error {
 	if err = creds.FetchFromCache(); err != nil {
 		msg.Message.Debugln("ℹ️", fmt.Sprintf("Credentials: Cached: %s", err))
 		msg.Message.Debugln("ℹ️", "Credentials: STS: Fetching...")
-		msg.Message.Debugln("ℹ️", fmt.Sprintf("MFA: TOTP: %s", a.MfaSerial))
+		msg.Message.Debugln("ℹ️", fmt.Sprintf("MFA: TOTP: %s", opts.MfaSerial))
 
 		err = creds.FetchFromAWS()
 		if err != nil {
