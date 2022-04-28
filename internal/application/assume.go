@@ -56,6 +56,12 @@ func (app *App) Assume(flags AssumeFlags) error {
 		msg.Message.Infoln("⏳", fmt.Sprintf("Credentials: Cached: Expiration in %s", humanize.Time(creds.Expiration)))
 	}
 
+	// TODO same for passwd cache
+	err = creds.Teardown()
+	if err != nil {
+		return err
+	}
+
 	msg.Message.HorizontalRuler()
 
 	return creds.Output()

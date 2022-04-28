@@ -4,10 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/aripalo/vegas-credentials/internal/application"
 	"github.com/aripalo/vegas-credentials/internal/config"
-	"github.com/aripalo/vegas-credentials/internal/msg"
-	"github.com/aripalo/vegas-credentials/internal/utils"
 
 	"github.com/spf13/cobra"
 )
@@ -46,17 +43,6 @@ func init() {
 		panic(err)
 	}
 
-	g, err := utils.ParseFlags(application.GlobalFlags{}, rootCmd)
-	if err != nil {
-		panic(err)
-	}
-
-	msg.Init(msg.Options{
-		SilentMode:  true,
-		VerboseMode: g.Verbose,
-		ColorMode:   !g.NoColor,
-		EmojiMode:   !g.NoEmoji,
-	})
 }
 
 func Execute() {
