@@ -3,6 +3,8 @@ package application
 import (
 	"io"
 	"os"
+
+	"github.com/aripalo/vegas-credentials/internal/msg"
 )
 
 type GlobalFlags struct {
@@ -19,6 +21,13 @@ type App struct {
 
 // Instantiate a new instance of App with defaults
 func New(globalFlags GlobalFlags) App {
+
+	msg.Init(msg.Options{
+		VerboseMode: globalFlags.Verbose,
+		ColorMode:   !globalFlags.NoColor,
+		EmojiMode:   !globalFlags.NoEmoji,
+	})
+
 	return App{
 		GlobalFlags: globalFlags,
 		dest:        os.Stdout,
