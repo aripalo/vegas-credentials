@@ -9,7 +9,6 @@ import (
 var Message delightful.Message
 
 type Options struct {
-	SilentMode  bool
 	VerboseMode bool
 	ColorMode   bool
 	EmojiMode   bool
@@ -17,7 +16,7 @@ type Options struct {
 
 func Init(options Options) {
 	Message = delightful.New(config.AppName)
-	Message.SetSilentMode(options.SilentMode)
+	Message.SetSilentMode(!options.VerboseMode)
 	Message.SetVerboseMode(options.VerboseMode)
 	Message.SetColorMode(options.ColorMode)
 	Message.SetEmojiMode(options.EmojiMode)
