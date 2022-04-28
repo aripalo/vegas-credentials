@@ -7,12 +7,13 @@ import (
 
 	"github.com/aripalo/vegas-credentials/internal/cache"
 	"github.com/aripalo/vegas-credentials/internal/config/locations"
+	"github.com/aripalo/vegas-credentials/internal/interfaces"
 	"github.com/aripalo/vegas-credentials/internal/msg"
 )
 
 type YubikeyPasswordCache struct {
 	serial string
-	cache  *cache.Cache
+	cache  interfaces.Cache
 }
 
 func New(serial string) *YubikeyPasswordCache {

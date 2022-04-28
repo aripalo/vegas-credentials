@@ -11,10 +11,13 @@ import (
 
 // Cache (and its methods) describes the caching mechanism
 type Cache struct {
-	db Database
+	db databaseConnection
 }
 
-type Database interface {
+// Internal interface to describe methods found from BadgerDB.
+// Allows switching the internal implementation if required later
+// and also useful for testing.
+type databaseConnection interface {
 	Write(key string, value []byte, ttl time.Duration) error
 	Read(key string) ([]byte, error)
 	Delete(key string) error
