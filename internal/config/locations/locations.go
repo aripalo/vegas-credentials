@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 
 	"github.com/aripalo/vegas-credentials/internal/config"
+	"github.com/aripalo/vegas-credentials/internal/config/locations/awsconfig"
 
 	"github.com/adrg/xdg"
 )
@@ -23,7 +24,7 @@ var ExecDir = filepath.Dir(must(os.Executable))
 // AWS config file location. Usually in $HOME/.aws/config or %USERPROFILE%/.aws/config
 // unless user has set $AWS_CONFIG_FILE environment variable.
 // https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html#cli-configure-files-where
-var AwsConfig = must(getAwsConfigFile)
+var AwsConfig = must(awsconfig.GetPath)
 
 // Location of the Yubikey Manager CLI (ykman) executable.
 // Empty if not available.
