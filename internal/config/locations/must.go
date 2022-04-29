@@ -1,6 +1,6 @@
-package utils
+package locations
 
-func Must[T any](operation func() (T, error)) T {
+func must[T any](operation func() (T, error)) T {
 	result, err := operation()
 	if err != nil {
 		panic(err)
