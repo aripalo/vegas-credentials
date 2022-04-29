@@ -18,7 +18,7 @@ func Test(t *testing.T) {
 			name:       "input nil",
 			input:      nil,
 			expected:   "",
-			errMessage: "nil input given",
+			errMessage: "checksum: nil input given",
 		},
 		{
 			name:       "input unsupported",
