@@ -1,18 +1,52 @@
 package checksum
 
-import "testing"
+import (
+	"fmt"
+	"testing"
 
-func TestGenerate(t *testing.T) {
-	input := "foobar"
+	"github.com/stretchr/testify/assert"
+)
 
-	// want generated with https://passwordsgenerator.net/sha1-hash-generator/
-	want := "5f6f3065208dde5f4624d7dfafc36a296a526590"
-
-	output, err := Generate(input)
-	if err != nil {
-		t.Fatalf("Got error %q, want nil", err)
+func Test(t *testing.T) {
+	tests := []struct {
+		name       string
+		input      any
+		expected   string
+		errMessage string
+	}{
+		{
+			name:       "input nil",
+			input:      nil,
+			expected:   "",
+			errMessage: "nil input given",
+		},
+		{
+			name:       "input unsupported",
+			input:      make(chan int),
+			expected:   "",
+			errMessage: "json: unsupported type: chan int",
+		},
+		{
+			name:     "input weird",
+			input:    -1,
+			expected: "",
+		},
+		{
+			name:     "input string",
+			input:    "foobar",
+			expected: "5f6f3065208dde5f4624d7dfafc36a296a526590", // https://passwordsgenerator.net/sha1-hash-generator/
+		},
 	}
-	if output != want {
-		t.Fatalf(`generateSha1Hash("%s") = %q, want match for %#q`, input, output, want)
+
+	for index, test := range tests {
+
+		name := fmt.Sprintf("case #%d - %s", index, test.name)
+		t.Run(name, func(t *testing.T) {
+			actual, err := Generate(test.input)
+			if test.errMessage != "" {
+				assert.Equal(t, test.errMessage, err.Error())
+			}
+			assert.Equal(t, test.expected, actual)
+		})
 	}
 }
