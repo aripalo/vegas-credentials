@@ -11,7 +11,7 @@ import (
 	"strings"
 
 	"github.com/aripalo/vegas-credentials/internal/checksum"
-	"github.com/aripalo/vegas-credentials/internal/utils"
+	"github.com/aripalo/vegas-credentials/internal/msg"
 
 	"github.com/shirou/gopsutil/host"
 )
@@ -27,7 +27,7 @@ func Encrypt(plaintext []byte) ([]byte, error) {
 	// include it at the beginning of the ciphertext.
 	iv := ciphertext[:aes.BlockSize]
 	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
-		utils.Bail(fmt.Sprintf("encryption failed: %v", err))
+		msg.Bail(fmt.Sprintf("encryption failed: %v", err))
 	}
 
 	blockCipher, err := createCipher()

@@ -1,6 +1,8 @@
 package msg
 
 import (
+	"os"
+
 	"github.com/aripalo/go-delightful"
 	"github.com/aripalo/vegas-credentials/internal/config"
 )
@@ -20,4 +22,9 @@ func Init(options Options) {
 	Message.SetVerboseMode(options.VerboseMode)
 	Message.SetColorMode(options.ColorMode)
 	Message.SetEmojiMode(options.EmojiMode)
+}
+
+func Bail(message string) {
+	Message.Failureln("❌", message)
+	os.Exit(1)
 }

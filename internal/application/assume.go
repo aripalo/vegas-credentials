@@ -10,7 +10,6 @@ import (
 	"github.com/aripalo/vegas-credentials/internal/credentials"
 	"github.com/aripalo/vegas-credentials/internal/msg"
 	"github.com/aripalo/vegas-credentials/internal/totp"
-	"github.com/aripalo/vegas-credentials/internal/utils"
 	"github.com/dustin/go-humanize"
 )
 
@@ -22,7 +21,7 @@ func (app *App) Assume(flags AssumeFlags) error {
 
 	opts, err := assumable.New(locations.AwsConfig, flags.Profile)
 	if err != nil {
-		utils.Bail(fmt.Sprintf("Credentials: Error: %s", err))
+		msg.Bail(fmt.Sprintf("Credentials: Error: %s", err))
 	}
 
 	msg.Message.Debugln("ℹ️", fmt.Sprintf("Credentials: Role: %s", opts.RoleArn))
@@ -44,9 +43,9 @@ func (app *App) Assume(flags AssumeFlags) error {
 		err = creds.FetchFromAWS(creds.BuildProvider(t.Get))
 		if err != nil {
 			if errors.Is(err, context.DeadlineExceeded) {
-				utils.Bail(fmt.Sprintf("Operation Timeout"))
+				msg.Bail(fmt.Sprintf("Operation Timeout"))
 			}
-			utils.Bail(fmt.Sprintf("Credentials: STS: %s", err))
+			msg.Bail(fmt.Sprintf("Credentials: STS: %s", err))
 		} else {
 			msg.Message.Successln("✅", fmt.Sprintf("Credentials: STS: Received fresh credentials"))
 			msg.Message.Infoln("⏳", fmt.Sprintf("Credentials: STS: Expiration in %s", humanize.Time(creds.Expiration)))

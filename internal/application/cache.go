@@ -5,7 +5,6 @@ import (
 
 	"github.com/aripalo/vegas-credentials/internal/credentials"
 	"github.com/aripalo/vegas-credentials/internal/msg"
-	"github.com/aripalo/vegas-credentials/internal/utils"
 	"github.com/aripalo/vegas-credentials/internal/yubikey/passcache"
 )
 
@@ -19,7 +18,7 @@ func (app *App) CacheClean(flags CacheFlags) error {
 	if flags.Password {
 		err := cleanPasswords()
 		if err != nil {
-			utils.Bail(fmt.Sprintf("error cleaning password cache:%v", err))
+			msg.Bail(fmt.Sprintf("error cleaning password cache:%v", err))
 		}
 		msg.Message.Successln("✅", "Password cache cleaned")
 	}
@@ -27,7 +26,7 @@ func (app *App) CacheClean(flags CacheFlags) error {
 	if flags.Credential {
 		err := cleanCredentials()
 		if err != nil {
-			utils.Bail(fmt.Sprintf("error cleaning credential cache:%v", err))
+			msg.Bail(fmt.Sprintf("error cleaning credential cache:%v", err))
 		}
 		msg.Message.Successln("✅", "Credential cache cleaned")
 	}
@@ -35,11 +34,11 @@ func (app *App) CacheClean(flags CacheFlags) error {
 	if !flags.Password && !flags.Credential {
 		err := cleanPasswords()
 		if err != nil {
-			utils.Bail(fmt.Sprintf("error cleaning password cache:%v", err))
+			msg.Bail(fmt.Sprintf("error cleaning password cache:%v", err))
 		}
 		err = cleanCredentials()
 		if err != nil {
-			utils.Bail(fmt.Sprintf("error cleaning credential cache:%v", err))
+			msg.Bail(fmt.Sprintf("error cleaning credential cache:%v", err))
 		}
 		msg.Message.Successln("✅", "Cache cleaned")
 	}
