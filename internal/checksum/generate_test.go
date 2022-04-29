@@ -1,14 +1,14 @@
-package utils
+package checksum
 
 import "testing"
 
-func TestGenerateSHA1(t *testing.T) {
+func TestGenerate(t *testing.T) {
 	input := "foobar"
 
 	// want generated with https://passwordsgenerator.net/sha1-hash-generator/
-	want := "8843d7f92416211de9ebb963ff4ce28125932878"
+	want := "5f6f3065208dde5f4624d7dfafc36a296a526590"
 
-	output, err := SHA1(input)
+	output, err := Generate(input)
 	if err != nil {
 		t.Fatalf("Got error %q, want nil", err)
 	}

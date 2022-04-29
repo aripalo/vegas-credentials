@@ -10,6 +10,7 @@ import (
 	"os/user"
 	"strings"
 
+	"github.com/aripalo/vegas-credentials/internal/checksum"
 	"github.com/aripalo/vegas-credentials/internal/utils"
 
 	"github.com/shirou/gopsutil/host"
@@ -102,7 +103,7 @@ func getPassphrase() ([]byte, error) {
 	joined.WriteString(bootedAtS)
 
 	// Create a SHA1 hash out of the joined strings
-	passphrase, err := utils.SHA1(joined.String())
+	passphrase, err := checksum.Generate([]byte(joined.String()))
 	if err != nil {
 		return nil, err
 	}
