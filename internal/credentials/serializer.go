@@ -4,12 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/aripalo/vegas-credentials/internal/utils"
+	"github.com/aripalo/vegas-credentials/internal/prettyjson"
 )
 
 // Serialize response into pretty JSON
 func (r *Credentials) Serialize() (json.RawMessage, error) {
-	data, err := utils.PrettyJSON(r)
+	data, err := prettyjson.Marshal(r)
 	if err != nil {
 		return nil, fmt.Errorf("Serialization Error: %s", err.Error())
 	}
