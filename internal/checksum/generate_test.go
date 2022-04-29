@@ -27,11 +27,6 @@ func Test(t *testing.T) {
 			errMessage: "json: unsupported type: chan int",
 		},
 		{
-			name:     "input weird",
-			input:    -1,
-			expected: "",
-		},
-		{
 			name:     "input string",
 			input:    "foobar",
 			expected: "5f6f3065208dde5f4624d7dfafc36a296a526590", // https://passwordsgenerator.net/sha1-hash-generator/
