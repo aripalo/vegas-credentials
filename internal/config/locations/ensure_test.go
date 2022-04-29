@@ -15,7 +15,7 @@ func TestLocatioEnsure(t *testing.T) {
 		tmpDir := os.TempDir()
 		appDir := filepath.Join(tmpDir, "vegas-credentials-testing-appdir")
 		_ = os.Remove(appDir)
-		actual := mustEnsureAppDir(appDir)
+		actual := EnsureWithinDir(appDir, config.AppName)
 		assert.Equal(t, filepath.Join(appDir, config.AppName), actual)
 
 		_, err := os.Stat(appDir)

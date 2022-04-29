@@ -3,16 +3,14 @@ package locations
 import (
 	"os"
 	"path/filepath"
-
-	"github.com/aripalo/vegas-credentials/internal/config"
 )
 
-// Ensure a directory with app name exists in given baseDir path.
-func mustEnsureAppDir(baseDir string) string {
-	dir := filepath.Join(baseDir, config.AppName)
-	err := os.MkdirAll(dir, os.ModePerm)
+// Creates a given directory under baseDir and returns the absolute path.
+func EnsureWithinDir(baseDir string, dirName string) string {
+	abs := filepath.Join(baseDir, dirName)
+	err := os.MkdirAll(abs, os.ModePerm)
 	if err != nil {
 		panic(err)
 	}
-	return dir
+	return abs
 }

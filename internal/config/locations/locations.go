@@ -4,6 +4,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/aripalo/vegas-credentials/internal/config"
 	"github.com/aripalo/vegas-credentials/internal/utils"
 
 	"github.com/adrg/xdg"
@@ -11,11 +12,11 @@ import (
 
 // OS/User Cache Data Directory.
 // https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
-var CacheDir = mustEnsureAppDir(xdg.CacheHome)
+var CacheDir = EnsureWithinDir(xdg.CacheHome, config.AppName)
 
 // OS/User State Data Directory.
 // https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
-var StateDir = mustEnsureAppDir(xdg.StateHome)
+var StateDir = EnsureWithinDir(xdg.StateHome, config.AppName)
 
 // The directory where vegas-credentials executable is located.
 var ExecDir = filepath.Dir(utils.Must(os.Executable))
