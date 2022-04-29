@@ -5,7 +5,7 @@ import (
 
 	"github.com/aripalo/vegas-credentials/internal/credentials"
 	"github.com/aripalo/vegas-credentials/internal/msg"
-	"github.com/aripalo/vegas-credentials/internal/yubikey/passcache"
+	"github.com/aripalo/vegas-credentials/internal/yubikey2/passcache"
 )
 
 type CacheFlags struct {
