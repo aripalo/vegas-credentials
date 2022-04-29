@@ -6,13 +6,14 @@ import (
 	"time"
 
 	"github.com/aripalo/vegas-credentials/internal/cache"
+	"github.com/aripalo/vegas-credentials/internal/config/locations"
 	"github.com/aripalo/vegas-credentials/internal/interfaces"
 	"github.com/aripalo/vegas-credentials/internal/msg"
 	"github.com/aripalo/vegas-credentials/internal/yubikey2/setup"
 	"github.com/aripalo/ykmangoath"
 )
 
-const cacheLocation string = "yubikey-oath-access"
+var cacheLocation string = locations.EnsureWithinDir(locations.CacheDir, "yubikey-oath-access")
 
 type Yubikey struct {
 	cache     interfaces.Cache

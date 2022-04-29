@@ -2,7 +2,6 @@ package credentials
 
 import (
 	"fmt"
-	"path/filepath"
 	"time"
 
 	"github.com/aripalo/vegas-credentials/internal/cache"
@@ -10,7 +9,7 @@ import (
 	"github.com/aripalo/vegas-credentials/internal/msg"
 )
 
-var cacheLocation string = filepath.Join(locations.CacheDir, "session-cache")
+var cacheLocation string = locations.EnsureWithinDir(locations.CacheDir, "session-cache")
 
 func NewCredentialCache() *cache.Cache {
 	msg.Message.Debugln("🔧", fmt.Sprintf("Path: Credentials Cache: %s", cacheLocation))
