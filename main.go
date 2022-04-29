@@ -11,7 +11,7 @@ import (
 )
 
 const lockFile string = "mutex-lock"
-const lockErrPrefix string = "Lock Error: "
+const lockErrPrefix string = "Lock Error: %s"
 
 // TODO msg not initialized...?
 
@@ -19,11 +19,11 @@ func main() {
 	lockPath := filepath.Join(locations.StateDir, lockFile)
 	mc, err := mutex.New(lockPath)
 	if err != nil {
-		msg.Bail(fmt.Sprintf("%s: %s", lockErrPrefix, err))
+		msg.Bail(fmt.Sprintf(lockErrPrefix, err))
 	}
 	err = mc.Lock()
 	if err != nil {
-		msg.Bail(fmt.Sprintf("%s: %s", lockErrPrefix, err))
+		msg.Bail(fmt.Sprintf(lockErrPrefix, err))
 	}
 
 	defer mc.Unlock()
