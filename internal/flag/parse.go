@@ -1,6 +1,7 @@
 package flag
 
 import (
+	"github.com/mitchellh/mapstructure"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -19,7 +20,7 @@ func Parse[T any](f T, cmd *cobra.Command) (T, error) {
 	}
 
 	// Unmarshal viper configuration into config.Config
-	err = v.Unmarshal(&f)
+	err = v.Unmarshal(&f, func(cfg *mapstructure.DecoderConfig) { cfg.ErrorUnset = true })
 
 	return f, err
 
