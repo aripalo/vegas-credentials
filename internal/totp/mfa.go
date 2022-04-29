@@ -10,7 +10,7 @@ import (
 	"github.com/aripalo/vegas-credentials/internal/msg"
 	"github.com/aripalo/vegas-credentials/internal/multinput"
 	"github.com/aripalo/vegas-credentials/internal/totp/resolver"
-	"github.com/aripalo/vegas-credentials/internal/yubikey"
+	"github.com/aripalo/vegas-credentials/internal/yubikey2"
 )
 
 type TotpOptions struct {
@@ -37,10 +37,10 @@ func New(options TotpOptions) TOTP {
 		resolvers: []multinput.InputResolver{
 			resolver.ConfigureCLI(),
 			resolver.ConfigureGUI(options.EnableGui),
-			resolver.ConfigureYubikey(yubikey.Options{
-				YubikeySerial: options.YubikeySerial,
-				YubikeyLabel:  options.YubikeyLabel,
-				EnableGui:     options.EnableGui,
+			resolver.ConfigureYubikey(yubikey2.Options{
+				Device:    options.YubikeySerial,
+				Account:   options.YubikeyLabel,
+				EnableGui: options.EnableGui,
 			}),
 		},
 	}

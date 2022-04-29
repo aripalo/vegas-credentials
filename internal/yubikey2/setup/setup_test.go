@@ -66,13 +66,13 @@ func TestStateMachine(t *testing.T) {
 		{
 			name:     "handle error in password not found from cache",
 			input:    State{Name: PASSWORD_NOT_FOUND_FROM_CACHE},
-			op:       Operation{DeletePassword: func() error { return errors.New("fail") }},
+			op:       Operation{RemovePassword: func() error { return errors.New("fail") }},
 			expected: State{Name: ERROR, Error: errors.New("fail")},
 		},
 		{
 			name:     "handle password not found from cache",
 			input:    State{Name: PASSWORD_NOT_FOUND_FROM_CACHE},
-			op:       Operation{DeletePassword: func() error { return nil }},
+			op:       Operation{RemovePassword: func() error { return nil }},
 			expected: State{Name: GET_PASSWORD_FROM_USER},
 		},
 		{

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/aripalo/vegas-credentials/internal/msg"
 	"github.com/aripalo/vegas-credentials/internal/yubikey/askpass"
 	"github.com/aripalo/ykmangoath"
 )
@@ -12,7 +13,7 @@ import (
 type PasswordStore interface {
 	SetPassword(password string) error
 	GetPassword() (string, error)
-	DeletePassword() error
+	RemovePassword() error
 }
 
 // Options passed in by the caller
@@ -30,7 +31,7 @@ type Operation struct {
 	AskPass             func() (string, error)
 	SetPassword         func(string) error
 	GetPassword         func() (string, error)
-	DeletePassword      func() error
+	RemovePassword      func() error
 }
 
 func Setup(options Options, store PasswordStore) error {
@@ -50,6 +51,7 @@ func Setup(options Options, store PasswordStore) error {
 			return oathAccounts.HasAccount(options.Account)
 		},
 		Authenticate: func(password string) (bool, error) {
+			msg.Message.Debugln("⚠️", "AUTHENTICAT RECEIVED: "+password)
 			return authenticate(oathAccounts, password)
 		},
 		AskPass: func() (string, error) {
@@ -57,7 +59,7 @@ func Setup(options Options, store PasswordStore) error {
 		},
 		SetPassword:    store.SetPassword,
 		GetPassword:    store.GetPassword,
-		DeletePassword: store.DeletePassword,
+		RemovePassword: store.RemovePassword,
 	}
 
 	result := run(op)
@@ -115,6 +117,7 @@ func stateMachine(state State, op Operation) State {
 
 	case CHECK_DEVICE_AVAILABLE:
 		if !op.IsAvailable() {
+			msg.Message.Debugln("⚠️", "Yubikey: Device not available")
 			return State{
 				Name:  ERROR,
 				Error: errors.New("yubikey: device not available"),
@@ -126,6 +129,7 @@ func stateMachine(state State, op Operation) State {
 
 	case CHECK_DEVICE_PASSWORD_PROTECTED:
 		if op.IsPasswordProtected() {
+			msg.Message.Debugln("⚠️", "Yubikey: Device is password protected")
 			return State{
 				Name: GET_PASSWORD_FROM_CACHE,
 			}
@@ -137,10 +141,12 @@ func stateMachine(state State, op Operation) State {
 	case GET_PASSWORD_FROM_CACHE:
 		password, err := op.GetPassword()
 		if err != nil {
+			msg.Message.Debugln("⚠️", "Yubikey: Password not found from cache")
 			return State{
 				Name: PASSWORD_NOT_FOUND_FROM_CACHE,
 			}
 		}
+		msg.Message.Debugln("⚠️", "Yubikey: Password found from cache")
 		return State{
 			Name:     AUTHENTICATE_WITH_CACHED_PASSWORD,
 			Password: password,
@@ -148,7 +154,7 @@ func stateMachine(state State, op Operation) State {
 		}
 
 	case PASSWORD_NOT_FOUND_FROM_CACHE:
-		err := op.DeletePassword()
+		err := op.RemovePassword()
 		if err != nil {
 			return State{
 				Name:  ERROR,
@@ -162,12 +168,14 @@ func stateMachine(state State, op Operation) State {
 	case AUTHENTICATE_WITH_CACHED_PASSWORD:
 		ok, err := op.Authenticate(state.Password)
 		if err != nil {
+			msg.Message.Warningln("⚠️", "Yubikey: Error authentication with cached password")
 			return State{
 				Name:  ERROR,
 				Error: err,
 			}
 		}
 		if !ok {
+			msg.Message.Warningln("⚠️", "Yubikey: Incorrect password from cache")
 			return State{
 				Name:  GET_PASSWORD_FROM_USER,
 				Count: state.Count,
@@ -187,6 +195,9 @@ func stateMachine(state State, op Operation) State {
 			}
 		}
 		value, err := op.AskPass()
+
+		msg.Message.Debugln("⚠️", "Yubikey OATH Password: "+value)
+
 		if err != nil {
 			return State{
 				Name:  ERROR,
@@ -202,13 +213,14 @@ func stateMachine(state State, op Operation) State {
 	case AUTHENTICATE_WITH_USER_PASSWORD:
 		ok, err := op.Authenticate(state.Password)
 		if err != nil {
+			msg.Message.Warningln("⚠️", "Yubikey OATH Password: Authentication Error")
 			return State{
 				Name:  ERROR,
 				Error: err,
 			}
 		}
 		if !ok {
-			//msg.Message.Warningln("⚠️", "Yubikey OATH Password: Incorrect")
+			msg.Message.Warningln("⚠️", "Yubikey OATH Password: Incorrect")
 			return State{
 				Name:  GET_PASSWORD_FROM_USER,
 				Count: state.Count,
@@ -269,7 +281,10 @@ func authenticate(oathAccounts ykmangoath.OathAccounts, password string) (bool, 
 	}
 
 	_, err := oathAccounts.List()
-	if err != ykmangoath.ErrOathAccountPasswordIncorrect {
+
+	msg.Message.Debugln("⚠️", fmt.Sprintf("List Error: %v", err))
+
+	if err != nil {
 		return false, err
 	}
 
