@@ -1,51 +1,40 @@
 package mutex
 
 import (
-	"errors"
-	"os"
 	"path"
 
 	"github.com/alexflint/go-filemutex"
+	"github.com/aripalo/vegas-credentials/internal/config/locations"
 )
 
-type MutexControl struct {
-	dir  string
-	file string
-	path string
+// Diretory to store the lock file into.
+// By default uses locations.StateDir which is ensured to exists.
+var dir string = locations.StateDir
 
-	// Will block until lock can be acquired
-	Lock func() error
+// File name used to control the mutex lock.
+var fileName string = "mutexlock"
 
-	// Releases the lock
-	Unlock func() error
-}
+// Return type fo the unlock function.
+type MutexUnlock func() error
 
 // Helps with parallel executions (e.g. with Terraform parallelism=n)
 // ensuring only a single process at a time can interact with AWS and
 // the internal cache – as the BadgerDB requires a filelock:
 // https://github.com/dgraph-io/badger/blob/69926151f6532f2fe97a9b11ee9281519c8ec5e6/dir_unix.go#L45
-func New(dir string) (MutexControl, error) {
-	file := "mutexlock"
-	m := MutexControl{
-		dir:  dir,
-		file: file,
-		path: path.Join(dir, file),
-	}
-
-	// the base directory must exists before hand so use MkdirAll
-	err := os.MkdirAll(dir, os.ModePerm)
-	if err != nil {
-		return m, errors.New("Could not create cache lock-control file")
-	}
+func Lock() (MutexUnlock, error) {
+	filePath := path.Join(dir, fileName)
 
 	// create the filemutex
-	fm, err := filemutex.New(m.path)
+	fm, err := filemutex.New(filePath)
 	if err != nil {
-		return m, errors.New("Directory did not exist or file could not created")
+		return nil, err
 	}
 
-	m.Lock = fm.Lock
-	m.Unlock = fm.Unlock
+	err = fm.Lock()
+	if err != nil {
+		return nil, err
+	}
 
-	return m, nil
+	return fm.Unlock, nil
+
 }

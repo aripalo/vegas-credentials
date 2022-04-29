@@ -2,32 +2,23 @@ package main
 
 import (
 	"fmt"
-	"path/filepath"
 
 	"github.com/aripalo/vegas-credentials/cmd"
-	"github.com/aripalo/vegas-credentials/internal/config/locations"
 	"github.com/aripalo/vegas-credentials/internal/msg"
 	"github.com/aripalo/vegas-credentials/internal/mutex"
 )
 
-const lockFile string = "mutex-lock"
-const lockErrPrefix string = "Lock Error: %s"
-
 // TODO msg not initialized...?
 
 func main() {
-	lockPath := filepath.Join(locations.StateDir, lockFile)
-	mc, err := mutex.New(lockPath)
+
+	unlock, err := mutex.Lock()
 	if err != nil {
-		msg.Bail(fmt.Sprintf(lockErrPrefix, err))
-	}
-	err = mc.Lock()
-	if err != nil {
-		msg.Bail(fmt.Sprintf(lockErrPrefix, err))
+		msg.Bail(fmt.Sprintf("Lock Error: %s", err))
 	}
 
 	defer func() {
-		_ = mc.Unlock()
+		_ = unlock()
 	}()
 
 	cmd.Execute()
