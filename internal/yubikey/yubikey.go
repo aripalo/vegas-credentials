@@ -1,4 +1,4 @@
-package yubikey2
+package yubikey
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 	"github.com/aripalo/vegas-credentials/internal/config/locations"
 	"github.com/aripalo/vegas-credentials/internal/interfaces"
 	"github.com/aripalo/vegas-credentials/internal/msg"
-	"github.com/aripalo/vegas-credentials/internal/yubikey2/setup"
+	"github.com/aripalo/vegas-credentials/internal/yubikey/setup"
 	"github.com/aripalo/ykmangoath"
 )
 

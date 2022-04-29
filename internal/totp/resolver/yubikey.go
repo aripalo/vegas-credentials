@@ -6,11 +6,11 @@ import (
 
 	"github.com/aripalo/vegas-credentials/internal/msg"
 	"github.com/aripalo/vegas-credentials/internal/multinput"
-	"github.com/aripalo/vegas-credentials/internal/yubikey2"
+	"github.com/aripalo/vegas-credentials/internal/yubikey"
 )
 
-func ConfigureYubikey(options yubikey2.Options) multinput.InputResolver {
-	y, err := yubikey2.New(options)
+func ConfigureYubikey(options yubikey.Options) multinput.InputResolver {
+	y, err := yubikey.New(options)
 
 	fmt.Println(y)
 

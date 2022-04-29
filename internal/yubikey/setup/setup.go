@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/aripalo/vegas-credentials/internal/msg"
-	"github.com/aripalo/vegas-credentials/internal/yubikey2/askpass"
+	"github.com/aripalo/vegas-credentials/internal/yubikey/askpass"
 	"github.com/aripalo/ykmangoath"
 )
 
