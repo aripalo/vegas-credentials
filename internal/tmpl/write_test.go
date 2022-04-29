@@ -36,6 +36,16 @@ func TestWrite(t *testing.T) {
 			},
 		},
 		{
+			name:     "incorrect template",
+			template: "{{{}.Version}} @ {{.DirPath}}",
+			input: tmplData{
+				Version: "v2.47.113",
+				DirPath: "/tmp/foo/bar",
+			},
+			expected: "",
+			err:      errors.New(`template: test:1: unexpected "{" in command`),
+		},
+		{
 			name:     "success",
 			template: "{{.Version}} @ {{.DirPath}}",
 			input: tmplData{
