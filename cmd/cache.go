@@ -2,8 +2,7 @@ package cmd
 
 import (
 	"github.com/aripalo/vegas-credentials/internal/application"
-	"github.com/aripalo/vegas-credentials/internal/utils"
-
+	"github.com/aripalo/vegas-credentials/internal/flag"
 	"github.com/spf13/cobra"
 )
 
@@ -18,12 +17,12 @@ var cacheCleanCmd = &cobra.Command{
 	Long:  "By defaults cleans all caches. Use flags to control if only specific caches need to be cleaned.",
 	RunE: func(cmd *cobra.Command, args []string) error {
 
-		g, err := utils.ParseFlags(application.GlobalFlags{}, cmd)
+		g, err := flag.Parse(application.GlobalFlags{}, cmd)
 		if err != nil {
 			return err
 		}
 
-		f, err := utils.ParseFlags(application.CacheFlags{}, cmd)
+		f, err := flag.Parse(application.CacheFlags{}, cmd)
 		if err != nil {
 			return err
 		}

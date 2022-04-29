@@ -2,8 +2,7 @@ package cmd
 
 import (
 	"github.com/aripalo/vegas-credentials/internal/application"
-	"github.com/aripalo/vegas-credentials/internal/utils"
-
+	"github.com/aripalo/vegas-credentials/internal/flag"
 	"github.com/spf13/cobra"
 )
 
@@ -17,7 +16,7 @@ var configListCmd = &cobra.Command{
 	Short: "List configuration information",
 	RunE: func(cmd *cobra.Command, args []string) error {
 
-		g, err := utils.ParseFlags(application.GlobalFlags{}, cmd)
+		g, err := flag.Parse(application.GlobalFlags{}, cmd)
 		if err != nil {
 			return err
 		}

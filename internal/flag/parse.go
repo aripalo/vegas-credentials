@@ -1,11 +1,11 @@
-package utils
+package flag
 
 import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
-func ParseFlags[T any](f T, cmd *cobra.Command) (T, error) {
+func Parse[T any](f T, cmd *cobra.Command) (T, error) {
 	var err error
 
 	// New viper instance
