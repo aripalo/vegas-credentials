@@ -6,6 +6,7 @@ import (
 
 	"github.com/aripalo/vegas-credentials/internal/config"
 	"github.com/aripalo/vegas-credentials/internal/config/locations/awsconfig"
+	"github.com/aripalo/vegas-credentials/internal/config/locations/ykman"
 
 	"github.com/adrg/xdg"
 )
@@ -28,4 +29,4 @@ var AwsConfig = must(awsconfig.GetPath)
 
 // Location of the Yubikey Manager CLI (ykman) executable.
 // Empty if not available.
-var YkmanPath = getYkmanPath()
+var YkmanPath = ykman.GetPath()
