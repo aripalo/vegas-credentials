@@ -1,12 +1,12 @@
-package utils
+package tmpl
 
 import (
 	"io"
 	"text/template"
 )
 
-// Print text template to stdout.
-func PrintTemplate[T any](dest io.Writer, name string, body string, data T) error {
+// Write text template to stdout.
+func Write[T any](dest io.Writer, name string, body string, data T) error {
 	var tmpl *template.Template
 	var err error
 

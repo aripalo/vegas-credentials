@@ -4,7 +4,7 @@ import (
 	"runtime"
 
 	"github.com/aripalo/vegas-credentials/internal/config"
-	"github.com/aripalo/vegas-credentials/internal/utils"
+	"github.com/aripalo/vegas-credentials/internal/tmpl"
 )
 
 type versionData struct {
@@ -27,7 +27,7 @@ func (app *App) Version(flags VersionFlags) error {
 	}
 
 	if flags.Full {
-		return utils.PrintTemplate(app.dest, "version-long", config.VersionLongTmpl, v)
+		return tmpl.Write(app.dest, "version-long", config.VersionLongTmpl, v)
 	}
-	return utils.PrintTemplate(app.dest, "version-short", config.VersionShortTmpl, v)
+	return tmpl.Write(app.dest, "version-short", config.VersionShortTmpl, v)
 }

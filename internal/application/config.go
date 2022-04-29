@@ -4,7 +4,7 @@ import (
 	_ "embed"
 
 	"github.com/aripalo/vegas-credentials/internal/config/locations"
-	"github.com/aripalo/vegas-credentials/internal/utils"
+	"github.com/aripalo/vegas-credentials/internal/tmpl"
 )
 
 //go:embed data/config.tmpl
@@ -28,5 +28,5 @@ func (app *App) ConfigList() error {
 		ExecDir:   locations.ExecDir,
 	}
 
-	return utils.PrintTemplate(app.dest, "config", ConfigTmpl, v)
+	return tmpl.Write(app.dest, "config", ConfigTmpl, v)
 }
