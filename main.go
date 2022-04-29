@@ -26,7 +26,9 @@ func main() {
 		msg.Bail(fmt.Sprintf(lockErrPrefix, err))
 	}
 
-	defer mc.Unlock()
+	defer func() {
+		_ = mc.Unlock()
+	}()
 
 	cmd.Execute()
 }
