@@ -10,12 +10,14 @@ require (
 	github.com/aws/aws-sdk-go v1.43.45
 	github.com/dgraph-io/badger/v3 v3.2103.2
 	github.com/dustin/go-humanize v1.0.0
+	github.com/mitchellh/mapstructure v1.5.0
 	github.com/ncruces/zenity v0.8.2
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/spf13/cobra v1.4.0
 	github.com/spf13/viper v1.11.0
 	github.com/stretchr/testify v1.7.1
 	gopkg.in/ini.v1 v1.66.4
+	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 )
 
 require (
@@ -46,7 +48,6 @@ require (
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/mattn/go-runewidth v0.0.13 // indirect
 	github.com/mattn/go-tty v0.0.4 // indirect
-	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/ncruces/go-strftime v0.1.6 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.0 // indirect

@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/aripalo/vegas-credentials/cmd"
+	"github.com/aripalo/vegas-credentials/internal/logger"
 	"github.com/aripalo/vegas-credentials/internal/msg"
 	"github.com/aripalo/vegas-credentials/internal/mutex"
 )
@@ -11,6 +12,7 @@ import (
 // TODO msg not initialized...?
 
 func main() {
+	logger.Trace("Initializing")
 
 	unlock, err := mutex.Lock()
 	if err != nil {

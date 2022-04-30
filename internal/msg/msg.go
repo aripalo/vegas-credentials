@@ -5,6 +5,7 @@ import (
 
 	"github.com/aripalo/go-delightful"
 	"github.com/aripalo/vegas-credentials/internal/config"
+	"github.com/aripalo/vegas-credentials/internal/logger"
 )
 
 // Initialize
@@ -25,6 +26,7 @@ func Init(options Options) {
 }
 
 func Bail(message string) {
+	logger.Fatal(message)
 	Message.Failureln("❌", message)
 	os.Exit(1)
 }
