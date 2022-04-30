@@ -63,7 +63,7 @@ func Prompt(prefix emoji.Emoji, message string) {
 }
 
 // TODO maybe name as fatal?
-func Bail(message string) {
+func Fatal(message string) {
 	logger.Fatal(getFilename(), message)
 	d.Failureln("❌", message)
 	os.Exit(1)

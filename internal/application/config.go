@@ -41,7 +41,7 @@ func (app *App) ConfigShowProfile(flags AssumeFlags) error {
 
 	opts, err := assumable.New(locations.AwsConfig, flags.Profile)
 	if err != nil {
-		msg.Bail(fmt.Sprintf("Credentials: Error: %s", err))
+		msg.Fatal(fmt.Sprintf("Credentials: Error: %s", err))
 	}
 
 	fmt.Println(opts)

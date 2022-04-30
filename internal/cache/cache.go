@@ -29,7 +29,7 @@ type databaseConnection interface {
 func New(databasePath string) *Cache {
 	db, err := database.Open(databasePath, database.DatabaseOptions{})
 	if err != nil {
-		msg.Bail(fmt.Sprintf("Configuration Error: %s", err))
+		msg.Fatal(fmt.Sprintf("Configuration Error: %s", err))
 	}
 	return &Cache{db}
 }

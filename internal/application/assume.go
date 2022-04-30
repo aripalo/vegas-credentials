@@ -21,7 +21,7 @@ func (app *App) Assume(flags AssumeFlags) error {
 
 	opts, err := assumable.New(locations.AwsConfig, flags.Profile)
 	if err != nil {
-		msg.Bail(fmt.Sprintf("Credentials: Error: %s", err))
+		msg.Fatal(fmt.Sprintf("Credentials: Error: %s", err))
 	}
 
 	msg.Debug("ℹ️", fmt.Sprintf("Credentials: Role: %s", opts.RoleArn))
@@ -43,9 +43,9 @@ func (app *App) Assume(flags AssumeFlags) error {
 		err = creds.FetchFromAWS(creds.BuildProvider(t.Get))
 		if err != nil {
 			if errors.Is(err, context.DeadlineExceeded) {
-				msg.Bail(fmt.Sprintf("Operation Timeout"))
+				msg.Fatal(fmt.Sprintf("Operation Timeout"))
 			}
-			msg.Bail(fmt.Sprintf("Credentials: STS: %s", err))
+			msg.Fatal(fmt.Sprintf("Credentials: STS: %s", err))
 		} else {
 			msg.Success("✅", fmt.Sprintf("Credentials: STS: Received fresh credentials"))
 			msg.Info("⏳", fmt.Sprintf("Credentials: STS: Expiration in %s", humanize.Time(creds.Expiration)))

@@ -41,7 +41,7 @@ func init() {
 	configShowProfileCmd.Flags().StringP(profileFlag, "p", "", "aws profile to use from config")
 	err := configShowProfileCmd.MarkFlagRequired(profileFlag)
 	if err != nil {
-		msg.Bail(err.Error())
+		msg.Fatal(err.Error())
 	}
 
 	rootCmd.AddCommand(cacheCmd)
@@ -54,12 +54,12 @@ func init() {
 	assumeCmd.Flags().StringP(profileFlag, "p", "", "aws profile to use from config")
 	err = assumeCmd.MarkFlagRequired(profileFlag)
 	if err != nil {
-		msg.Bail(err.Error())
+		msg.Fatal(err.Error())
 	}
 }
 
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		msg.Bail(err.Error())
+		msg.Fatal(err.Error())
 	}
 }

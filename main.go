@@ -15,7 +15,7 @@ func main() {
 
 	unlock, err := mutex.Lock()
 	if err != nil {
-		msg.Bail(fmt.Sprintf("Lock Error: %s", err))
+		msg.Fatal(fmt.Sprintf("Lock Error: %s", err))
 	}
 
 	defer func() {
