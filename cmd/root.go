@@ -26,8 +26,16 @@ func init() {
 	rootCmd.AddCommand(versionCmd)
 	versionCmd.Flags().Bool("full", false, "display full version information")
 
+	profileFlag := "profile"
+
 	rootCmd.AddCommand(configCmd)
 	configCmd.AddCommand(configListCmd)
+	configCmd.AddCommand(configShowProfileCmd)
+	configShowProfileCmd.Flags().StringP(profileFlag, "p", "", "aws profile to use from config")
+	err := configShowProfileCmd.MarkFlagRequired(profileFlag)
+	if err != nil {
+		panic(err)
+	}
 
 	rootCmd.AddCommand(cacheCmd)
 	cacheCmd.AddCommand(cacheCleanCmd)
@@ -36,9 +44,8 @@ func init() {
 
 	rootCmd.AddCommand(assumeCmd)
 
-	profileFlag := "profile"
 	assumeCmd.Flags().StringP(profileFlag, "p", "", "aws profile to use from config")
-	err := assumeCmd.MarkFlagRequired(profileFlag)
+	err = assumeCmd.MarkFlagRequired(profileFlag)
 	if err != nil {
 		panic(err)
 	}

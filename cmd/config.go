@@ -25,3 +25,23 @@ var configListCmd = &cobra.Command{
 		return app.ConfigList()
 	},
 }
+
+var configShowProfileCmd = &cobra.Command{
+	Use:   "show-profile",
+	Short: "Show resolved profile configuration",
+	RunE: func(cmd *cobra.Command, args []string) error {
+
+		g, err := flag.Parse(application.GlobalFlags{}, cmd)
+		if err != nil {
+			return err
+		}
+
+		f, err := flag.Parse(application.AssumeFlags{}, cmd)
+		if err != nil {
+			return err
+		}
+
+		app := application.New(g)
+		return app.ConfigShowProfile(f)
+	},
+}
