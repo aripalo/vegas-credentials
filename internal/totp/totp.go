@@ -79,17 +79,8 @@ type inputTmplOpts struct {
 // Method responsible for actually querying the TOTP code from end-user.
 func (m *Totp) Get() (string, error) {
 
-	messageOpts := inputTmplOpts{
-		GuiEnabled:     m.guiEnabled,
-		YubikeyEnabled: m.yubikeyEnabled,
-	}
-	message := bytes.Buffer{}
-	err := tmpl.Write(&message, "mfa-code-input", inputTmpl, messageOpts)
-	if err != nil {
-		msg.Fatal(err.Error())
-	}
-
-	msg.Prompt("🔑", string(message.Bytes()))
+	message := formatInputMessage(m.guiEnabled, m.yubikeyEnabled)
+	msg.Prompt("🔑", message)
 
 	ctx, cancel := context.WithTimeout(context.Background(), MfaTimeout)
 	defer cancel()
@@ -119,4 +110,17 @@ func (m *Totp) Get() (string, error) {
 // 6 digits or more.
 func isValidToken(value string) bool {
 	return regexp.MustCompile(`^\d{6}\d*$`).MatchString(value)
+}
+
+func formatInputMessage(guiEnabled bool, yubikeyEnabled bool) string {
+	opts := inputTmplOpts{
+		GuiEnabled:     guiEnabled,
+		YubikeyEnabled: yubikeyEnabled,
+	}
+	message := bytes.Buffer{}
+	err := tmpl.Write(&message, "mfa-code-input", inputTmpl, opts)
+	if err != nil {
+		msg.Fatal(err.Error())
+	}
+	return string(message.Bytes())
 }
