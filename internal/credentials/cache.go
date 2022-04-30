@@ -12,7 +12,7 @@ import (
 var cacheLocation string = locations.EnsureWithinDir(locations.CacheDir, "session-cache")
 
 func NewCredentialCache() *cache.Cache {
-	msg.Message.Debugln("🔧", fmt.Sprintf("Path: Credentials Cache: %s", cacheLocation))
+	msg.Debug("🔧", fmt.Sprintf("Path: Credentials Cache: %s", cacheLocation))
 	return cache.New(cacheLocation)
 }
 

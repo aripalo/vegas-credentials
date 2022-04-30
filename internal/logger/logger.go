@@ -29,7 +29,7 @@ var output io.Writer = func() io.Writer {
 	return os.Stderr
 }()
 
-var logFlag = log.Ldate | log.Ltime | log.Lshortfile
+var logFlag = log.Ldate | log.Ltime
 
 var (
 	Trace Logger = defineLogger("TRACE", output)

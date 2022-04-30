@@ -5,7 +5,7 @@ import (
 
 	"github.com/aripalo/vegas-credentials/internal/application"
 	"github.com/aripalo/vegas-credentials/internal/flag"
-	"github.com/aripalo/vegas-credentials/internal/logger"
+	"github.com/aripalo/vegas-credentials/internal/msg"
 
 	"github.com/spf13/cobra"
 )
@@ -14,10 +14,10 @@ var assumeCmd = &cobra.Command{
 	Use:   "assume",
 	Short: "Assume Temporary Session Credentials",
 	PreRun: func(cmd *cobra.Command, args []string) {
-		logger.Trace(fmt.Sprintf("%s cmd init", cmd.Name()))
+		msg.Trace("", fmt.Sprintf("%s cmd init", cmd.Name()))
 	},
 	PostRun: func(cmd *cobra.Command, args []string) {
-		logger.Trace(fmt.Sprintf("%s cmd done", cmd.Name()))
+		msg.Trace("", fmt.Sprintf("%s cmd done", cmd.Name()))
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
 

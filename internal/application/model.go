@@ -1,6 +1,7 @@
 package application
 
 import (
+	"fmt"
 	"io"
 	"os"
 
@@ -27,6 +28,14 @@ func New(globalFlags GlobalFlags) App {
 		ColorMode:   !globalFlags.NoColor,
 		EmojiMode:   !globalFlags.NoEmoji,
 	})
+
+	msg.Trace("", fmt.Sprintf(
+		"app configuration verbose=%v noColor=%v noEmoji=%v noGui=%v",
+		globalFlags.Verbose,
+		globalFlags.NoColor,
+		globalFlags.NoEmoji,
+		globalFlags.NoGui,
+	))
 
 	return App{
 		GlobalFlags: globalFlags,

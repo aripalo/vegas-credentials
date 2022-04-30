@@ -35,7 +35,7 @@ func AskPassword(ctx context.Context, enableGui bool) (string, error) {
 		resolvers = append(resolvers, passwordQueryGUI)
 	}
 
-	msg.Message.Promptln("🔑", "Input Yubikey OATH password: ")
+	msg.Prompt("🔑", "Input Yubikey OATH password: ")
 
 	// Assign multinput query with given resolvers
 	mi := multinput.New(resolvers)

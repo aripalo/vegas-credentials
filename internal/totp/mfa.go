@@ -53,7 +53,7 @@ func (m *Totp) Get() (string, error) {
 
 	// Print some end-user messages
 	// TODO detect GUI/Yubikey... requires some refactor
-	msg.Message.Promptln("🔑", "Input the Token Code (or touch Yubikey if configured):")
+	msg.Prompt("🔑", "Input the Token Code (or touch Yubikey if configured):")
 
 	ctx, cancel := context.WithTimeout(context.Background(), MfaTimeout)
 	defer cancel()

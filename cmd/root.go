@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/aripalo/vegas-credentials/internal/config"
-	"github.com/aripalo/vegas-credentials/internal/logger"
 	"github.com/aripalo/vegas-credentials/internal/msg"
 
 	"github.com/spf13/cobra"
@@ -16,10 +15,10 @@ var rootCmd = &cobra.Command{
 	Short:   "TODO1",
 	Long:    `TODO2`,
 	PreRun: func(cmd *cobra.Command, args []string) {
-		logger.Trace(fmt.Sprintf("%s cmd init", cmd.Name()))
+		msg.Trace("", fmt.Sprintf("%s cmd init", cmd.Name()))
 	},
 	PostRun: func(cmd *cobra.Command, args []string) {
-		logger.Trace(fmt.Sprintf("%s cmd done", cmd.Name()))
+		msg.Trace("", fmt.Sprintf("%s cmd done", cmd.Name()))
 	},
 }
 

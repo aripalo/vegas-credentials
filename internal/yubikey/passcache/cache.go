@@ -29,7 +29,7 @@ var CacheLocation string = filepath.Join(locations.CacheDir, cacheName)
 
 // Open new database where to store yubikey password
 func InitCache() *cache.Cache {
-	msg.Message.Debugln("🔧", fmt.Sprintf("Path: Yubikey OATH Cache: %s", CacheLocation))
+	msg.Debug("🔧", fmt.Sprintf("Path: Yubikey OATH Cache: %s", CacheLocation))
 	return cache.New(CacheLocation)
 }
 

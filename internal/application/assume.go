@@ -24,14 +24,14 @@ func (app *App) Assume(flags AssumeFlags) error {
 		msg.Bail(fmt.Sprintf("Credentials: Error: %s", err))
 	}
 
-	msg.Message.Debugln("ℹ️", fmt.Sprintf("Credentials: Role: %s", opts.RoleArn))
+	msg.Debug("ℹ️", fmt.Sprintf("Credentials: Role: %s", opts.RoleArn))
 
 	creds := credentials.New(opts)
 
 	if err = creds.FetchFromCache(); err != nil {
-		msg.Message.Debugln("ℹ️", fmt.Sprintf("Credentials: Cached: %s", err))
-		msg.Message.Debugln("ℹ️", "Credentials: STS: Fetching...")
-		msg.Message.Debugln("ℹ️", fmt.Sprintf("MFA: TOTP: %s", opts.MfaSerial))
+		msg.Debug("ℹ️", fmt.Sprintf("Credentials: Cached: %s", err))
+		msg.Debug("ℹ️", "Credentials: STS: Fetching...")
+		msg.Debug("ℹ️", fmt.Sprintf("MFA: TOTP: %s", opts.MfaSerial))
 
 		// TODO refactor this
 		t := totp.New(totp.TotpOptions{
@@ -47,12 +47,12 @@ func (app *App) Assume(flags AssumeFlags) error {
 			}
 			msg.Bail(fmt.Sprintf("Credentials: STS: %s", err))
 		} else {
-			msg.Message.Successln("✅", fmt.Sprintf("Credentials: STS: Received fresh credentials"))
-			msg.Message.Infoln("⏳", fmt.Sprintf("Credentials: STS: Expiration in %s", humanize.Time(creds.Expiration)))
+			msg.Success("✅", fmt.Sprintf("Credentials: STS: Received fresh credentials"))
+			msg.Info("⏳", fmt.Sprintf("Credentials: STS: Expiration in %s", humanize.Time(creds.Expiration)))
 		}
 	} else {
-		msg.Message.Successln("✅", "Credentials: Cached: Received")
-		msg.Message.Infoln("⏳", fmt.Sprintf("Credentials: Cached: Expiration in %s", humanize.Time(creds.Expiration)))
+		msg.Success("✅", "Credentials: Cached: Received")
+		msg.Info("⏳", fmt.Sprintf("Credentials: Cached: Expiration in %s", humanize.Time(creds.Expiration)))
 	}
 
 	// TODO same for passwd cache
@@ -61,7 +61,7 @@ func (app *App) Assume(flags AssumeFlags) error {
 		return err
 	}
 
-	msg.Message.HorizontalRuler()
+	msg.HorizontalRuler()
 
 	return creds.Output()
 }

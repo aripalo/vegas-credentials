@@ -16,7 +16,7 @@ func ConfigureYubikey(options yubikey.Options) multinput.InputResolver {
 
 	if err != nil {
 
-		msg.Message.Warningln("⚠️", "YUBIERR: "+err.Error())
+		msg.Warn("⚠️", "YUBIERR: "+err.Error())
 
 		// TODO fix this
 		// To avoid nil pointer reference, return just a resolver that resolves

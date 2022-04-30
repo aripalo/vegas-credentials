@@ -6,6 +6,7 @@ import (
 	"github.com/alexflint/go-filemutex"
 	"github.com/aripalo/vegas-credentials/internal/config/locations"
 	"github.com/aripalo/vegas-credentials/internal/logger"
+	"github.com/aripalo/vegas-credentials/internal/msg"
 )
 
 // Diretory to store the lock file into.
@@ -24,7 +25,7 @@ type MutexUnlock func() error
 // https://github.com/dgraph-io/badger/blob/69926151f6532f2fe97a9b11ee9281519c8ec5e6/dir_unix.go#L45
 func Lock() (MutexUnlock, error) {
 
-	logger.Trace("mutex init")
+	msg.Trace("", "mutex init")
 
 	filePath := path.Join(dir, fileName)
 
@@ -34,14 +35,14 @@ func Lock() (MutexUnlock, error) {
 		logger.Error("mutex init failed")
 		return nil, err
 	}
-	logger.Trace("mutex init success")
+	msg.Trace("", "mutex init success")
 
 	err = fm.Lock()
 	if err != nil {
 		logger.Error("mutex lock acquiring failed")
 		return nil, err
 	}
-	logger.Trace("mutex lock acquired")
+	msg.Trace("", "mutex lock acquired")
 
 	return func() error {
 		err := fm.Unlock()
@@ -49,7 +50,7 @@ func Lock() (MutexUnlock, error) {
 			logger.Error("mutex unlock failed")
 			return err
 		}
-		logger.Trace("mutex unlock success")
+		msg.Trace("", "mutex unlock success")
 		return nil
 	}, nil
 

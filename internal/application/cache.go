@@ -20,7 +20,7 @@ func (app *App) CacheClean(flags CacheFlags) error {
 		if err != nil {
 			msg.Bail(fmt.Sprintf("error cleaning password cache:%v", err))
 		}
-		msg.Message.Successln("✅", "Password cache cleaned")
+		msg.Success("✅", "Password cache cleaned")
 	}
 
 	if flags.Credential {
@@ -28,7 +28,7 @@ func (app *App) CacheClean(flags CacheFlags) error {
 		if err != nil {
 			msg.Bail(fmt.Sprintf("error cleaning credential cache:%v", err))
 		}
-		msg.Message.Successln("✅", "Credential cache cleaned")
+		msg.Success("✅", "Credential cache cleaned")
 	}
 
 	if !flags.Password && !flags.Credential {
@@ -40,7 +40,7 @@ func (app *App) CacheClean(flags CacheFlags) error {
 		if err != nil {
 			msg.Bail(fmt.Sprintf("error cleaning credential cache:%v", err))
 		}
-		msg.Message.Successln("✅", "Cache cleaned")
+		msg.Success("✅", "Cache cleaned")
 	}
 
 	return nil
