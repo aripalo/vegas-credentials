@@ -1,7 +1,7 @@
 package assumable
 
 import (
-	"errors"
+	"fmt"
 
 	"github.com/aripalo/vegas-credentials/internal/assumable/awsini"
 	"github.com/aripalo/vegas-credentials/internal/checksum"
@@ -22,7 +22,7 @@ func New[D awsini.DataSource](dataSource D, profileName string) (Opts, error) {
 	}
 
 	if role.SourceProfile == "" {
-		return opts, errors.New("vegas_source_profile not configured")
+		return opts, fmt.Errorf(`Profile "%s" does not contain "vegas_source_profile"`, profileName)
 	}
 
 	err = awsini.LoadProfile(dataSource, role.SourceProfile, &user)
