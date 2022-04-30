@@ -41,7 +41,7 @@ func Lock() (MutexUnlock, error) {
 		logger.Error("mutex lock acquiring failed")
 		return nil, err
 	}
-	logger.Trace("Mutex lock acquired")
+	logger.Trace("mutex lock acquired")
 
 	return func() error {
 		err := fm.Unlock()

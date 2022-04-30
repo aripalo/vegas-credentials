@@ -2,9 +2,10 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/aripalo/vegas-credentials/internal/config"
+	"github.com/aripalo/vegas-credentials/internal/logger"
+	"github.com/aripalo/vegas-credentials/internal/msg"
 
 	"github.com/spf13/cobra"
 )
@@ -14,9 +15,16 @@ var rootCmd = &cobra.Command{
 	Version: config.Version,
 	Short:   "TODO1",
 	Long:    `TODO2`,
+	PreRun: func(cmd *cobra.Command, args []string) {
+		logger.Trace(fmt.Sprintf("%s cmd init", cmd.Name()))
+	},
+	PostRun: func(cmd *cobra.Command, args []string) {
+		logger.Trace(fmt.Sprintf("%s cmd done", cmd.Name()))
+	},
 }
 
 func init() {
+
 	rootCmd.PersistentFlags().Bool("no-color", false, "disable both colors and emoji from visible output")
 	rootCmd.PersistentFlags().Bool("no-emoji", false, "disable emoji from visible output (but keep colors)")
 	rootCmd.PersistentFlags().Bool("no-gui", false, "disable GUI Diaglog Prompt")
@@ -34,7 +42,7 @@ func init() {
 	configShowProfileCmd.Flags().StringP(profileFlag, "p", "", "aws profile to use from config")
 	err := configShowProfileCmd.MarkFlagRequired(profileFlag)
 	if err != nil {
-		panic(err)
+		msg.Bail(err.Error())
 	}
 
 	rootCmd.AddCommand(cacheCmd)
@@ -47,14 +55,12 @@ func init() {
 	assumeCmd.Flags().StringP(profileFlag, "p", "", "aws profile to use from config")
 	err = assumeCmd.MarkFlagRequired(profileFlag)
 	if err != nil {
-		panic(err)
+		msg.Bail(err.Error())
 	}
-
 }
 
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		msg.Bail(err.Error())
 	}
 }
