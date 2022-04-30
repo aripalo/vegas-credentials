@@ -16,6 +16,7 @@ import (
 type Logger func(v ...any)
 
 var output io.Writer = func() io.Writer {
+	// Avoids writing to log file during tests
 	if flag.Lookup("test.v") == nil {
 		return &lumberjack.Logger{
 			Filename:   filepath.Join(locations.StateDir, "application.log"),
