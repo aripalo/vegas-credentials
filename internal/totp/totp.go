@@ -92,7 +92,7 @@ func (m *Totp) Get() (string, error) {
 		return "", err
 	}
 
-	msg.Debug("ℹ️", fmt.Sprintf("MFA: Token Code received via %s", result.ResolverID))
+	msg.Debug("ℹ️", fmt.Sprintf("MFA: Token received via %s", result.ResolverID))
 
 	// Trim just in case.
 	code := strings.TrimSpace(result.Value)
