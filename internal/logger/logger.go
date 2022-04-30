@@ -9,7 +9,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/aripalo/vegas-credentials/internal/config"
 	"github.com/aripalo/vegas-credentials/internal/config/locations"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
@@ -19,7 +18,7 @@ type Logger func(v ...any)
 var output io.Writer = func() io.Writer {
 	if flag.Lookup("test.v") == nil {
 		return &lumberjack.Logger{
-			Filename:   filepath.Join(locations.StateDir, fmt.Sprintf("%s.log", config.AppName)),
+			Filename:   filepath.Join(locations.StateDir, "application.log"),
 			MaxSize:    1, // megabytes
 			MaxBackups: 3,
 			MaxAge:     28, // days
