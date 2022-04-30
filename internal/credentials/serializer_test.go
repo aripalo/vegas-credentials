@@ -11,11 +11,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-type testData struct {
-	BooleanValue bool
-	StringValue  string
-}
-
 var expirationLayout = "2006-01-02T15:04:05Z"
 var expirationTime = "2022-04-30T23:05:12Z"
 
