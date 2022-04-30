@@ -24,34 +24,32 @@ type MutexUnlock func() error
 // https://github.com/dgraph-io/badger/blob/69926151f6532f2fe97a9b11ee9281519c8ec5e6/dir_unix.go#L45
 func Lock() (MutexUnlock, error) {
 
-	logger.Trace("Mutex lock initializing")
+	logger.Trace("mutex init")
 
 	filePath := path.Join(dir, fileName)
 
 	// create the filemutex
 	fm, err := filemutex.New(filePath)
 	if err != nil {
-		logger.Error("Mutex lock init failed")
+		logger.Error("mutex init failed")
 		return nil, err
 	}
-
-	logger.Trace("Mutex lock init success")
+	logger.Trace("mutex init success")
 
 	err = fm.Lock()
 	if err != nil {
-		logger.Error("Mutex lock acquiring failed")
+		logger.Error("mutex lock acquiring failed")
 		return nil, err
 	}
-
-	logger.Trace("Mutex lock acquiring success")
+	logger.Trace("Mutex lock acquired")
 
 	return func() error {
 		err := fm.Unlock()
 		if err != nil {
-			logger.Error("Mutex unlock failed")
+			logger.Error("mutex unlock failed")
 			return err
 		}
-		logger.Trace("Mutex unlock success")
+		logger.Trace("mutex unlock success")
 		return nil
 	}, nil
 

@@ -12,7 +12,7 @@ import (
 // TODO msg not initialized...?
 
 func main() {
-	logger.Trace("Initializing")
+	logger.Trace("initializing")
 
 	unlock, err := mutex.Lock()
 	if err != nil {
