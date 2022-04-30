@@ -282,8 +282,6 @@ func authenticate(oathAccounts ykmangoath.OathAccounts, password string) (bool, 
 
 	_, err := oathAccounts.List()
 
-	msg.Debug("⚠️", fmt.Sprintf("List Error: %v", err))
-
 	if err != nil {
 		return false, err
 	}

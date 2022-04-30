@@ -86,14 +86,11 @@ func (y *Yubikey) Code(ctx context.Context) (string, error) {
 
 	oathAccounts, err := ykmangoath.New(ctx, y.device)
 	if err != nil {
-
-		msg.Debug("⚠️", "CODERR 1: "+err.Error())
 		return "", err
 	}
 
 	password, err := y.GetPassword()
 	if err != nil {
-		msg.Debug("⚠️", "CODERR 2: "+err.Error())
 		return "", err
 	}
 
@@ -101,7 +98,6 @@ func (y *Yubikey) Code(ctx context.Context) (string, error) {
 		// set the password we already know (after yubikey init)
 		err := oathAccounts.SetPassword(password)
 		if err != nil {
-			msg.Debug("⚠️", "CODERR 3: "+err.Error())
 			return "", err
 		}
 	}

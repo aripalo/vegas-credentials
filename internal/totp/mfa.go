@@ -1,14 +1,18 @@
 package totp
 
 import (
+	"bytes"
 	"context"
+	_ "embed"
 	"errors"
+	"fmt"
 	"regexp"
 	"strings"
 	"time"
 
 	"github.com/aripalo/vegas-credentials/internal/msg"
 	"github.com/aripalo/vegas-credentials/internal/multinput"
+	"github.com/aripalo/vegas-credentials/internal/tmpl"
 	"github.com/aripalo/vegas-credentials/internal/totp/resolver"
 	"github.com/aripalo/vegas-credentials/internal/yubikey"
 )
@@ -26,29 +30,29 @@ type TOTP interface {
 
 // Describes the internal configuration/state.
 type Totp struct {
-	//yubikeyLabel string
+	guiEnabled     bool
 	yubikeyEnabled bool
 	resolvers      []multinput.InputResolver
 }
 
 // Initialize a new TOTP construct which provides the Get method.
 func New(options TotpOptions) TOTP {
+	guiEnabled := options.EnableGui
+	yubikeyEnabled := false
 
 	var resolvers []multinput.InputResolver
 
 	resolvers = append(resolvers, resolver.CLI)
 
-	if options.EnableGui {
+	if guiEnabled {
 		resolvers = append(resolvers, resolver.GUI)
 	}
 
 	y, err := yubikey.New(yubikey.Options{
 		Device:    options.YubikeySerial,
 		Account:   options.YubikeyLabel,
-		EnableGui: options.EnableGui,
+		EnableGui: guiEnabled,
 	})
-
-	yubikeyEnabled := false
 
 	if err == nil {
 		yubikeyEnabled = true
@@ -56,7 +60,7 @@ func New(options TotpOptions) TOTP {
 	}
 
 	return &Totp{
-		//yubikeyLabel: options.YubikeyLabel,
+		guiEnabled:     guiEnabled,
 		yubikeyEnabled: yubikeyEnabled,
 		resolvers:      resolvers,
 	}
@@ -64,15 +68,28 @@ func New(options TotpOptions) TOTP {
 
 const MfaTimeout time.Duration = 60 * time.Second
 
+//go:embed data/mfa-code-message.tmpl
+var inputTmpl string
+
+type inputTmplOpts struct {
+	GuiEnabled     bool
+	YubikeyEnabled bool
+}
+
 // Method responsible for actually querying the TOTP code from end-user.
 func (m *Totp) Get() (string, error) {
 
-	// Print some end-user messages
-	if m.yubikeyEnabled {
-		msg.Prompt("🔑", "Input the Token Code or touch Yubikey:")
-	} else {
-		msg.Prompt("🔑", "Input the Token Code:")
+	messageOpts := inputTmplOpts{
+		GuiEnabled:     m.guiEnabled,
+		YubikeyEnabled: m.yubikeyEnabled,
 	}
+	message := bytes.Buffer{}
+	err := tmpl.Write(&message, "mfa-code-input", inputTmpl, messageOpts)
+	if err != nil {
+		msg.Fatal(err.Error())
+	}
+
+	msg.Prompt("🔑", string(message.Bytes()))
 
 	ctx, cancel := context.WithTimeout(context.Background(), MfaTimeout)
 	defer cancel()
@@ -83,6 +100,8 @@ func (m *Totp) Get() (string, error) {
 	if err != nil {
 		return "", err
 	}
+
+	msg.Debug("ℹ️", fmt.Sprintf("MFA: Token Code received via %s", result.ResolverID))
 
 	// Trim just in case.
 	code := strings.TrimSpace(result.Value)
@@ -96,7 +115,8 @@ func (m *Totp) Get() (string, error) {
 	return code, nil
 }
 
-// Validates the received value looks like a TOTP MFA Token Code.
+// Validates the received value looks like a TOTP MFA Token Code:
+// 6 digits or more.
 func isValidToken(value string) bool {
 	return regexp.MustCompile(`^\d{6}\d*$`).MatchString(value)
 }
