@@ -5,7 +5,8 @@ import (
 	"text/template"
 )
 
-// Write text template to stdout.
+// Write text template to stdout. An utility method that wraps text/template
+// with our own preferences.
 func Write[T any](dest io.Writer, name string, body string, data T) error {
 	var tmpl *template.Template
 	var err error
