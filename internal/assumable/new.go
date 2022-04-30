@@ -43,8 +43,9 @@ func New[D awsini.DataSource](dataSource D, profileName string) (Opts, error) {
 		ExternalID:      role.ExternalID,
 	}
 
-	if opts.MfaSerial == "" {
-		return opts, errors.New("mfa_serial not configured")
+	err = opts.validate()
+	if err != nil {
+		return opts, err
 	}
 
 	checksum, err := checksum.Generate(opts)
