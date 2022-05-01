@@ -81,20 +81,41 @@ $ vegas-credentials --profile frank@concerts
 }
 ```
 
-### `config list`
+### `version`
 
-🚧 **Not implemented yet!**
+Print out version information.
+
+| Flag | Required? | Purpose |
+| :--- | :-----------: | :------ |
+|`--full`|  | Print out full version & build information  |
+
+```sh
+$ vegas-credentials version --full
+vegas-credentials version 0.11.1 darwin/amd64
+```
+
+### `config list`
 
 Prints out information what are the various configuration, cache and temporary file locations in use.
 
+```sh
+$ vegas-credentials config list
+aws config: /Users/Frank/.aws/config
+ykman cli: /usr/local/bin/ykman
+cache dir: /Users/Frank/Library/Caches/vegas-credentials
+state dir: /Users/Frank/Library/Application Support/vegas-credentials
+exec dir: /usr/local/bin
+```
 
 ### `cache clean`
-
-🚧 **Not implemented yet!**
 
 Cleans up the cached data.
 
 | Flag | Required? | Purpose |
 | :--- | :-----------: | :------ |
-|`--password`|  | Deletes the Yubikey OATH application password cache only  |
 |`--credential`|  | Deletes the Temporary Session Credential cache only  |
+|`--password`|  | Deletes the Yubikey OATH application password cache only  |
+
+```sh
+$ vegas-credentials cache clean --credential
+```
