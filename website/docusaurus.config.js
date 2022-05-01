@@ -5,7 +5,7 @@
 const lightCodeTheme = require("prism-react-renderer/themes/github");
 const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 
-const socialImageUrl = '/img/vegas-credentials-hero.jpg';
+const socialImageUrl = 'https://credentials.vegas/img/vegas-credentials-hero.jpg';
 const socialTitle = 'vegas-credentials';
 const socialDescription = 'AWS credential_process utility to request STS Temporary Security Credentials by assuming an IAM role with TOTP MFA via either Yubikey Touch or Authenticator Apps.';
 
