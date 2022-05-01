@@ -12,8 +12,8 @@ import (
 var rootCmd = &cobra.Command{
 	Use:     "vegas-credentials",
 	Version: config.Version,
-	Short:   "TODO1",
-	Long:    `TODO2`,
+	Short:   "TODOTODO1", // TODO
+	Long:    `TODOTODO2`, // TODO
 	PreRun: func(cmd *cobra.Command, args []string) {
 		msg.Trace("", fmt.Sprintf("%s cmd init", cmd.Name()))
 	},

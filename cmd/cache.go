@@ -12,6 +12,12 @@ import (
 var cacheCmd = &cobra.Command{
 	Use:   "cache",
 	Short: "Manage cache",
+	PreRun: func(cmd *cobra.Command, args []string) {
+		msg.Trace("", fmt.Sprintf("%s cmd init", cmd.Name()))
+	},
+	PostRun: func(cmd *cobra.Command, args []string) {
+		msg.Trace("", fmt.Sprintf("%s cmd done", cmd.Name()))
+	},
 }
 
 var cacheCleanCmd = &cobra.Command{
