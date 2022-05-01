@@ -122,17 +122,19 @@ func stateMachine(state State, op Operation) State {
 				Error: errors.New("yubikey: device not available"),
 			}
 		}
+		msg.Debug("ℹ️", "Yubikey: device is available")
 		return State{
 			Name: CHECK_DEVICE_PASSWORD_PROTECTED,
 		}
 
 	case CHECK_DEVICE_PASSWORD_PROTECTED:
 		if op.IsPasswordProtected() {
-			msg.Debug("⚠️", "Yubikey: OATH application is password protected")
+			msg.Debug("🔒", "Yubikey: OATH application is password protected")
 			return State{
 				Name: GET_PASSWORD_FROM_CACHE,
 			}
 		}
+		msg.Debug("🔓", "Yubikey: OATH application not password protected")
 		return State{
 			Name: CHECK_DEVICE_HAS_ACCOUNT,
 		}
@@ -140,12 +142,12 @@ func stateMachine(state State, op Operation) State {
 	case GET_PASSWORD_FROM_CACHE:
 		password, err := op.GetPassword()
 		if err != nil {
-			msg.Debug("⚠️", "Yubikey: OATH password not found from cache")
+			msg.Debug("🔒", "Yubikey: OATH password not found from cache")
 			return State{
 				Name: PASSWORD_NOT_FOUND_FROM_CACHE,
 			}
 		}
-		msg.Debug("⚠️", "Yubikey: OATH password found from cache")
+		msg.Debug("🔐", "Yubikey: OATH password found from cache")
 		return State{
 			Name:     AUTHENTICATE_WITH_CACHED_PASSWORD,
 			Password: password,
@@ -195,6 +197,11 @@ func stateMachine(state State, op Operation) State {
 				Count: state.Count,
 			}
 		}
+
+		if state.Count > 0 {
+			msg.Debug("🔐", "Yubikey: OATH password retry...")
+		}
+
 		value, err := op.AskPass()
 
 		msg.DebugNoLog("⚠️", "Yubikey: OATH password received: "+value)
@@ -227,6 +234,7 @@ func stateMachine(state State, op Operation) State {
 				Count: state.Count,
 			}
 		}
+		msg.Success("🔓", "Yubikey: OATH password is correct")
 		return State{
 			Name:     SAVE_PASSWORD,
 			Password: state.Password,
@@ -256,6 +264,7 @@ func stateMachine(state State, op Operation) State {
 			}
 		}
 		if !has {
+			msg.Warn("⚠️", "Yubikey: OATH application has no such account")
 			return State{
 				Name:  ERROR,
 				Error: errors.New("yubikey: account not found"),
