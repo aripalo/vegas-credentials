@@ -201,7 +201,3 @@ scoop:
   # An array of commands to be executed after an application is installed.
   # Default is empty.
   #post_install: ["Write-Host 'Running postinstall command'"]
-
-publishers:
-  - name: npm-publisher
-    cmd: ./utils/set-npm-version.sh {{ .Version }}
