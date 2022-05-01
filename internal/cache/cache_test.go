@@ -47,8 +47,6 @@ func TestCache(t *testing.T) {
 				log.Fatal(err)
 			}
 
-			fmt.Println(tempDir)
-
 			defer os.RemoveAll(tempDir)
 
 			c := New(tempDir)
