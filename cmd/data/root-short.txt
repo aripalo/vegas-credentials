@@ -1,0 +1,1 @@
+AWS credential_process utility to request STS Temporary Security Credentials by assuming an IAM role with TOTP MFA via either Yubikey Touch or Authenticator Apps.

@@ -1,0 +1,11 @@
+AWS credential_process utility to request STS Temporary Security Credentials by assuming an IAM role with TOTP MFA via either Yubikey Touch or Authenticator Apps.
+
+You don't use this command directly, instead configure it into your ~/.aws/config:
+
+    [default]
+    mfa_serial = arn:aws:iam::111111111111:mfa/FrankSinatra
+
+    [profile frank@concerts]
+    credential_process = vegas-credentials assume --profile=frank@concerts
+    vegas_role_arn=arn:aws:iam::222222222222:role/SingerRole
+    vegas_source_profile=default

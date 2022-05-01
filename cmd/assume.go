@@ -12,7 +12,8 @@ import (
 
 var assumeCmd = &cobra.Command{
 	Use:   "assume",
-	Short: "Assume Temporary Session Credentials",
+	Short: rootDescShort,
+	Long:  rootDescLong,
 	PreRun: func(cmd *cobra.Command, args []string) {
 		msg.Trace("", fmt.Sprintf("%s cmd init", cmd.Name()))
 	},

@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	_ "embed"
 	"fmt"
 
 	"github.com/aripalo/vegas-credentials/internal/config"
@@ -9,11 +10,17 @@ import (
 	"github.com/spf13/cobra"
 )
 
+//go:embed data/root-short.txt
+var rootDescShort string
+
+//go:embed data/root-long.txt
+var rootDescLong string
+
 var rootCmd = &cobra.Command{
 	Use:     "vegas-credentials",
 	Version: config.Version,
-	Short:   "TODOTODO1", // TODO
-	Long:    `TODOTODO2`, // TODO
+	Short:   rootDescShort,
+	Long:    rootDescLong,
 	PreRun: func(cmd *cobra.Command, args []string) {
 		msg.Trace("", fmt.Sprintf("%s cmd init", cmd.Name()))
 	},
