@@ -121,7 +121,7 @@ const config = {
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
-        additionalLanguages: ['ini', 'hcl', 'yaml'],
+        additionalLanguages: ['ini', 'hcl', 'yaml', 'log'],
       },
     }),
 };
