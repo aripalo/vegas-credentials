@@ -1,12 +1,4 @@
-🚧 🚧 🚧  **Important:** 🚧 🚧 🚧
-
-Currently this branch points to rewritten next version of `vegas-credentials` which may not yet have been released. If you're looking for the currently released version, see [`original`-branch](https://github.com/aripalo/vegas-credentials/tree/original).
-
----
-
-<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-
-| **Work-in-Progress** | 🚀 ⁉️ Publish Plan |
+| **🚧 Work-in-Progress** | 🚀 ⁉️ Publish Plan |
 | :--------------------- | :--- |
 | Things may break without any prior notice at any given `v0.x.x` version: So do not use this for anything critical, but feel free to test this out and give feedback! | After some testing, depending on the amount of bugs/issues/feedback, I'm hoping to release `v1.0.0` during spring 2022. No commitments though! See [`v1` Roadmap](https://github.com/aripalo/vegas-credentials/projects/1). |
 ---
@@ -29,6 +21,14 @@ Vegas Credentials is an utility with smooth user experience that plugs into AWS 
 <!-- /Badges -->
 
 ---
+
+<br/>
+
+## Docs
+
+**For guides, examples and full documentation, go to https://credentials.vegas.**
+
+
 
 <br/>
 
