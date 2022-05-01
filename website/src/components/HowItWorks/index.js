@@ -26,7 +26,7 @@ export default function HowItWorks() {
 
           <TabItem value="awscli" label="CLI">
             <CodeBlock language="bash">
-            $ aws aws s3api create-bucket --bucket=my-bucket --profile=my-profile
+            $ aws s3api create-bucket --bucket=my-bucket --profile=my-profile
             </CodeBlock>
           </TabItem>
 
