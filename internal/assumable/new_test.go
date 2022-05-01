@@ -1,6 +1,7 @@
 package assumable
 
 import (
+	"errors"
 	"fmt"
 	"testing"
 
@@ -28,6 +29,13 @@ func TestNewAssumable(t *testing.T) {
 				DurationSeconds: 3600,
 				Checksum:        "d8fdfde29a33d93a04f2c81a014d3558fe09f1c7",
 			},
+		},
+		{
+			name:        "invalid-missing-source",
+			datasource:  "./testdata/invalid-missing-source.ini",
+			profileName: "frank@concerts",
+			expected:    Opts{},
+			err:         errors.New("Profile \"frank@concerts\" does not contain \"vegas_source_profile\""),
 		},
 	}
 
