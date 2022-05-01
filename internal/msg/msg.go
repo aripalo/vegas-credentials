@@ -70,7 +70,6 @@ func Prompt(prefix emoji.Emoji, message string) {
 	d.Promptln(prefix, message)
 }
 
-// TODO maybe name as fatal?
 func Fatal(message string) {
 	logger.Fatal(getFilename(), message)
 	d.Failureln("❌", message)
