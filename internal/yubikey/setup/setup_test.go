@@ -5,10 +5,14 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/aripalo/vegas-credentials/internal/msg"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestStateMachine(t *testing.T) {
+
+	msg.SetSilentMode(true)
+
 	tests := []struct {
 		name     string
 		input    State
@@ -97,7 +101,7 @@ func TestStateMachine(t *testing.T) {
 			name:     "get password from user too many retried",
 			input:    State{Name: GET_PASSWORD_FROM_USER, Count: maximumPasswordTries + 1},
 			op:       Operation{AskPass: func() (string, error) { return "p4ssword", nil }},
-			expected: State{Name: ERROR, Count: 4, Error: errors.New("password is incorrect: failed with too many attempts (4)")},
+			expected: State{Name: ERROR, Count: 4, Error: errors.New("OATH password authentication failed: too many attempts (4)")},
 		},
 		{
 			name:     "get password from user error",

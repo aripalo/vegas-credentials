@@ -29,6 +29,10 @@ func Init(options Options) {
 	d.SetEmojiMode(options.EmojiMode)
 }
 
+func SetSilentMode(silentMode bool) {
+	d.SetSilentMode(silentMode)
+}
+
 func Trace(prefix emoji.Emoji, message string) {
 	logger.Trace(getFilename(), message)
 }
