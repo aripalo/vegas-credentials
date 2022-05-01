@@ -5,6 +5,10 @@
 const lightCodeTheme = require("prism-react-renderer/themes/github");
 const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 
+const socialImageUrl = '/img/vegas-credentials-hero.jpg';
+const socialTitle = 'vegas-credentials';
+const socialDescription = 'AWS credential_process utility to request STS Temporary Security Credentials by assuming an IAM role with TOTP MFA via either Yubikey Touch or Authenticator Apps.';
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'vegas-credentials',
@@ -38,6 +42,23 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      metadata: [
+        {name: 'description', content: socialDescription},
+        {property: 'og:description', content: socialDescription},
+        {name: 'twitter:description', content: socialDescription},
+        {itemprop: 'description', content: socialDescription},
+
+        {name: 'keywords', content: 'amazon web services, aws, iam, sts, mfa, multi-factor authentication, yubikey'},
+
+        {property: 'og:title', content: socialTitle},
+        {name: 'twitter:title', content: socialTitle},
+        {itemprop: 'title', content: socialTitle},
+
+        {property: 'og:image', content: socialImageUrl},
+        {name: 'twitter:image', content: socialImageUrl},
+        {name: 'twitter:card', content: 'summary_large_image'},
+        {itemprop: 'image', content: socialImageUrl},
+      ],
       colorMode: {
         defaultMode: 'dark',
         disableSwitch: false,
