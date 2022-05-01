@@ -282,6 +282,10 @@ func authenticate(oathAccounts ykmangoath.OathAccounts, password string) (bool, 
 
 	_, err := oathAccounts.List()
 
+	if err == ykmangoath.ErrOathAccountPasswordIncorrect {
+		return false, nil
+	}
+
 	if err != nil {
 		return false, err
 	}
