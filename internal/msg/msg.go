@@ -38,6 +38,10 @@ func Debug(prefix emoji.Emoji, message string) {
 	d.Debugln(prefix, message)
 }
 
+func DebugNoLog(prefix emoji.Emoji, message string) {
+	d.Debugln(prefix, message)
+}
+
 func Info(prefix emoji.Emoji, message string) {
 	logger.Info(getFilename(), message)
 	d.Infoln(prefix, message)

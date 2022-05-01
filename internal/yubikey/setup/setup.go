@@ -51,7 +51,6 @@ func Setup(options Options, store PasswordStore) error {
 			return oathAccounts.HasAccount(options.Account)
 		},
 		Authenticate: func(password string) (bool, error) {
-			msg.Debug("⚠️", "AUTHENTICAT RECEIVED: "+password)
 			return authenticate(oathAccounts, password)
 		},
 		AskPass: func() (string, error) {
@@ -117,7 +116,7 @@ func stateMachine(state State, op Operation) State {
 
 	case CHECK_DEVICE_AVAILABLE:
 		if !op.IsAvailable() {
-			msg.Debug("⚠️", "Yubikey: Device not available")
+			msg.Debug("⚠️", "Yubikey: device not available")
 			return State{
 				Name:  ERROR,
 				Error: errors.New("yubikey: device not available"),
@@ -129,7 +128,7 @@ func stateMachine(state State, op Operation) State {
 
 	case CHECK_DEVICE_PASSWORD_PROTECTED:
 		if op.IsPasswordProtected() {
-			msg.Debug("⚠️", "Yubikey: Device is password protected")
+			msg.Debug("⚠️", "Yubikey: OATH application is password protected")
 			return State{
 				Name: GET_PASSWORD_FROM_CACHE,
 			}
@@ -141,12 +140,12 @@ func stateMachine(state State, op Operation) State {
 	case GET_PASSWORD_FROM_CACHE:
 		password, err := op.GetPassword()
 		if err != nil {
-			msg.Debug("⚠️", "Yubikey: Password not found from cache")
+			msg.Debug("⚠️", "Yubikey: OATH password not found from cache")
 			return State{
 				Name: PASSWORD_NOT_FOUND_FROM_CACHE,
 			}
 		}
-		msg.Debug("⚠️", "Yubikey: Password found from cache")
+		msg.Debug("⚠️", "Yubikey: OATH password found from cache")
 		return State{
 			Name:     AUTHENTICATE_WITH_CACHED_PASSWORD,
 			Password: password,
@@ -168,14 +167,14 @@ func stateMachine(state State, op Operation) State {
 	case AUTHENTICATE_WITH_CACHED_PASSWORD:
 		ok, err := op.Authenticate(state.Password)
 		if err != nil {
-			msg.Warn("⚠️", "Yubikey: Error authentication with cached password")
+			msg.Warn("⚠️", "Yubikey: OATH password authentication error (with cached password)")
 			return State{
 				Name:  ERROR,
 				Error: err,
 			}
 		}
 		if !ok {
-			msg.Warn("⚠️", "Yubikey: Incorrect password from cache")
+			msg.Warn("⚠️", "Yubikey: OATH password incorrect (from cache)")
 			return State{
 				Name:  GET_PASSWORD_FROM_USER,
 				Count: state.Count,
@@ -188,15 +187,17 @@ func stateMachine(state State, op Operation) State {
 
 	case GET_PASSWORD_FROM_USER:
 		if state.Count >= maximumPasswordTries {
+			message := fmt.Sprintf("OATH password authentication failed: too many attempts (%d)", state.Count)
+			msg.Warn("⚠️", fmt.Sprintf("Yubikey: %s", message))
 			return State{
 				Name:  ERROR,
-				Error: fmt.Errorf("password is incorrect: failed with too many attempts (%d)", state.Count),
+				Error: errors.New(message),
 				Count: state.Count,
 			}
 		}
 		value, err := op.AskPass()
 
-		msg.Debug("⚠️", "Yubikey OATH Password: "+value)
+		msg.DebugNoLog("⚠️", "Yubikey: OATH password received: "+value)
 
 		if err != nil {
 			return State{
@@ -213,14 +214,14 @@ func stateMachine(state State, op Operation) State {
 	case AUTHENTICATE_WITH_USER_PASSWORD:
 		ok, err := op.Authenticate(state.Password)
 		if err != nil {
-			msg.Warn("⚠️", "Yubikey OATH Password: Authentication Error")
+			msg.Warn("⚠️", "Yubikey: OATH password authentication error")
 			return State{
 				Name:  ERROR,
 				Error: err,
 			}
 		}
 		if !ok {
-			msg.Warn("⚠️", "Yubikey OATH Password: Incorrect")
+			msg.Warn("⚠️", "Yubikey: OATH password is incorrect")
 			return State{
 				Name:  GET_PASSWORD_FROM_USER,
 				Count: state.Count,
