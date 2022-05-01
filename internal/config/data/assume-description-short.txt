@@ -1,1 +1,0 @@
-Assume Temporary Session Credentials with MFA.

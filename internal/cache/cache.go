@@ -1,35 +1,47 @@
 package cache
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/aripalo/vegas-credentials/internal/cache/database"
 	"github.com/aripalo/vegas-credentials/internal/cache/encryption"
+	"github.com/aripalo/vegas-credentials/internal/msg"
 )
 
-// NewCache (and its methods) describes the caching mechanism
-type NewCache struct {
-	db *database.Database
+// Cache (and its methods) describes the caching mechanism
+type Cache struct {
+	db databaseConnection
 }
 
-// New instantiates a cache
-func New(cacheName string) *NewCache {
-	cachePath := CachePath(cacheName, "cachedb")
-	db, err := database.Open(cachePath, database.DatabaseOptions{})
+// Internal interface to describe methods found from BadgerDB.
+// Allows switching the internal implementation if required later
+// and also useful for testing.
+type databaseConnection interface {
+	Write(key string, value []byte, ttl time.Duration) error
+	Read(key string) ([]byte, error)
+	Delete(key string) error
+	DeleteByPrefix(keyPrefix string) error
+	DeleteAll() error
+	Close() error
+}
+
+func New(databasePath string) *Cache {
+	db, err := database.Open(databasePath, database.DatabaseOptions{})
 	if err != nil {
-		panic(err)
+		msg.Fatal(fmt.Sprintf("Configuration Error: %s", err))
 	}
-	return &NewCache{db}
+	return &Cache{db}
 }
 
 // Set value to cache
-func (n *NewCache) Set(key string, data []byte, ttl time.Duration) error {
+func (c *Cache) Set(key string, data []byte, ttl time.Duration) error {
 	encrypted, err := encryption.Encrypt(data)
 	if err != nil {
 		return err
 	}
 
-	err = n.db.Write(key, encrypted, ttl)
+	err = c.db.Write(key, encrypted, ttl)
 	if err != nil {
 		return err
 	}
@@ -38,8 +50,8 @@ func (n *NewCache) Set(key string, data []byte, ttl time.Duration) error {
 }
 
 // Get value from cache
-func (n *NewCache) Get(key string) ([]byte, error) {
-	cached, err := n.db.Read(key)
+func (c *Cache) Get(key string) ([]byte, error) {
+	cached, err := c.db.Read(key)
 	if err != nil {
 		return nil, err
 	}
@@ -53,8 +65,8 @@ func (n *NewCache) Get(key string) ([]byte, error) {
 }
 
 // Remove value from cache
-func (n *NewCache) Remove(key string) error {
-	err := n.db.Delete(key)
+func (c *Cache) Remove(key string) error {
+	err := c.db.Delete(key)
 	if err != nil {
 		return err
 	}
@@ -62,16 +74,16 @@ func (n *NewCache) Remove(key string) error {
 }
 
 // RemoveByPrefix clears all values with key prefix from cache
-func (n *NewCache) RemoveByPrefix(keyPrefix string) error {
-	return n.db.DeleteByPrefix(keyPrefix)
+func (c *Cache) RemoveByPrefix(keyPrefix string) error {
+	return c.db.DeleteByPrefix(keyPrefix)
 }
 
 // RemoveAll clears the whole cache
-func (n *NewCache) RemoveAll() error {
-	return n.db.DeleteAll()
+func (c *Cache) RemoveAll() error {
+	return c.db.DeleteAll()
 }
 
 // Disconnect closes cache database connections
-func (n *NewCache) Disconnect() error {
-	return n.db.Close()
+func (c *Cache) Disconnect() error {
+	return c.db.Close()
 }

@@ -1,9 +1,0 @@
-AWS credential_process utility to assume AWS IAM Roles with (Yubikey Touch and Authenticator App) OATH TOTP MFA to provide temporary session credentials – with local caching to Keyring (macOS Keychain, Windows Credential Manager, Secret Service, pass... etc).
-
-You shouldn't have to really use this command directly, instead configure it into your ~/.aws/config:
-
-    [profile my-profile]
-    credential_process = vegas-credentials assume --profile=my-profile
-    _role_arn=arn:aws:iam::123456789012:role/Demo
-    source_profile=default
-    mfa_serial=arn:aws:iam::111111111111:mfa/example

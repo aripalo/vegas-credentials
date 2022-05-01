@@ -8,14 +8,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/aripalo/vegas-credentials/internal/config"
 	"github.com/dgraph-io/badger/v3"
 )
 
 // createTempDir creates a temporary directory for testing the disk database
 // and returns the path for the directory and a function to remove the dir after test
 func createTempDir() (string, func()) {
-	dir, err := ioutil.TempDir("", strings.Join([]string{config.APP_NAME, "test", ""}, "-"))
+	dir, err := ioutil.TempDir("", strings.Join([]string{"vegas-credentials", "test", ""}, "-"))
 	if err != nil {
 		panic(err)
 	}

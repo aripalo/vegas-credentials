@@ -1,27 +1,26 @@
 package main
 
 import (
-	"log"
-	"os"
-	"runtime/pprof"
+	"fmt"
 
 	"github.com/aripalo/vegas-credentials/cmd"
+	"github.com/aripalo/vegas-credentials/internal/msg"
+	"github.com/aripalo/vegas-credentials/internal/mutex"
 )
 
+// TODO msg not initialized...?
+
 func main() {
+	msg.Trace("", "init")
 
-	cpuProfile := os.Getenv("CPU_PROFILE")
-
-	if cpuProfile != "" {
-		f, err := os.Create(cpuProfile)
-		if err != nil {
-			log.Fatal(err)
-		}
-		err = pprof.StartCPUProfile(f)
-		if err != nil {
-			panic(err)
-		}
-		defer pprof.StopCPUProfile()
+	unlock, err := mutex.Lock()
+	if err != nil {
+		msg.Fatal(fmt.Sprintf("Lock Error: %s", err))
 	}
+
+	defer func() {
+		_ = unlock()
+	}()
+
 	cmd.Execute()
 }

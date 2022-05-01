@@ -1,0 +1,279 @@
+/**
+ * CSS files with the .module.css suffix will be treated as CSS modules
+ * and scoped locally.
+ */
+
+.heroBanner {
+  padding: 4rem 0;
+  position: relative;
+  overflow: hidden;
+  background: rgb(13, 17, 23);
+
+  color: white;
+}
+
+.heroBanner code {
+  color: inherit;
+  background: #151519;
+}
+
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 2rem;
+  }
+}
+
+.heroLogo {
+  max-height: 300px;
+}
+
+
+.heroTitle {
+  font-size: 2.5rem;
+  position: relative;
+  text-shadow: none;
+}
+@media screen and (min-width: 480px) {
+  .heroTitle {
+    font-size: 3rem;
+  }
+}
+@media screen and (min-width: 996px) {
+  .heroTitle {
+    font-size: 5rem;
+  }
+}
+@media screen and (min-width: 1500px) {
+  .heroTitle {
+    font-size: 7rem;
+    /*
+    text-align: justify;
+    text-justify: inter-character;
+    */
+  }
+}
+
+.textVegas {
+  color: #F1491C;
+
+  text-shadow:
+
+    #C70F10 1px 1px 0,
+    #C70F10 -1px -1px 0,
+    #C70F10 -1px 1px 0,
+    #C70F10 1px -1px 0
+    ;
+
+  -webkit-text-stroke: 2px #C70F10;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.textCredentials {
+  color: #38B9F7;
+  text-shadow:
+
+    #2743CB 1px 1px 0,
+    #2743CB -1px -1px 0,
+    #2743CB -1px 1px 0,
+    #2743CB 1px -1px 0
+    ;
+  -webkit-text-stroke: 2px #2743CB;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+@media screen and (min-width: 720px) {
+  .textVegas {
+    text-shadow:
+    #C70F10 1px 1px 20px,
+    #C70F10 1px 1px 0,
+    #C70F10 -1px -1px 0,
+      #C70F10 -1px 1px 0,
+      #C70F10 1px -1px 0
+      ;
+  }
+  .textCredentials {
+    text-shadow:
+      #2743CB 1px 1px 20px,
+      #2743CB 1px 1px 0,
+      #2743CB -1px -1px 0,
+      #2743CB -1px 1px 0,
+      #2743CB 1px -1px 0
+      ;
+  }
+}
+
+.heroTitle:before {
+  content: "Fabulous";
+  position: absolute;
+  top: -1.5em;
+  left: 0em;
+  text-align: left;
+  color: #E943EF;
+  font-family: 'Pacifico', cursive;
+  font-size: 0.5em;
+  padding: 0;
+  margin: 0;
+  text-shadow: #C70F10 0 0 14px;
+  transform-origin: 50% 50%;
+}
+
+@media screen and (min-width: 1200px) {
+  .heroTitle:before {
+    top: -1.5em;
+    left: -1.5em;
+    transform: rotate(-10deg);
+  }
+}
+
+/*
+pinkki #F869DE
+reunapuna #C70F10
+puna #F1491C
+*/
+
+.heroDescription {
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 400;
+}
+
+.heroDescription code {
+  color: white;
+
+  vertical-align: 1px;
+}
+
+.heroQuote {
+  color: #90A6C2;
+}
+
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.install {
+  margin: 2rem 0;
+  background: #151519;
+}
+
+
+.install [role="tablist"] {
+  background: #040404;
+}
+
+.install [class^="margin-vert"] {
+  margin: 0 !important;
+}
+
+.install pre {
+  background: #151519;
+  border-radius: 0;
+}
+
+.install code {
+  margin: 0;
+  background: #151519;
+  border-radius: 0;
+}
+
+.install code:before {
+  content: '$ ';
+  color: var(--ifm-color-primary-light);
+}
+
+.install code span {
+  color: white;
+}
+
+.install code span.function {
+  color: rgb(80, 250, 123) !important;
+}
+
+.installTab {
+  border-radius: 0;
+  border: none;
+  color: white;
+  /*
+  background: #040404;
+  */
+}
+
+.installTabPrefix {
+  color: #747C86;
+  display: none;
+}
+
+@media screen and (min-width: 720px) {
+  .installTabPrefix {
+    display: inline;
+  }
+}
+
+.installTab[aria-selected='true'] {
+  background: #151519;
+}
+
+.installTabTitle {
+  color: var(--ifm-color-primary-lighter);
+}
+
+/*
+ attributes={{className: styles.installTab}}
+
+*/
+
+
+.afterInstall {
+  color: white;
+  color: #90A6C2;
+}
+
+.afterInstall ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+
+.afterInstall ol li::before {
+  content: "→ ";
+}
+
+
+.howItWorks {
+  padding: 4rem 0;
+  border-top: 1px solid var(--ifm-color-primary-darkest);
+}
+
+
+.howItWorks h2 {
+  font-size: 3rem;
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.howItWorksDiagram {
+  margin: 1rem auto;
+  max-width: 1200px;
+}
+
+.howItWorksDiagram figcaption {
+  margin-bottom: 2rem;
+}
+
+.howItWorksDiagram figcaption ol {
+  margin: 0;
+  padding: 0;
+}
+
+.howItWorksDiagram figcaption ol li {
+  margin: 0 0 1rem 1rem;
+}
+
+.howItWorksDiagram svg {
+  width: 100%;
+}

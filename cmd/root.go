@@ -1,44 +1,72 @@
 package cmd
 
 import (
+	_ "embed"
+	"fmt"
+
 	"github.com/aripalo/vegas-credentials/internal/config"
+	"github.com/aripalo/vegas-credentials/internal/msg"
+
 	"github.com/spf13/cobra"
 )
 
-var version string = "development"
+//go:embed data/root-short.txt
+var rootDescShort string
 
-// rootCmd represents the base command when called without any subcommands
+//go:embed data/root-long.txt
+var rootDescLong string
+
 var rootCmd = &cobra.Command{
-	Use:     config.APP_NAME,
-	Short:   config.APP_DESCRIPTION_SHORT,
-	Long:    config.APP_DESCRIPTION_LONG,
-	Version: version,
-}
-
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
-func Execute() {
-	cobra.CheckErr(rootCmd.Execute())
+	Use:     "vegas-credentials",
+	Version: config.Version,
+	Short:   rootDescShort,
+	Long:    rootDescLong,
+	PreRun: func(cmd *cobra.Command, args []string) {
+		msg.Trace("", fmt.Sprintf("%s cmd init", cmd.Name()))
+	},
+	PostRun: func(cmd *cobra.Command, args []string) {
+		msg.Trace("", fmt.Sprintf("%s cmd done", cmd.Name()))
+	},
 }
 
 func init() {
 
-	rootCmd.PersistentFlags().Bool(
-		config.Defaults.NoColor.Name,
-		config.Defaults.NoColor.Value,
-		config.Defaults.NoColor.Usage,
-	)
+	rootCmd.PersistentFlags().Bool("no-color", false, "disable both colors and emoji from visible output")
+	rootCmd.PersistentFlags().Bool("no-emoji", false, "disable emoji from visible output (but keep colors)")
+	rootCmd.PersistentFlags().Bool("no-gui", false, "disable GUI Diaglog Prompt")
+	rootCmd.PersistentFlags().Bool("verbose", false, "enable verbose output")
 
-	rootCmd.PersistentFlags().Bool(
-		config.Defaults.Verbose.Name,
-		config.Defaults.Verbose.Value,
-		config.Defaults.Verbose.Usage,
-	)
+	rootCmd.SetVersionTemplate(config.VersionShortTmpl)
+	rootCmd.AddCommand(versionCmd)
+	versionCmd.Flags().Bool("full", false, "display full version information")
 
-	rootCmd.PersistentFlags().Bool(
-		config.Defaults.Debug.Name,
-		config.Defaults.Debug.Value,
-		config.Defaults.Debug.Usage,
-	)
+	profileFlag := "profile"
 
+	rootCmd.AddCommand(configCmd)
+	configCmd.AddCommand(configListCmd)
+	configCmd.AddCommand(configShowProfileCmd)
+	configShowProfileCmd.Flags().StringP(profileFlag, "p", "", "aws profile to use from config")
+	err := configShowProfileCmd.MarkFlagRequired(profileFlag)
+	if err != nil {
+		msg.Fatal(err.Error())
+	}
+
+	rootCmd.AddCommand(cacheCmd)
+	cacheCmd.AddCommand(cacheCleanCmd)
+	cacheCleanCmd.Flags().Bool("password", false, "delete yubikey oath application password cache")
+	cacheCleanCmd.Flags().Bool("credential", false, "delete temporary session credential cache")
+
+	rootCmd.AddCommand(assumeCmd)
+
+	assumeCmd.Flags().StringP(profileFlag, "p", "", "aws profile to use from config")
+	err = assumeCmd.MarkFlagRequired(profileFlag)
+	if err != nil {
+		msg.Fatal(err.Error())
+	}
+}
+
+func Execute() {
+	if err := rootCmd.Execute(); err != nil {
+		msg.Fatal(err.Error())
+	}
 }

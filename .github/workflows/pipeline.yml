@@ -1,11 +1,12 @@
 name: build
 
-on: push
+on:
+  push:
 
 jobs:
 
-  pipeline:
-    name: Pipeline
+  prepare:
+    name: Prepare
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -48,6 +49,20 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  release:
+    needs: prepare
+    if: startsWith(github.ref, 'refs/tags/')
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@v2
+        with:
+          go-version: "^1.18.0"
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2
         if: startsWith(github.ref, 'refs/tags/')
@@ -60,12 +75,36 @@ jobs:
           SCOOP_BUCKET_GITHUB_TOKEN: ${{ secrets.SCOOP_BUCKET_GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+  website:
+    needs: release
+    name: Deploy Website
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          cache: npm
+          cache-dependency-path: website/package-lock.json
+      - name: Install dependencies
+        working-directory: website
+        run: npm ci
+      - name: Build website
+        working-directory: website
+        run: npm run build
 
-      - name: Read Version
-        run: |
-          VERSION=$(cat package.json | jq -r '.version')
-          echo '::set-output name=VERSION::$VERSION'
-        id: debug-version
-      - name: Debug Version
-        run: |
-          echo 'VERSION: ${{ steps.debug-version.outputs.VERSION }}'
+      # Popular action to deploy to GitHub Pages:
+      # Docs: https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-docusaurus
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # Build output to publish to the `gh-pages` branch:
+          publish_dir: ./website/build
+          # The following lines assign commit authorship to the official
+          # GH-Actions bot for deploys to `gh-pages` branch:
+          # https://github.com/actions/checkout/issues/13#issuecomment-724415212
+          # The GH actions bot is used by default if you didn't specify the two fields.
+          # You can swap them out with your own user credentials.
+          user_name: github-actions[bot]
+          user_email: 41898282+github-actions[bot]@users.noreply.github.com

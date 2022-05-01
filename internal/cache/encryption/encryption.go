@@ -10,7 +10,8 @@ import (
 	"os/user"
 	"strings"
 
-	"github.com/aripalo/vegas-credentials/internal/utils"
+	"github.com/aripalo/vegas-credentials/internal/checksum"
+
 	"github.com/shirou/gopsutil/host"
 )
 
@@ -24,8 +25,9 @@ func Encrypt(plaintext []byte) ([]byte, error) {
 	// The IV needs to be unique, but not secure. Therefore it's common to
 	// include it at the beginning of the ciphertext.
 	iv := ciphertext[:aes.BlockSize]
-	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
-		panic(err)
+	_, err = io.ReadFull(rand.Reader, iv)
+	if err != nil {
+		return nil, err
 	}
 
 	blockCipher, err := createCipher()
@@ -101,7 +103,7 @@ func getPassphrase() ([]byte, error) {
 	joined.WriteString(bootedAtS)
 
 	// Create a SHA1 hash out of the joined strings
-	passphrase, err := utils.GenerateSHA1(joined.String())
+	passphrase, err := checksum.Generate([]byte(joined.String()))
 	if err != nil {
 		return nil, err
 	}
