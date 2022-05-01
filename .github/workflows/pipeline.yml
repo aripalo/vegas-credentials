@@ -76,7 +76,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   website:
-    # TODO add this back: needs: release
+    needs: release
     name: Deploy Website
     runs-on: ubuntu-latest
     steps:
