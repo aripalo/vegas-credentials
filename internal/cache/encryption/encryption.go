@@ -10,9 +10,9 @@ import (
 	"os/user"
 	"strings"
 
+	"github.com/aripalo/vegas-credentials/internal/cache/encryption/boottime"
 	"github.com/aripalo/vegas-credentials/internal/checksum"
-
-	"github.com/shirou/gopsutil/host"
+	"github.com/aripalo/vegas-credentials/internal/msg"
 )
 
 // Encrypt data with AES-256-CTR
@@ -79,9 +79,7 @@ const AES_256_KEYSIZE int = 32
 // will be fetched from AWS STS.
 func getPassphrase() ([]byte, error) {
 
-	// Get system boot time, ignore error and use the default value (0) in that case
-	bootedAt, _ := host.BootTime()
-	bootedAtS := fmt.Sprint(bootedAt)
+	bootTime := getTimeStamp()
 
 	// Resolve system hostname
 	hostname, err := os.Hostname()
@@ -94,16 +92,18 @@ func getPassphrase() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	userUid := user.Uid
 
-	// Join the resolved values
-	var joined strings.Builder
-	joined.WriteString(hostname)
-	joined.WriteString(userUid)
-	joined.WriteString(bootedAtS)
+	// Control value invalidates the cache if:
+	// - machine hostname changed
+	// - user UID changed
+	// - system has been restarted
+	control := buildControlValue(hostname, user.Uid, bootTime)
+
+	// Print out control value for debugging purposes, but don't write it to log.
+	msg.DebugNoLog("ℹ️", fmt.Sprintf("Cache: Control Value: %s", control))
 
 	// Create a SHA1 hash out of the joined strings
-	passphrase, err := checksum.Generate([]byte(joined.String()))
+	passphrase, err := checksum.Generate([]byte(control))
 	if err != nil {
 		return nil, err
 	}
@@ -113,4 +113,26 @@ func getPassphrase() ([]byte, error) {
 
 	// Finally return the passphrase as byte array
 	return []byte(passphrase32), nil
+}
+
+// Time formatting layout for cache control value.
+// Essentially: year+month+day+hour+minute.
+const bootedAtTimestampFormat string = "200601021504"
+
+// Get system boot time minute (or fallback to previous day 4AM).
+// See package "boottime" for more.
+func getTimeStamp() string {
+	bootedAt := boottime.Get()
+	return bootedAt.Format(bootedAtTimestampFormat)
+}
+
+// Build cache control value from hostname, user UID and boot time.
+func buildControlValue(hostname string, userUid string, bootTime string) string {
+	var joined strings.Builder
+	joined.WriteString(hostname)
+	joined.WriteString("__")
+	joined.WriteString(userUid)
+	joined.WriteString("__")
+	joined.WriteString(bootTime)
+	return joined.String()
 }
