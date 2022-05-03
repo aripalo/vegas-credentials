@@ -58,8 +58,6 @@ func (c *Credentials) readFromCache() error {
 		return err
 	}
 
-	//logger.DebugJSON(a, "🔧 ", "Cached Credentials", data)
-
 	err = c.Deserialize(data)
 	if err != nil {
 		return err
