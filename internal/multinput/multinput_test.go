@@ -72,7 +72,7 @@ func Test(t *testing.T) {
 					}, nil
 				},
 				func(ctx context.Context) (*Result, error) {
-					time.Sleep(20 * time.Millisecond)
+					time.Sleep(50 * time.Millisecond)
 					return &Result{
 						Value:      "SECOND_VALUE",
 						ResolverID: "SECOND_RESOLVER",
