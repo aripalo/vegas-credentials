@@ -1,6 +1,7 @@
 package boottime
 
 import (
+	"runtime"
 	"time"
 
 	"github.com/shirou/gopsutil/v3/host"
@@ -8,6 +9,14 @@ import (
 
 // Return the system boot time or fallback to previous day 4AM.
 func Get() time.Time {
+
+	// Since Windows boot time can not be trusted (due to +1s drift)
+	// just use the previous day 4AM for now. It's okay for our cache
+	// control purposes.
+	if runtime.GOOS == "windows" {
+		return getPreviousDay4AM()
+	}
+
 	bootTime, err := getRealBootTime()
 	if err != nil {
 		return getPreviousDay4AM()
