@@ -23,4 +23,4 @@ role_session_name = SinatraAtTheSands
 3. System Hostname: e.g. `work-laptop`
 4. Combination of OS & Architecture: e.g. `darwin_amd64`
 
-It also removes disallowed characters and truncates the string to match the requirements of [IAM names](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-quotas.html#reference_iam-quotas-entity-length).
+It also removes disallowed characters and truncates the string to match the [requirements](https://aws.amazon.com/blogs/security/easily-control-naming-individual-iam-role-sessions/).
