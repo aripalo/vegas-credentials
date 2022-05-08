@@ -48,7 +48,7 @@ func (a *App) Assume(flags AssumeFlags) error {
 	})
 
 	if err != nil {
-		msg.Fatal(fmt.Sprintf("TOTP: %s", err))
+		msg.Fatal(fmt.Sprintf("MFA: TOTP: %s", err))
 	}
 
 	msg.Debug("ℹ️", fmt.Sprintf("MFA: Serial: %s", cfg.MfaSerial))
