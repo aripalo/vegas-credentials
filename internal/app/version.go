@@ -7,6 +7,7 @@ import (
 	"github.com/aripalo/vegas-credentials/internal/tmpl"
 )
 
+// Data used in templating.
 type versionData struct {
 	Version string
 	Name    string
@@ -14,10 +15,13 @@ type versionData struct {
 	Goarch  string
 }
 
+// CLI flags for this command.
 type VersionFlags struct {
 	Full bool `mapstructure:"full"`
 }
 
+// Implementation of "version" CLI command
+// without any knowledge of spf13/cobra internals.
 func (a *App) Version(flags VersionFlags) error {
 	v := versionData{
 		Version: config.Version,

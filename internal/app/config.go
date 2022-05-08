@@ -16,6 +16,7 @@ var ConfigTmpl string
 //go:embed data/show-profile.tmpl
 var ConfigShowProfileTmpl string
 
+// Data used in templating.
 type configData struct {
 	AwsConfig      string
 	YkmanPath      string
@@ -25,6 +26,8 @@ type configData struct {
 	YkmanInstalled bool
 }
 
+// Implementation of "config list" CLI command
+// without any knowledge of spf13/cobra internals.
 func (a *App) ConfigList() error {
 	v := configData{
 		AwsConfig: locations.AwsConfig,
@@ -37,6 +40,8 @@ func (a *App) ConfigList() error {
 	return tmpl.Write(a.dest, "config-list", ConfigTmpl, v)
 }
 
+// Implementation of "config show-profile" CLI command
+// without any knowledge of spf13/cobra internals.
 func (a *App) ConfigShowProfile(flags AssumeFlags) error {
 
 	cfg, err := assumecfg.New(locations.AwsConfig, flags.Profile)

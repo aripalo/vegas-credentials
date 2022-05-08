@@ -13,10 +13,13 @@ import (
 	"github.com/dustin/go-humanize"
 )
 
+// CLI flags for this command.
 type AssumeFlags struct {
 	Profile string `mapstructure:"profile"`
 }
 
+// Implementation of "assume" CLI command
+// without any knowledge of spf13/cobra internals.
 func (a *App) Assume(flags AssumeFlags) error {
 
 	cfg, err := assumecfg.New(locations.AwsConfig, flags.Profile)

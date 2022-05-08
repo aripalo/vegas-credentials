@@ -8,11 +8,14 @@ import (
 	"github.com/aripalo/vegas-credentials/internal/yubikey/passcache"
 )
 
+// CLI flags for this command.
 type CacheFlags struct {
 	Password   bool `mapstructure:"password"`
 	Credential bool `mapstructure:"credential"`
 }
 
+// Implementation of "cache clean" CLI command
+// without any knowledge of spf13/cobra internals.
 func (a *App) CacheClean(flags CacheFlags) error {
 
 	if flags.Password {
