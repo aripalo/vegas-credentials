@@ -77,6 +77,12 @@ func getSessionIdentifier() string {
 func format(id string) string {
 	cleaned := removeDisallowed(id)
 	truncated := truncate(cleaned)
+
+	// handle extremely rare situation where the cleaned string is too short
+	if len(truncated) <= minLength {
+		return fmt.Sprintf("mysession-%s", truncated)
+	}
+
 	return truncated
 }
 
