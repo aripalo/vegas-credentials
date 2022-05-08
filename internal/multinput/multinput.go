@@ -37,19 +37,6 @@ func New(resolvers []InputResolver) Multinput {
 // non-empty value until timeout reached.
 func (m *Multinput) Provide(ctx context.Context) (*Result, error) {
 
-	/*
-		var ctx context.Context
-		var cancel context.CancelFunc
-
-		if m.timeout != time.Duration(0) {
-			ctx, cancel = context.WithTimeout(context.Background(), m.timeout)
-		} else {
-			ctx, cancel = context.WithCancel(context.Background())
-		}
-
-		defer cancel()
-	*/
-
 	// loop through all given resolvers, run them as goroutines and
 	// if any of them return a non-empty value assign it into the channel
 	for _, ir := range m.resolvers {
