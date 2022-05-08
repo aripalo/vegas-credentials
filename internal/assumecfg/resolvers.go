@@ -6,6 +6,8 @@ import (
 	"os/user"
 	"regexp"
 	"runtime"
+
+	"github.com/aripalo/vegas-credentials/internal/msg"
 )
 
 const DurationSecondsDefault int = 3600
@@ -54,11 +56,13 @@ func getSessionIdentifier() string {
 
 		// Return user full name if meaningful
 		if len(u.Name) >= minLength {
+			msg.Trace("", "Fallback: Fullname")
 			return u.Name
 		}
 
 		// Return user (system) name if meaningful
 		if len(u.Username) >= minLength {
+			msg.Trace("", "Fallback: Username")
 			return u.Username
 		}
 	}
@@ -66,9 +70,12 @@ func getSessionIdentifier() string {
 	// If username not found, return hostname if meaningful
 	if hostname, err := os.Hostname(); err == nil {
 		if len(hostname) >= minLength {
+			msg.Trace("", "Fallback: Hostname")
 			return hostname
 		}
 	}
+
+	msg.Trace("", "Fallback: OS_ARCH")
 
 	// If no other value could not be resolved, use system info
 	return fmt.Sprintf("%s_%s\n", runtime.GOOS, runtime.GOARCH)
