@@ -7,7 +7,6 @@ import (
 
 	"github.com/aripalo/vegas-credentials/internal/cache"
 	"github.com/aripalo/vegas-credentials/internal/config/locations"
-	"github.com/aripalo/vegas-credentials/internal/interfaces"
 	"github.com/aripalo/vegas-credentials/internal/msg"
 	"github.com/aripalo/vegas-credentials/internal/yubikey/setup"
 	"github.com/aripalo/ykmangoath"
@@ -16,7 +15,7 @@ import (
 var cacheLocation string = locations.EnsureWithinDir(locations.CacheDir, "yubikey-oath-access")
 
 type Yubikey struct {
-	cache     interfaces.Cache
+	repo      cache.Repository
 	device    string
 	account   string
 	enableGui bool
@@ -31,7 +30,7 @@ type Options struct {
 	EnableGui bool
 }
 
-func NewCache() interfaces.Cache {
+func NewCache() cache.Repository {
 	msg.Debug("🔧", fmt.Sprintf("Path: Credentials Cache: %s", cacheLocation))
 	return cache.New(cacheLocation)
 }
@@ -40,7 +39,7 @@ func New(options Options) (Yubikey, error) {
 	var err error
 
 	y := Yubikey{
-		cache:     NewCache(),
+		repo:      NewCache(),
 		device:    options.Device,
 		account:   options.Account,
 		enableGui: options.EnableGui,
@@ -53,7 +52,7 @@ func New(options Options) (Yubikey, error) {
 
 // Save password to cache and assign it into the instance.
 func (y *Yubikey) SetPassword(password string) error {
-	err := y.cache.Set(y.device, []byte(password), time.Duration(12*time.Hour))
+	err := y.repo.Write(y.device, []byte(password), time.Duration(12*time.Hour))
 	if err != nil {
 		return err
 	}
@@ -63,7 +62,7 @@ func (y *Yubikey) SetPassword(password string) error {
 
 // Get password from cache, assign it into the instance and finally return it.
 func (y *Yubikey) GetPassword() (string, error) {
-	result, err := y.cache.Get(y.device)
+	result, err := y.repo.Read(y.device)
 	if err != nil {
 		return "", err
 	}
@@ -73,7 +72,7 @@ func (y *Yubikey) GetPassword() (string, error) {
 
 // Remove password from cache and fomr the instance.
 func (y *Yubikey) RemovePassword() error {
-	err := y.cache.Remove(y.device)
+	err := y.repo.Delete(y.device)
 	if err != nil {
 		return err
 	}

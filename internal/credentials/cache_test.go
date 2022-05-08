@@ -37,7 +37,7 @@ func TestCache(t *testing.T) {
 		{
 			name: "",
 			input: Credentials{
-				cache:           c,
+				repo:            c,
 				cfg:             cfg,
 				Version:         1,
 				AccessKeyID:     "ID",
@@ -60,7 +60,7 @@ func TestCache(t *testing.T) {
 
 			fmt.Println("SAVED")
 
-			actual := &Credentials{cache: c, cfg: cfg}
+			actual := &Credentials{repo: c, cfg: cfg}
 
 			fmt.Println(actual)
 

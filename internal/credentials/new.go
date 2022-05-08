@@ -14,7 +14,7 @@ func New(cfg assumecfg.AssumeCfg) *Credentials {
 	r := &Credentials{
 		cfg:     cfg,
 		output:  os.Stdout,
-		cache:   NewCredentialCache(),
+		repo:    NewCredentialCache(),
 		Version: AWS_CREDENTIAL_PROCESS_VERSION,
 	}
 
@@ -23,5 +23,5 @@ func New(cfg assumecfg.AssumeCfg) *Credentials {
 
 // Teardown operations for response, use with defer
 func (r *Credentials) Teardown() error {
-	return r.cache.Disconnect()
+	return r.repo.Close()
 }

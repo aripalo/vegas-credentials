@@ -48,10 +48,10 @@ func (a *App) CacheClean(flags CacheFlags) error {
 
 func cleanPasswords() error {
 	cache := passcache.InitCache()
-	return cache.RemoveAll()
+	return cache.DeleteAll()
 }
 
 func cleanCredentials() error {
 	cache := credentials.NewCredentialCache()
-	return cache.RemoveAll()
+	return cache.DeleteAll()
 }

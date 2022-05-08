@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/aripalo/vegas-credentials/internal/assumecfg"
+	"github.com/aripalo/vegas-credentials/internal/cache"
 	"github.com/aripalo/vegas-credentials/internal/credentials/sts"
-	"github.com/aripalo/vegas-credentials/internal/interfaces"
 )
 
 // Credentials defines the output format expected by AWS credential_process
@@ -14,7 +14,7 @@ import (
 type Credentials struct {
 	cfg             assumecfg.AssumeCfg
 	provider        sts.Provider
-	cache           interfaces.Cache
+	repo            cache.Repository
 	output          io.Writer
 	Version         int       `json:"Version"`
 	AccessKeyID     string    `json:"AccessKeyId"`

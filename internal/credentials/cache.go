@@ -11,7 +11,7 @@ import (
 
 var cacheLocation string = locations.EnsureWithinDir(locations.CacheDir, "session-cache")
 
-func NewCredentialCache() *cache.Cache {
+func NewCredentialCache() cache.Repository {
 	msg.Debug("🔧", fmt.Sprintf("Path: Credentials Cache: %s", cacheLocation))
 	return cache.New(cacheLocation)
 }
@@ -36,7 +36,7 @@ func (c *Credentials) saveToCache() error {
 	now := time.Now()
 	ttl := c.Expiration.Sub(now)
 
-	err = c.cache.Set(key, data, ttl)
+	err = c.repo.Write(key, data, ttl)
 	if err != nil {
 		return err
 	}
@@ -53,7 +53,7 @@ func (c *Credentials) readFromCache() error {
 		return err
 	}
 
-	data, err := c.cache.Get(key)
+	data, err := c.repo.Read(key)
 	if err != nil {
 		return err
 	}
@@ -73,5 +73,5 @@ func (c *Credentials) deleteFromCache() error {
 		return err
 	}
 
-	return c.cache.Remove(key)
+	return c.repo.Delete(key)
 }
