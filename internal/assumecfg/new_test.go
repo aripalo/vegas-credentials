@@ -25,9 +25,10 @@ func TestNewAssumable(t *testing.T) {
 				MfaSerial:       "arn:aws:iam::111111111111:mfa/FrankSinatra",
 				YubikeyLabel:    "arn:aws:iam::111111111111:mfa/FrankSinatra",
 				RoleArn:         "arn:aws:iam::222222222222:role/SingerRole",
+				RoleSessionName: "SinatraAtTheSands",
 				SourceProfile:   "default",
 				DurationSeconds: 3600,
-				Checksum:        "d8fdfde29a33d93a04f2c81a014d3558fe09f1c7",
+				Checksum:        "d5656b38d196c58de4ab1e2cdd5e2715611e9282",
 			},
 		},
 		{
