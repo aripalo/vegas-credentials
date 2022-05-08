@@ -1,4 +1,4 @@
-package flag
+package flagparser
 
 import (
 	"fmt"

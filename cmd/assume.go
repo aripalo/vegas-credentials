@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/aripalo/vegas-credentials/internal/application"
-	"github.com/aripalo/vegas-credentials/internal/flag"
+	"github.com/aripalo/vegas-credentials/internal/application/flagparser"
 	"github.com/aripalo/vegas-credentials/internal/msg"
 
 	"github.com/spf13/cobra"
@@ -22,12 +22,12 @@ var assumeCmd = &cobra.Command{
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
 
-		g, err := flag.Parse(application.GlobalFlags{}, cmd)
+		g, err := flagparser.Parse(application.GlobalFlags{}, cmd)
 		if err != nil {
 			return err
 		}
 
-		f, err := flag.Parse(application.AssumeFlags{}, cmd)
+		f, err := flagparser.Parse(application.AssumeFlags{}, cmd)
 		if err != nil {
 			return err
 		}
