@@ -3,7 +3,7 @@ package credentials
 import (
 	"time"
 
-	"github.com/aripalo/vegas-credentials/internal/sts"
+	"github.com/aripalo/vegas-credentials/internal/credentials/sts"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials/stscreds"
 )

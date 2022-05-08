@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/aripalo/vegas-credentials/internal/assumecfg"
+	"github.com/aripalo/vegas-credentials/internal/credentials/sts"
 	"github.com/aripalo/vegas-credentials/internal/interfaces"
-	"github.com/aripalo/vegas-credentials/internal/sts"
 )
 
 // Credentials defines the output format expected by AWS credential_process
