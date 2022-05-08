@@ -39,7 +39,7 @@ func New[D awsini.DataSource](dataSource D, profileName string) (AssumeCfg, erro
 		SourceProfile:   role.SourceProfile,
 		RoleArn:         role.RoleArn,
 		DurationSeconds: resolveDurationSeconds(role.DurationSeconds),
-		RoleSessionName: role.RoleSessionName,
+		RoleSessionName: resolveRoleSessionName(role.RoleSessionName),
 		ExternalID:      role.ExternalID,
 	}
 
