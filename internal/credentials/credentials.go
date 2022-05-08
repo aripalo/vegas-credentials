@@ -10,6 +10,7 @@ import (
 
 	"github.com/aripalo/vegas-credentials/internal/assumecfg"
 	"github.com/aripalo/vegas-credentials/internal/cache"
+	"github.com/aripalo/vegas-credentials/internal/msg"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
@@ -112,6 +113,9 @@ func (c *Credentials) New(code string) error {
 	if err != nil {
 		panic(err)
 	}
+
+	msg.DebugNoLog("👷", fmt.Sprintf("Credentials: Assumed ID: %s", aws.ToString(result.AssumedRoleUser.AssumedRoleId)))
+	msg.DebugNoLog("👷", fmt.Sprintf("Credentials: Assumed ARN: %s", aws.ToString(result.AssumedRoleUser.Arn)))
 
 	c.AccessKeyID = aws.ToString(result.Credentials.AccessKeyId)
 	c.SecretAccessKey = aws.ToString(result.Credentials.SecretAccessKey)
