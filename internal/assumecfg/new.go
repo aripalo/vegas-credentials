@@ -1,9 +1,9 @@
-package assumable
+package assumecfg
 
 import (
 	"fmt"
 
-	"github.com/aripalo/vegas-credentials/internal/assumable/awsini"
+	"github.com/aripalo/vegas-credentials/internal/assumecfg/awsini"
 	"github.com/aripalo/vegas-credentials/internal/checksum"
 )
 
@@ -11,26 +11,26 @@ import (
 // IAM role with MFA. Effectively it parses the given dataSource
 // (either file name with string type or raw data in []byte) and finds the
 // correct configuration by looking up the given profileName.
-func New[D awsini.DataSource](dataSource D, profileName string) (Opts, error) {
-	var opts Opts
+func New[D awsini.DataSource](dataSource D, profileName string) (AssumeCfg, error) {
+	var cfg AssumeCfg
 	var role awsini.Role
 	var user awsini.User
 
 	err := awsini.LoadProfile(dataSource, profileName, &role)
 	if err != nil {
-		return opts, err
+		return cfg, err
 	}
 
 	if role.SourceProfile == "" {
-		return opts, fmt.Errorf(`Profile "%s" does not contain "vegas_source_profile"`, profileName)
+		return cfg, fmt.Errorf(`Profile "%s" does not contain "vegas_source_profile"`, profileName)
 	}
 
 	err = awsini.LoadProfile(dataSource, role.SourceProfile, &user)
 	if err != nil {
-		return opts, err
+		return cfg, err
 	}
 
-	opts = Opts{
+	cfg = AssumeCfg{
 		ProfileName:     profileName,
 		MfaSerial:       user.MfaSerial,
 		YubikeySerial:   user.YubikeySerial,
@@ -43,17 +43,17 @@ func New[D awsini.DataSource](dataSource D, profileName string) (Opts, error) {
 		ExternalID:      role.ExternalID,
 	}
 
-	err = opts.validate()
+	err = cfg.validate()
 	if err != nil {
-		return opts, err
+		return cfg, err
 	}
 
-	checksum, err := checksum.Generate(opts)
+	checksum, err := checksum.Generate(cfg)
 	if err != nil {
-		return opts, err
+		return cfg, err
 	}
 
-	opts.Checksum = checksum
+	cfg.Checksum = checksum
 
-	return opts, nil
+	return cfg, nil
 }

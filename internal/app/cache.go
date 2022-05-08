@@ -1,4 +1,4 @@
-package application
+package app
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ type CacheFlags struct {
 	Credential bool `mapstructure:"credential"`
 }
 
-func (app *App) CacheClean(flags CacheFlags) error {
+func (a *App) CacheClean(flags CacheFlags) error {
 
 	if flags.Password {
 		err := cleanPasswords()
@@ -48,10 +48,10 @@ func (app *App) CacheClean(flags CacheFlags) error {
 
 func cleanPasswords() error {
 	cache := passcache.InitCache()
-	return cache.RemoveAll()
+	return cache.DeleteAll()
 }
 
 func cleanCredentials() error {
 	cache := credentials.NewCredentialCache()
-	return cache.RemoveAll()
+	return cache.DeleteAll()
 }

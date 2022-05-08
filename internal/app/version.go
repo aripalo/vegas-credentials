@@ -1,4 +1,4 @@
-package application
+package app
 
 import (
 	"runtime"
@@ -18,7 +18,7 @@ type VersionFlags struct {
 	Full bool `mapstructure:"full"`
 }
 
-func (app *App) Version(flags VersionFlags) error {
+func (a *App) Version(flags VersionFlags) error {
 	v := versionData{
 		Version: config.Version,
 		Name:    config.AppName,
@@ -27,7 +27,7 @@ func (app *App) Version(flags VersionFlags) error {
 	}
 
 	if flags.Full {
-		return tmpl.Write(app.dest, "version-long", config.VersionLongTmpl, v)
+		return tmpl.Write(a.dest, "version-long", config.VersionLongTmpl, v)
 	}
-	return tmpl.Write(app.dest, "version-short", config.VersionShortTmpl, v)
+	return tmpl.Write(a.dest, "version-short", config.VersionShortTmpl, v)
 }

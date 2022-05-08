@@ -3,8 +3,8 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/aripalo/vegas-credentials/internal/application"
-	"github.com/aripalo/vegas-credentials/internal/flag"
+	"github.com/aripalo/vegas-credentials/internal/app"
+	"github.com/aripalo/vegas-credentials/internal/app/flagparser"
 	"github.com/aripalo/vegas-credentials/internal/msg"
 	"github.com/spf13/cobra"
 )
@@ -32,17 +32,17 @@ var cacheCleanCmd = &cobra.Command{
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
 
-		g, err := flag.Parse(application.GlobalFlags{}, cmd)
+		g, err := flagparser.Parse(app.GlobalFlags{}, cmd)
 		if err != nil {
 			return err
 		}
 
-		f, err := flag.Parse(application.CacheFlags{}, cmd)
+		f, err := flagparser.Parse(app.CacheFlags{}, cmd)
 		if err != nil {
 			return err
 		}
 
-		app := application.New(g)
-		return app.CacheClean(f)
+		a := app.New(g)
+		return a.CacheClean(f)
 	},
 }

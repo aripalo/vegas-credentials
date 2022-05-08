@@ -1,6 +1,9 @@
-package assumable
+// Package assumecfg implements loading & providing necessary configuration data
+// required to perform AWS STS AssumeRole operations with MFA.
+package assumecfg
 
-type Opts struct {
+// Configuration data required to perform AWS STS AssumeRole operation with MFA.
+type AssumeCfg struct {
 	// ProfileName of the profile in AWS Configuration file.
 	//  "frank@concerts"
 	ProfileName string

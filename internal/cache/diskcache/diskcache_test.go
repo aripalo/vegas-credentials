@@ -1,4 +1,4 @@
-package database
+package diskcache
 
 import (
 	"io/ioutil"
@@ -11,7 +11,7 @@ import (
 	"github.com/dgraph-io/badger/v3"
 )
 
-// createTempDir creates a temporary directory for testing the disk database
+// createTempDir creates a temporary directory for testing the disk d
 // and returns the path for the directory and a function to remove the dir after test
 func createTempDir() (string, func()) {
 	dir, err := ioutil.TempDir("", strings.Join([]string{"vegas-credentials", "test", ""}, "-"))
@@ -21,20 +21,20 @@ func createTempDir() (string, func()) {
 	return dir, func() { os.RemoveAll(dir) }
 }
 
-func TestDatabaseOpen(t *testing.T) {
+func TestDatabaseNew(t *testing.T) {
 	tempDir, tempDirRemove := createTempDir()
 	defer tempDirRemove()
 
-	database, err := Open(tempDir, DatabaseOptions{})
+	d, err := New(tempDir, Options{})
 
 	if err != nil {
-		t.Fatalf("Could not open the database: %q", err)
+		t.Fatalf("Could not open the d: %q", err)
 	}
 
 	// Use the Close method on the actual badger instance
-	err = database.db.Close()
+	err = d.db.Close()
 	if err != nil {
-		t.Fatalf("Could not close the database: %q", err)
+		t.Fatalf("Could not close the d: %q", err)
 	}
 }
 
@@ -42,16 +42,16 @@ func TestDatabaseClose(t *testing.T) {
 	tempDir, tempDirRemove := createTempDir()
 	defer tempDirRemove()
 
-	database, err := Open(tempDir, DatabaseOptions{})
+	d, err := New(tempDir, Options{})
 
 	if err != nil {
-		t.Fatalf("Could not open the database: %q", err)
+		t.Fatalf("Could not open the d: %q", err)
 	}
 
-	// use the Close method on database struct
-	err = database.Close()
+	// use the Close method on d struct
+	err = d.Close()
 	if err != nil {
-		t.Fatalf("Could not close the database: %q", err)
+		t.Fatalf("Could not close the d: %q", err)
 	}
 }
 
@@ -59,23 +59,23 @@ func TestDatabaseWrite(t *testing.T) {
 	tempDir, tempDirRemove := createTempDir()
 	defer tempDirRemove()
 
-	database, err := Open(tempDir, DatabaseOptions{})
+	d, err := New(tempDir, Options{})
 	defer func() {
-		err := database.Close()
+		err := d.Close()
 		if err != nil {
 			panic(err)
 		}
 	}()
 	if err != nil {
-		t.Fatalf("Could not open the database: %q", err)
+		t.Fatalf("Could not open the d: %q", err)
 	}
 
 	key := "foo"
 	data := []byte(randStringBytes(1000))
 
-	err = database.Write(key, data, time.Microsecond)
+	err = d.Write(key, data, time.Microsecond)
 	if err != nil {
-		t.Fatalf("Could not write to database: %q", err)
+		t.Fatalf("Could not write to d: %q", err)
 	}
 }
 
@@ -83,28 +83,28 @@ func TestDatabaseWriteAndRead(t *testing.T) {
 	tempDir, tempDirRemove := createTempDir()
 	defer tempDirRemove()
 
-	database, err := Open(tempDir, DatabaseOptions{})
+	d, err := New(tempDir, Options{})
 	defer func() {
-		err := database.Close()
+		err := d.Close()
 		if err != nil {
 			panic(err)
 		}
 	}()
 	if err != nil {
-		t.Fatalf("Could not open the database: %q", err)
+		t.Fatalf("Could not open the d: %q", err)
 	}
 
 	key := "foo"
 	data := []byte(randStringBytes(1000))
 
-	err = database.Write(key, data, time.Minute)
+	err = d.Write(key, data, time.Minute)
 	if err != nil {
-		t.Fatalf("Could not write to database: %q", err)
+		t.Fatalf("Could not write to d: %q", err)
 	}
 
-	output, err := database.Read(key)
+	output, err := d.Read(key)
 	if err != nil {
-		t.Fatalf("Could not read from database: %q", err)
+		t.Fatalf("Could not read from d: %q", err)
 	}
 
 	got := string(output)
@@ -119,31 +119,31 @@ func TestDatabaseDelete(t *testing.T) {
 	tempDir, tempDirRemove := createTempDir()
 	defer tempDirRemove()
 
-	database, err := Open(tempDir, DatabaseOptions{})
+	d, err := New(tempDir, Options{})
 	defer func() {
-		err := database.Close()
+		err := d.Close()
 		if err != nil {
 			panic(err)
 		}
 	}()
 	if err != nil {
-		t.Fatalf("Could not open the database: %q", err)
+		t.Fatalf("Could not open the d: %q", err)
 	}
 
 	key := "foo"
 	data := []byte(randStringBytes(1000))
 
-	err = database.Write(key, data, time.Minute)
+	err = d.Write(key, data, time.Minute)
 	if err != nil {
-		t.Fatalf("Could not write to database: %q", err)
+		t.Fatalf("Could not write to d: %q", err)
 	}
 
-	err = database.Delete(key)
+	err = d.Delete(key)
 	if err != nil {
-		t.Fatalf("Could not delete from database: %q", err)
+		t.Fatalf("Could not delete from d: %q", err)
 	}
 
-	_, err = database.Read(key)
+	_, err = d.Read(key)
 	if err.Error() != badger.ErrKeyNotFound.Error() {
 		t.Fatalf("Invalid response: %q", err)
 	}
@@ -153,31 +153,31 @@ func TestDatabaseDeleteByPrefix(t *testing.T) {
 	tempDir, tempDirRemove := createTempDir()
 	defer tempDirRemove()
 
-	database, err := Open(tempDir, DatabaseOptions{})
+	d, err := New(tempDir, Options{})
 	defer func() {
-		err := database.Close()
+		err := d.Close()
 		if err != nil {
 			panic(err)
 		}
 	}()
 	if err != nil {
-		t.Fatalf("Could not open the database: %q", err)
+		t.Fatalf("Could not open the d: %q", err)
 	}
 
 	key := "foo"
 	data := []byte(randStringBytes(1000))
 
-	err = database.Write(key, data, time.Minute)
+	err = d.Write(key, data, time.Minute)
 	if err != nil {
-		t.Fatalf("Could not write to database: %q", err)
+		t.Fatalf("Could not write to d: %q", err)
 	}
 
-	err = database.DeleteByPrefix("f")
+	err = d.DeleteByPrefix("f")
 	if err != nil {
-		t.Fatalf("Could not delete all from database: %q", err)
+		t.Fatalf("Could not delete all from d: %q", err)
 	}
 
-	_, err = database.Read(key)
+	_, err = d.Read(key)
 	if err.Error() != badger.ErrKeyNotFound.Error() {
 		t.Fatalf("Invalid response: %q", err)
 	}
@@ -187,31 +187,31 @@ func TestDatabaseDeleteAll(t *testing.T) {
 	tempDir, tempDirRemove := createTempDir()
 	defer tempDirRemove()
 
-	database, err := Open(tempDir, DatabaseOptions{})
+	d, err := New(tempDir, Options{})
 	defer func() {
-		err := database.Close()
+		err := d.Close()
 		if err != nil {
 			panic(err)
 		}
 	}()
 	if err != nil {
-		t.Fatalf("Could not open the database: %q", err)
+		t.Fatalf("Could not open the d: %q", err)
 	}
 
 	key := "foo"
 	data := []byte(randStringBytes(1000))
 
-	err = database.Write(key, data, time.Minute)
+	err = d.Write(key, data, time.Minute)
 	if err != nil {
-		t.Fatalf("Could not write to database: %q", err)
+		t.Fatalf("Could not write to d: %q", err)
 	}
 
-	err = database.DeleteAll()
+	err = d.DeleteAll()
 	if err != nil {
-		t.Fatalf("Could not delete all from database: %q", err)
+		t.Fatalf("Could not delete all from d: %q", err)
 	}
 
-	_, err = database.Read(key)
+	_, err = d.Read(key)
 	if err.Error() != badger.ErrKeyNotFound.Error() {
 		t.Fatalf("Invalid response: %q", err)
 	}
@@ -221,28 +221,28 @@ func TestDatabaseTTL(t *testing.T) {
 	tempDir, tempDirRemove := createTempDir()
 	defer tempDirRemove()
 
-	database, err := Open(tempDir, DatabaseOptions{})
+	d, err := New(tempDir, Options{})
 	defer func() {
-		err := database.Close()
+		err := d.Close()
 		if err != nil {
 			panic(err)
 		}
 	}()
 	if err != nil {
-		t.Fatalf("Could not open the database: %q", err)
+		t.Fatalf("Could not open the d: %q", err)
 	}
 
 	key := "foo"
 	data := []byte(randStringBytes(1000))
 
-	err = database.Write(key, data, time.Second)
+	err = d.Write(key, data, time.Second)
 	if err != nil {
-		t.Fatalf("Could not write to database: %q", err)
+		t.Fatalf("Could not write to d: %q", err)
 	}
 
-	output, err := database.Read(key)
+	output, err := d.Read(key)
 	if err != nil {
-		t.Fatalf("Could not read from database: %q", err)
+		t.Fatalf("Could not read from d: %q", err)
 	}
 
 	got := string(output)
@@ -254,7 +254,7 @@ func TestDatabaseTTL(t *testing.T) {
 
 	time.Sleep(time.Second)
 
-	_, err = database.Read(key)
+	_, err = d.Read(key)
 	if err.Error() != badger.ErrKeyNotFound.Error() {
 		t.Fatalf("Invalid response: %q", err)
 	}

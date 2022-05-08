@@ -11,7 +11,7 @@ import (
 
 var cacheLocation string = locations.EnsureWithinDir(locations.CacheDir, "session-cache")
 
-func NewCredentialCache() *cache.Cache {
+func NewCredentialCache() cache.Repository {
 	msg.Debug("🔧", fmt.Sprintf("Path: Credentials Cache: %s", cacheLocation))
 	return cache.New(cacheLocation)
 }
@@ -28,7 +28,7 @@ func (c *Credentials) saveToCache() error {
 		return err
 	}
 
-	key, err := resolveKey(c.opts.ProfileName, c.opts.Checksum)
+	key, err := resolveKey(c.cfg.ProfileName, c.cfg.Checksum)
 	if err != nil {
 		return err
 	}
@@ -36,7 +36,7 @@ func (c *Credentials) saveToCache() error {
 	now := time.Now()
 	ttl := c.Expiration.Sub(now)
 
-	err = c.cache.Set(key, data, ttl)
+	err = c.repo.Write(key, data, ttl)
 	if err != nil {
 		return err
 	}
@@ -48,12 +48,12 @@ func (c *Credentials) saveToCache() error {
 
 // ReadFromCache gets the cached response from cache database
 func (c *Credentials) readFromCache() error {
-	key, err := resolveKey(c.opts.ProfileName, c.opts.Checksum)
+	key, err := resolveKey(c.cfg.ProfileName, c.cfg.Checksum)
 	if err != nil {
 		return err
 	}
 
-	data, err := c.cache.Get(key)
+	data, err := c.repo.Read(key)
 	if err != nil {
 		return err
 	}
@@ -68,10 +68,10 @@ func (c *Credentials) readFromCache() error {
 
 // DeleteFromCache deletes the cached response cache database
 func (c *Credentials) deleteFromCache() error {
-	key, err := resolveKey(c.opts.ProfileName, c.opts.Checksum)
+	key, err := resolveKey(c.cfg.ProfileName, c.cfg.Checksum)
 	if err != nil {
 		return err
 	}
 
-	return c.cache.Remove(key)
+	return c.repo.Delete(key)
 }

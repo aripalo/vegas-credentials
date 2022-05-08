@@ -51,12 +51,12 @@ func TestCache(t *testing.T) {
 
 			c := New(tempDir)
 
-			err = c.Set(test.name, []byte(test.input), test.ttl)
+			err = c.Write(test.name, []byte(test.input), test.ttl)
 			require.NoError(t, err)
 
 			time.Sleep(test.sleep)
 
-			result, err := c.Get(test.name)
+			result, err := c.Read(test.name)
 			if test.errMessage != "" {
 				assert.Equal(t, test.errMessage, err.Error())
 			}
@@ -65,7 +65,7 @@ func TestCache(t *testing.T) {
 
 			assert.Equal(t, test.expected, actual)
 
-			err = c.Remove(test.name)
+			err = c.Delete(test.name)
 			require.NoError(t, err)
 		})
 	}

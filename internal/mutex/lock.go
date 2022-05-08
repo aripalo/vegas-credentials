@@ -5,7 +5,6 @@ import (
 
 	"github.com/alexflint/go-filemutex"
 	"github.com/aripalo/vegas-credentials/internal/config/locations"
-	"github.com/aripalo/vegas-credentials/internal/logger"
 	"github.com/aripalo/vegas-credentials/internal/msg"
 )
 
@@ -32,14 +31,14 @@ func Lock() (MutexUnlock, error) {
 	// create the filemutex
 	fm, err := filemutex.New(filePath)
 	if err != nil {
-		logger.Error("mutex init failed")
+		msg.Error("❌", "mutex init failed")
 		return nil, err
 	}
 	msg.Trace("", "mutex init success")
 
 	err = fm.Lock()
 	if err != nil {
-		logger.Error("mutex lock acquiring failed")
+		msg.Error("❌", "mutex lock acquiring failed")
 		return nil, err
 	}
 	msg.Trace("", "mutex lock acquired")
@@ -47,7 +46,7 @@ func Lock() (MutexUnlock, error) {
 	return func() error {
 		err := fm.Unlock()
 		if err != nil {
-			logger.Error("mutex unlock failed")
+			msg.Error("❌", "mutex unlock failed")
 			return err
 		}
 		msg.Trace("", "mutex unlock success")

@@ -1,4 +1,4 @@
-package database
+package diskcache
 
 import (
 	"time"
@@ -6,18 +6,18 @@ import (
 	"github.com/dgraph-io/badger/v3"
 )
 
-// Database definition
-type Database struct {
+// DiskCache definition
+type DiskCache struct {
 	db *badger.DB
 }
 
-// DatabaseOptions allow providing configuration
-type DatabaseOptions struct {
+// Options allow providing configuration
+type Options struct {
 	Logger badger.Logger
 }
 
-// Open a database connection
-func Open(path string, opts DatabaseOptions) (*Database, error) {
+// New a disk cache connection
+func New(path string, opts Options) (*DiskCache, error) {
 	// Open the Badger database located in the path
 	// It will be created if it doesn't exist.
 	db, err := badger.Open(
@@ -26,17 +26,12 @@ func Open(path string, opts DatabaseOptions) (*Database, error) {
 	if err != nil {
 		return nil, err
 	}
-	d := &Database{db}
+	d := &DiskCache{db}
 	return d, nil
 }
 
-// Close database connection
-func (d *Database) Close() error {
-	return d.db.Close()
-}
-
-// Read item from database
-func (d *Database) Read(key string) ([]byte, error) {
+// Read item from disk cache
+func (d *DiskCache) Read(key string) ([]byte, error) {
 	var value []byte
 	err := d.db.View(func(txn *badger.Txn) error {
 		item, err := txn.Get([]byte(key))
@@ -49,8 +44,8 @@ func (d *Database) Read(key string) ([]byte, error) {
 	return value, err
 }
 
-// Write item to database (with TTL)
-func (d *Database) Write(key string, value []byte, ttl time.Duration) error {
+// Write item to disk cache (with TTL)
+func (d *DiskCache) Write(key string, value []byte, ttl time.Duration) error {
 	return d.db.Update(func(txn *badger.Txn) error {
 		e := badger.NewEntry([]byte(key), value).WithTTL(ttl)
 		err := txn.SetEntry(e)
@@ -58,19 +53,24 @@ func (d *Database) Write(key string, value []byte, ttl time.Duration) error {
 	})
 }
 
-// Delete item by key from database
-func (d *Database) Delete(key string) error {
+// Delete item by key from disk cache
+func (d *DiskCache) Delete(key string) error {
 	return d.db.Update(func(txn *badger.Txn) error {
 		return txn.Delete([]byte(key))
 	})
 }
 
-// DeleteByPrefix deletes all keys matching the prefix from database
-func (d *Database) DeleteByPrefix(keyPrefix string) error {
+// DeleteByPrefix deletes all keys matching the prefix from disk cache
+func (d *DiskCache) DeleteByPrefix(keyPrefix string) error {
 	return d.db.DropPrefix([]byte(keyPrefix))
 }
 
-// DeleteAll deletes everything from the database
-func (d *Database) DeleteAll() error {
+// DeleteAll deletes everything from the disk cache
+func (d *DiskCache) DeleteAll() error {
 	return d.db.DropAll()
+}
+
+// Close disk cache connection
+func (d *DiskCache) Close() error {
+	return d.db.Close()
 }

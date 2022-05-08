@@ -1,10 +1,10 @@
-package application
+package app
 
 import (
 	_ "embed"
 	"fmt"
 
-	"github.com/aripalo/vegas-credentials/internal/assumable"
+	"github.com/aripalo/vegas-credentials/internal/assumecfg"
 	"github.com/aripalo/vegas-credentials/internal/config/locations"
 	"github.com/aripalo/vegas-credentials/internal/msg"
 	"github.com/aripalo/vegas-credentials/internal/tmpl"
@@ -25,7 +25,7 @@ type configData struct {
 	YkmanInstalled bool
 }
 
-func (app *App) ConfigList() error {
+func (a *App) ConfigList() error {
 	v := configData{
 		AwsConfig: locations.AwsConfig,
 		YkmanPath: locations.YkmanPath,
@@ -34,17 +34,17 @@ func (app *App) ConfigList() error {
 		ExecDir:   locations.ExecDir,
 	}
 
-	return tmpl.Write(app.dest, "config-list", ConfigTmpl, v)
+	return tmpl.Write(a.dest, "config-list", ConfigTmpl, v)
 }
 
-func (app *App) ConfigShowProfile(flags AssumeFlags) error {
+func (a *App) ConfigShowProfile(flags AssumeFlags) error {
 
-	opts, err := assumable.New(locations.AwsConfig, flags.Profile)
+	cfg, err := assumecfg.New(locations.AwsConfig, flags.Profile)
 	if err != nil {
 		msg.Fatal(fmt.Sprintf("Credentials: Error: %s", err))
 	}
 
-	fmt.Println(opts)
+	fmt.Println(cfg)
 
-	return tmpl.Write(app.dest, "config-show-profile", ConfigShowProfileTmpl, opts)
+	return tmpl.Write(a.dest, "config-show-profile", ConfigShowProfileTmpl, cfg)
 }

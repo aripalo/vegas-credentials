@@ -1,4 +1,4 @@
-package assumable
+package assumecfg
 
 import (
 	"errors"
@@ -11,12 +11,12 @@ import (
 func TestValidate(t *testing.T) {
 	tests := []struct {
 		name     string
-		input    Opts
+		input    AssumeCfg
 		expected error
 	}{
 		{
 			name: "mfa_serial missing",
-			input: Opts{
+			input: AssumeCfg{
 				ProfileName:   "frank@concerts",
 				RoleArn:       "arn:aws:iam::222222222222:role/SingerRole",
 				SourceProfile: "default",
@@ -25,7 +25,7 @@ func TestValidate(t *testing.T) {
 		},
 		{
 			name: "mfa_serial invalid",
-			input: Opts{
+			input: AssumeCfg{
 				ProfileName:   "frank@concerts",
 				RoleArn:       "arn:aws:iam::222222222222:role/SingerRole",
 				SourceProfile: "default",
@@ -35,7 +35,7 @@ func TestValidate(t *testing.T) {
 		},
 		{
 			name: "vegas_source_profile missing",
-			input: Opts{
+			input: AssumeCfg{
 				ProfileName: "frank@concerts",
 				RoleArn:     "arn:aws:iam::222222222222:role/SingerRole",
 				MfaSerial:   "arn:aws:iam::111111111111:mfa/FrankSinatra",
@@ -44,7 +44,7 @@ func TestValidate(t *testing.T) {
 		},
 		{
 			name: "vegas_role_arn missing",
-			input: Opts{
+			input: AssumeCfg{
 				ProfileName:   "frank@concerts",
 				SourceProfile: "default",
 				MfaSerial:     "arn:aws:iam::111111111111:mfa/FrankSinatra",
@@ -53,7 +53,7 @@ func TestValidate(t *testing.T) {
 		},
 		{
 			name: "vegas_role_arn invalid",
-			input: Opts{
+			input: AssumeCfg{
 				ProfileName:   "frank@concerts",
 				SourceProfile: "default",
 				MfaSerial:     "arn:aws:iam::111111111111:mfa/FrankSinatra",
@@ -63,7 +63,7 @@ func TestValidate(t *testing.T) {
 		},
 		{
 			name: "role_session_name invalid",
-			input: Opts{
+			input: AssumeCfg{
 				ProfileName:     "frank@concerts",
 				SourceProfile:   "default",
 				MfaSerial:       "arn:aws:iam::111111111111:mfa/FrankSinatra",
@@ -74,7 +74,7 @@ func TestValidate(t *testing.T) {
 		},
 		{
 			name: "external_id invalid",
-			input: Opts{
+			input: AssumeCfg{
 				ProfileName:   "frank@concerts",
 				SourceProfile: "default",
 				MfaSerial:     "arn:aws:iam::111111111111:mfa/FrankSinatra",

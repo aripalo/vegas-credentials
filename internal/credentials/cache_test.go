@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/aripalo/vegas-credentials/internal/assumable"
+	"github.com/aripalo/vegas-credentials/internal/assumecfg"
 	"github.com/aripalo/vegas-credentials/internal/cache"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -25,7 +25,7 @@ func TestCache(t *testing.T) {
 
 	c := cache.New(tempDir)
 
-	opts := assumable.Opts{
+	cfg := assumecfg.AssumeCfg{
 		ProfileName: "foo",
 		Checksum:    "bar",
 	}
@@ -37,8 +37,8 @@ func TestCache(t *testing.T) {
 		{
 			name: "",
 			input: Credentials{
-				cache:           c,
-				opts:            opts,
+				repo:            c,
+				cfg:             cfg,
 				Version:         1,
 				AccessKeyID:     "ID",
 				SecretAccessKey: "SECRET",
@@ -60,7 +60,7 @@ func TestCache(t *testing.T) {
 
 			fmt.Println("SAVED")
 
-			actual := &Credentials{cache: c, opts: opts}
+			actual := &Credentials{repo: c, cfg: cfg}
 
 			fmt.Println(actual)
 

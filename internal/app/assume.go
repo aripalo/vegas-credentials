@@ -1,11 +1,11 @@
-package application
+package app
 
 import (
 	"context"
 	"errors"
 	"fmt"
 
-	"github.com/aripalo/vegas-credentials/internal/assumable"
+	"github.com/aripalo/vegas-credentials/internal/assumecfg"
 	"github.com/aripalo/vegas-credentials/internal/config/locations"
 	"github.com/aripalo/vegas-credentials/internal/credentials"
 	"github.com/aripalo/vegas-credentials/internal/msg"
@@ -17,27 +17,27 @@ type AssumeFlags struct {
 	Profile string `mapstructure:"profile"`
 }
 
-func (app *App) Assume(flags AssumeFlags) error {
+func (a *App) Assume(flags AssumeFlags) error {
 
-	opts, err := assumable.New(locations.AwsConfig, flags.Profile)
+	cfg, err := assumecfg.New(locations.AwsConfig, flags.Profile)
 	if err != nil {
 		msg.Fatal(fmt.Sprintf("Credentials: Error: %s", err))
 	}
 
-	msg.Debug("ℹ️", fmt.Sprintf("Credentials: Role: %s", opts.RoleArn))
+	msg.Debug("ℹ️", fmt.Sprintf("Credentials: Role: %s", cfg.RoleArn))
 
-	creds := credentials.New(opts)
+	creds := credentials.New(cfg)
 
 	if err = creds.FetchFromCache(); err != nil {
 		msg.Debug("ℹ️", fmt.Sprintf("Credentials: Cached: %s", err))
 		msg.Debug("ℹ️", "Credentials: STS: Fetching...")
-		msg.Debug("ℹ️", fmt.Sprintf("MFA: TOTP: %s", opts.MfaSerial))
+		msg.Debug("ℹ️", fmt.Sprintf("MFA: TOTP: %s", cfg.MfaSerial))
 
 		// TODO refactor this
 		t := totp.New(totp.TotpOptions{
-			YubikeySerial: opts.YubikeySerial,
-			YubikeyLabel:  opts.YubikeyLabel,
-			EnableGui:     !app.NoGui,
+			YubikeySerial: cfg.YubikeySerial,
+			YubikeyLabel:  cfg.YubikeyLabel,
+			EnableGui:     !a.NoGui,
 		})
 
 		err = creds.FetchFromAWS(creds.BuildProvider(t.Get))
