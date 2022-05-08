@@ -1,4 +1,4 @@
-package application
+package app
 
 import (
 	"bytes"
@@ -35,8 +35,8 @@ func TestVersion(t *testing.T) {
 		name := fmt.Sprintf("case #%d - %s", index, test.name)
 		t.Run(name, func(t *testing.T) {
 			var output bytes.Buffer
-			app := &App{dest: &output}
-			err := app.Version(test.input)
+			a := &App{dest: &output}
+			err := a.Version(test.input)
 			require.NoError(t, err)
 			actual := string(output.Bytes())
 			assert.Equal(t, test.expected, actual)

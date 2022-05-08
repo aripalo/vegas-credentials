@@ -1,4 +1,4 @@
-package application
+package app
 
 import (
 	"context"
@@ -17,7 +17,7 @@ type AssumeFlags struct {
 	Profile string `mapstructure:"profile"`
 }
 
-func (app *App) Assume(flags AssumeFlags) error {
+func (a *App) Assume(flags AssumeFlags) error {
 
 	cfg, err := assumecfg.New(locations.AwsConfig, flags.Profile)
 	if err != nil {
@@ -37,7 +37,7 @@ func (app *App) Assume(flags AssumeFlags) error {
 		t := totp.New(totp.TotpOptions{
 			YubikeySerial: cfg.YubikeySerial,
 			YubikeyLabel:  cfg.YubikeyLabel,
-			EnableGui:     !app.NoGui,
+			EnableGui:     !a.NoGui,
 		})
 
 		err = creds.FetchFromAWS(creds.BuildProvider(t.Get))

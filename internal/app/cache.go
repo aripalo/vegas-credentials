@@ -1,4 +1,4 @@
-package application
+package app
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ type CacheFlags struct {
 	Credential bool `mapstructure:"credential"`
 }
 
-func (app *App) CacheClean(flags CacheFlags) error {
+func (a *App) CacheClean(flags CacheFlags) error {
 
 	if flags.Password {
 		err := cleanPasswords()

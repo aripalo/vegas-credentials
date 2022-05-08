@@ -3,8 +3,8 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/aripalo/vegas-credentials/internal/application"
-	"github.com/aripalo/vegas-credentials/internal/application/flagparser"
+	"github.com/aripalo/vegas-credentials/internal/app"
+	"github.com/aripalo/vegas-credentials/internal/app/flagparser"
 	"github.com/aripalo/vegas-credentials/internal/msg"
 	"github.com/spf13/cobra"
 )
@@ -31,13 +31,13 @@ var configListCmd = &cobra.Command{
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
 
-		g, err := flagparser.Parse(application.GlobalFlags{}, cmd)
+		g, err := flagparser.Parse(app.GlobalFlags{}, cmd)
 		if err != nil {
 			return err
 		}
 
-		app := application.New(g)
-		return app.ConfigList()
+		a := app.New(g)
+		return a.ConfigList()
 	},
 }
 
@@ -52,17 +52,17 @@ var configShowProfileCmd = &cobra.Command{
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
 
-		g, err := flagparser.Parse(application.GlobalFlags{}, cmd)
+		g, err := flagparser.Parse(app.GlobalFlags{}, cmd)
 		if err != nil {
 			return err
 		}
 
-		f, err := flagparser.Parse(application.AssumeFlags{}, cmd)
+		f, err := flagparser.Parse(app.AssumeFlags{}, cmd)
 		if err != nil {
 			return err
 		}
 
-		app := application.New(g)
-		return app.ConfigShowProfile(f)
+		a := app.New(g)
+		return a.ConfigShowProfile(f)
 	},
 }

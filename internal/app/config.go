@@ -1,4 +1,4 @@
-package application
+package app
 
 import (
 	_ "embed"
@@ -25,7 +25,7 @@ type configData struct {
 	YkmanInstalled bool
 }
 
-func (app *App) ConfigList() error {
+func (a *App) ConfigList() error {
 	v := configData{
 		AwsConfig: locations.AwsConfig,
 		YkmanPath: locations.YkmanPath,
@@ -34,10 +34,10 @@ func (app *App) ConfigList() error {
 		ExecDir:   locations.ExecDir,
 	}
 
-	return tmpl.Write(app.dest, "config-list", ConfigTmpl, v)
+	return tmpl.Write(a.dest, "config-list", ConfigTmpl, v)
 }
 
-func (app *App) ConfigShowProfile(flags AssumeFlags) error {
+func (a *App) ConfigShowProfile(flags AssumeFlags) error {
 
 	cfg, err := assumecfg.New(locations.AwsConfig, flags.Profile)
 	if err != nil {
@@ -46,5 +46,5 @@ func (app *App) ConfigShowProfile(flags AssumeFlags) error {
 
 	fmt.Println(cfg)
 
-	return tmpl.Write(app.dest, "config-show-profile", ConfigShowProfileTmpl, cfg)
+	return tmpl.Write(a.dest, "config-show-profile", ConfigShowProfileTmpl, cfg)
 }
