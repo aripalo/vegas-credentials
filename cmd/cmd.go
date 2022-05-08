@@ -1,3 +1,6 @@
+// Package cmd defines all the spf13/cobra commands and their configuration.
+// It does not implement the actual application logic; Instead application logic are
+// is implemented in app package which contains a method per command.
 package cmd
 
 import (
@@ -29,6 +32,7 @@ var rootCmd = &cobra.Command{
 	},
 }
 
+// init is automatically called by spf13/cobra to setup the commands.
 func init() {
 
 	rootCmd.PersistentFlags().Bool("no-color", false, "disable both colors and emoji from visible output")
@@ -65,6 +69,7 @@ func init() {
 	}
 }
 
+// Execute the root cmd.
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		msg.Fatal(err.Error())
