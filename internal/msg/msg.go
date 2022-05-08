@@ -8,7 +8,7 @@ import (
 
 	"github.com/aripalo/go-delightful"
 	"github.com/aripalo/vegas-credentials/internal/config"
-	"github.com/aripalo/vegas-credentials/internal/logger"
+	"github.com/aripalo/vegas-credentials/internal/msg/logger"
 	"github.com/enescakir/emoji"
 )
 
