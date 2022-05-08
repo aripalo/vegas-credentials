@@ -17,77 +17,46 @@ import (
 	"github.com/aripalo/vegas-credentials/internal/yubikey"
 )
 
-type TotpOptions struct {
+type GetCodeInput struct {
 	YubikeySerial string
 	YubikeyLabel  string
 	EnableGui     bool
+	EnableYubikey bool
 }
 
-// Returned interface.
-type TOTP interface {
-	Get() (string, error)
-}
+const MfaTimeout time.Duration = 60 * time.Second
 
-// Describes the internal configuration/state.
-type Totp struct {
-	guiEnabled     bool
-	yubikeyEnabled bool
-	resolvers      []multinput.InputResolver
-}
+func GetCode(ctx context.Context, input GetCodeInput) (string, error) {
 
-// Initialize a new TOTP construct which provides the Get method.
-func New(options TotpOptions) TOTP {
-	guiEnabled := options.EnableGui
-	yubikeyEnabled := false
+	ctxWithTimeout, cancel := context.WithTimeout(ctx, MfaTimeout)
+	defer cancel()
 
 	var resolvers []multinput.InputResolver
 
 	resolvers = append(resolvers, resolver.CLI)
 
-	if guiEnabled {
+	if input.EnableGui {
 		resolvers = append(resolvers, resolver.GUI)
 	}
 
-	y, err := yubikey.New(yubikey.Options{
-		Device:    options.YubikeySerial,
-		Account:   options.YubikeyLabel,
-		EnableGui: guiEnabled,
-	})
+	if input.EnableYubikey {
+		y, err := yubikey.New(yubikey.Options{
+			Device:    input.YubikeySerial,
+			Account:   input.YubikeyLabel,
+			EnableGui: input.EnableGui,
+		})
 
-	if err == nil {
-		yubikeyEnabled = true
-		resolvers = append(resolvers, resolver.Yubikey(y))
+		if err == nil {
+			resolvers = append(resolvers, resolver.Yubikey(y))
+		}
 	}
 
-	return &Totp{
-		guiEnabled:     guiEnabled,
-		yubikeyEnabled: yubikeyEnabled,
-		resolvers:      resolvers,
-	}
-}
-
-const MfaTimeout time.Duration = 60 * time.Second
-
-//go:embed data/mfa-code-message.tmpl
-var inputTmpl string
-
-type inputTmplOpts struct {
-	GuiEnabled     bool
-	YubikeyEnabled bool
-}
-
-// Method responsible for actually querying the TOTP code from end-user.
-func (m *Totp) Get() (string, error) {
-
-	message := formatInputMessage(m.guiEnabled, m.yubikeyEnabled)
+	message := formatInputMessage(input.EnableGui, input.EnableYubikey)
 	msg.Prompt("🔑", message)
 
-	ctx, cancel := context.WithTimeout(context.Background(), MfaTimeout)
-	defer cancel()
-
 	// Use Multinput to query the TOTP from various resolvers (CLI, GUI, Yubikey).
-	mi := multinput.New(m.resolvers)
-	result, err := mi.Provide(ctx)
+	mi := multinput.New(resolvers)
+	result, err := mi.Provide(ctxWithTimeout)
 	if err != nil {
 		return "", err
 	}
@@ -111,6 +80,14 @@ func (m *Totp) Get() (string, error) {
 func isValidToken(value string) bool {
 	return regexp.MustCompile(`^\d{6}\d*$`).MatchString(value)
 }
+
+type inputTmplOpts struct {
+	GuiEnabled     bool
+	YubikeyEnabled bool
+}
+
+//go:embed data/mfa-code-message.tmpl
+var inputTmpl string
 
 func formatInputMessage(guiEnabled bool, yubikeyEnabled bool) string {
 	opts := inputTmplOpts{

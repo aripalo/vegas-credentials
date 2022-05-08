@@ -4,14 +4,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"os"
-	"strings"
 
 	"github.com/aripalo/vegas-credentials/internal/assumecfg"
 	"github.com/aripalo/vegas-credentials/internal/config/locations"
 	"github.com/aripalo/vegas-credentials/internal/credentials"
 	"github.com/aripalo/vegas-credentials/internal/msg"
-	"github.com/aripalo/vegas-credentials/internal/prompt"
+	"github.com/aripalo/vegas-credentials/internal/totp"
 	"github.com/dustin/go-humanize"
 )
 
@@ -38,24 +36,18 @@ func (a *App) Assume(flags AssumeFlags) error {
 		msg.Debug("ℹ️", "Credentials: STS: Fetching...")
 		msg.Debug("ℹ️", fmt.Sprintf("MFA: TOTP: %s", cfg.MfaSerial))
 
-		// TODO refactor this
-		/*
-					t := totp.New(totp.TotpOptions{
-						YubikeySerial: cfg.YubikeySerial,
-						YubikeyLabel:  cfg.YubikeyLabel,
-						EnableGui:     !a.NoGui,
-					})
+		code, err := totp.GetCode(context.Background(), totp.GetCodeInput{
+			EnableGui:     !a.NoGui,
+			EnableYubikey: true, // TODO ??
+			YubikeySerial: cfg.YubikeySerial,
+			YubikeyLabel:  cfg.YubikeyLabel,
+		})
 
-			    creds.BuildProvider(t.Get)
-		*/
-
-		fmt.Fprintln(os.Stderr, "CODE:")
-		code, err := prompt.Cli(context.Background(), "")
 		if err != nil {
-			panic(err) // TODO fix
+			msg.Fatal(fmt.Sprintf("TOTP: %s", err))
 		}
 
-		err = creds.New(strings.TrimSpace(code))
+		err = creds.New(code)
 		if err != nil {
 			if errors.Is(err, context.DeadlineExceeded) {
 				msg.Fatal(fmt.Sprintf("Operation Timeout"))
