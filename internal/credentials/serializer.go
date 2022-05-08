@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/aripalo/vegas-credentials/internal/prettyjson"
+	"github.com/aripalo/vegas-credentials/internal/credentials/prettyjson"
 )
 
 // Serialize response into pretty JSON
