@@ -33,10 +33,9 @@ func (a *App) Assume(flags AssumeFlags) error {
 
 	if err = creds.Load(); err != nil {
 		msg.Debug("ℹ️", fmt.Sprintf("Credentials: Cached: %s", err))
-		msg.Debug("ℹ️", "Credentials: STS: Fetching...")
-		msg.Debug("ℹ️", fmt.Sprintf("MFA: TOTP: %s", cfg.MfaSerial))
+		msg.Debug("ℹ️", fmt.Sprintf("MFA: Serial: %s", cfg.MfaSerial))
 
-		code, err := totp.GetCode(context.Background(), totp.GetCodeInput{
+		code, err := totp.GetCode(context.Background(), totp.Options{
 			EnableGui:     !a.NoGui,
 			EnableYubikey: true, // TODO ??
 			YubikeySerial: cfg.YubikeySerial,
