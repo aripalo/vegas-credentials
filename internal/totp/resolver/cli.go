@@ -2,6 +2,7 @@ package resolver
 
 import (
 	"context"
+	"strings"
 
 	"github.com/aripalo/vegas-credentials/internal/multinput"
 	"github.com/aripalo/vegas-credentials/internal/prompt"
@@ -10,6 +11,7 @@ import (
 var cliPrompt = prompt.Cli
 
 func CLI(ctx context.Context) (*multinput.Result, error) {
-	value, err := cliPrompt(ctx, "")
-	return &multinput.Result{Value: value, ResolverID: ResolverIdCliStdin}, err
+	result, err := cliPrompt(ctx, "")
+	code := strings.TrimSpace(result)
+	return &multinput.Result{Value: code, ResolverID: ResolverIdCliStdin}, err
 }

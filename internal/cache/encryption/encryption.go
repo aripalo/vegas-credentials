@@ -100,7 +100,7 @@ func getPassphrase() ([]byte, error) {
 	control := buildControlValue(hostname, user.Uid, bootTime)
 
 	// Print out control value for debugging purposes, but don't write it to log.
-	msg.DebugNoLog("ℹ️", fmt.Sprintf("Cache: Control Value: %s", control))
+	msg.DebugNoLog("ℹ️", fmt.Sprintf("Control Value: %s", control))
 
 	// Create a SHA1 hash out of the joined strings
 	passphrase, err := checksum.Generate([]byte(control))

@@ -31,7 +31,7 @@ type Options struct {
 }
 
 func NewCache() cache.Repository {
-	msg.Debug("🔧", fmt.Sprintf("Path: Credentials Cache: %s", cacheLocation))
+	msg.Debug("🔧", fmt.Sprintf("Yubikey: OATH password cache: %s", cacheLocation))
 	return cache.New(cacheLocation)
 }
 
