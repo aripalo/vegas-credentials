@@ -86,11 +86,8 @@ func format(id string) string {
 	return truncated
 }
 
-/*
-must be alphanumeric, including the following common characters: plus (+), equal (=), comma (,), period (.), at (@), underscore (_), and hyphen (-).
-https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-quotas.html#reference_iam-quotas-entity-length
-*/
-var disallowed = `[^a-zA-Z0-9_+=,.@-]`
+// https://aws.amazon.com/blogs/security/easily-control-naming-individual-iam-role-sessions/
+var disallowed = `[^a-zA-Z0-9_=,.@-]`
 var disallowedRegexp = regexp.MustCompile(disallowed)
 
 func removeDisallowed(value string) string {
