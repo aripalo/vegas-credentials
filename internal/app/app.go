@@ -1,3 +1,5 @@
+// Package app implements a common application struct with global configuration
+// and a method per each CLI command.
 package app
 
 import (
@@ -8,6 +10,7 @@ import (
 	"github.com/aripalo/vegas-credentials/internal/msg"
 )
 
+// GlobalFlags describes all the CLI flags applied to all commands.
 type GlobalFlags struct {
 	NoColor bool `mapstructure:"no-color"`
 	NoEmoji bool `mapstructure:"no-emoji"`
@@ -15,12 +18,13 @@ type GlobalFlags struct {
 	Verbose bool `mapstructure:"verbose"`
 }
 
+// App describes the global application configuration.
 type App struct {
 	GlobalFlags
 	dest io.Writer
 }
 
-// Instantiate a new instance of App with defaults
+// Instantiate a new instance of App with defaults.
 func New(globalFlags GlobalFlags) App {
 
 	msg.Init(msg.Options{
