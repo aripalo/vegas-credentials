@@ -1,4 +1,4 @@
-package assumable
+package assumecfg
 
 import (
 	"os"

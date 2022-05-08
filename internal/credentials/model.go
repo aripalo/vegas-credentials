@@ -4,7 +4,7 @@ import (
 	"io"
 	"time"
 
-	"github.com/aripalo/vegas-credentials/internal/assumable"
+	"github.com/aripalo/vegas-credentials/internal/assumecfg"
 	"github.com/aripalo/vegas-credentials/internal/interfaces"
 	"github.com/aripalo/vegas-credentials/internal/sts"
 )
@@ -12,7 +12,7 @@ import (
 // Credentials defines the output format expected by AWS credential_process
 // https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sourcing-external.html
 type Credentials struct {
-	opts            assumable.Opts
+	cfg             assumecfg.AssumeCfg
 	provider        sts.Provider
 	cache           interfaces.Cache
 	output          io.Writer

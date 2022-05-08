@@ -1,38 +1,38 @@
-package assumable
+package assumecfg
 
 import (
 	"fmt"
 	"regexp"
 )
 
-func (opts *Opts) validate() error {
+func (cfg *AssumeCfg) validate() error {
 
-	if opts.MfaSerial == "" {
-		return fmt.Errorf(`Profile "%s" does not contain "mfa_serial"`, opts.ProfileName)
+	if cfg.MfaSerial == "" {
+		return fmt.Errorf(`Profile "%s" does not contain "mfa_serial"`, cfg.ProfileName)
 	}
 
-	if !iamMfaDevicePattern.MatchString(opts.MfaSerial) {
-		return fmt.Errorf(`Profile "%s" contains invalid mfa_serial "%s". Must satisfy %s`, opts.ProfileName, opts.MfaSerial, iamMfaDevicePatternBase)
+	if !iamMfaDevicePattern.MatchString(cfg.MfaSerial) {
+		return fmt.Errorf(`Profile "%s" contains invalid mfa_serial "%s". Must satisfy %s`, cfg.ProfileName, cfg.MfaSerial, iamMfaDevicePatternBase)
 	}
 
-	if opts.SourceProfile == "" {
-		return fmt.Errorf(`Profile "%s" does not contain "vegas_source_profile"`, opts.ProfileName)
+	if cfg.SourceProfile == "" {
+		return fmt.Errorf(`Profile "%s" does not contain "vegas_source_profile"`, cfg.ProfileName)
 	}
 
-	if opts.RoleArn == "" {
-		return fmt.Errorf(`Profile "%s" does not contain "vegas_role_arn"`, opts.ProfileName)
+	if cfg.RoleArn == "" {
+		return fmt.Errorf(`Profile "%s" does not contain "vegas_role_arn"`, cfg.ProfileName)
 	}
 
-	if !iamRolePattern.MatchString(opts.RoleArn) {
-		return fmt.Errorf(`Profile "%s" contains invalid vegas_role_arn "%s". Must satisty %s`, opts.ProfileName, opts.RoleArn, iamRolePatternBase)
+	if !iamRolePattern.MatchString(cfg.RoleArn) {
+		return fmt.Errorf(`Profile "%s" contains invalid vegas_role_arn "%s". Must satisty %s`, cfg.ProfileName, cfg.RoleArn, iamRolePatternBase)
 	}
 
-	if opts.RoleSessionName != "" && !iamResourceNamePattern.MatchString(opts.RoleSessionName) {
-		return fmt.Errorf(`Profile "%s" contains invalid role_session_name "%s". Must satisfy %s`, opts.ProfileName, opts.RoleSessionName, iamResourceNamePAtternFull)
+	if cfg.RoleSessionName != "" && !iamResourceNamePattern.MatchString(cfg.RoleSessionName) {
+		return fmt.Errorf(`Profile "%s" contains invalid role_session_name "%s". Must satisfy %s`, cfg.ProfileName, cfg.RoleSessionName, iamResourceNamePAtternFull)
 	}
 
-	if opts.ExternalID != "" && !externalIdPattern.MatchString(opts.ExternalID) {
-		return fmt.Errorf(`Profile "%s" contains invalid external_id "%s". Must satisfy %s`, opts.ProfileName, opts.ExternalID, externalIdPatternBase)
+	if cfg.ExternalID != "" && !externalIdPattern.MatchString(cfg.ExternalID) {
+		return fmt.Errorf(`Profile "%s" contains invalid external_id "%s". Must satisfy %s`, cfg.ProfileName, cfg.ExternalID, externalIdPatternBase)
 	}
 
 	return nil

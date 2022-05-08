@@ -28,7 +28,7 @@ func (c *Credentials) saveToCache() error {
 		return err
 	}
 
-	key, err := resolveKey(c.opts.ProfileName, c.opts.Checksum)
+	key, err := resolveKey(c.cfg.ProfileName, c.cfg.Checksum)
 	if err != nil {
 		return err
 	}
@@ -48,7 +48,7 @@ func (c *Credentials) saveToCache() error {
 
 // ReadFromCache gets the cached response from cache database
 func (c *Credentials) readFromCache() error {
-	key, err := resolveKey(c.opts.ProfileName, c.opts.Checksum)
+	key, err := resolveKey(c.cfg.ProfileName, c.cfg.Checksum)
 	if err != nil {
 		return err
 	}
@@ -68,7 +68,7 @@ func (c *Credentials) readFromCache() error {
 
 // DeleteFromCache deletes the cached response cache database
 func (c *Credentials) deleteFromCache() error {
-	key, err := resolveKey(c.opts.ProfileName, c.opts.Checksum)
+	key, err := resolveKey(c.cfg.ProfileName, c.cfg.Checksum)
 	if err != nil {
 		return err
 	}

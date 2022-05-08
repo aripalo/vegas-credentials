@@ -1,4 +1,4 @@
-package assumable
+package assumecfg
 
 import (
 	"errors"
@@ -13,14 +13,14 @@ func TestNewAssumable(t *testing.T) {
 		name        string
 		datasource  string
 		profileName string
-		expected    Opts
+		expected    AssumeCfg
 		err         error
 	}{
 		{
 			name:        "valid-minimal",
 			datasource:  "./testdata/valid-minimal.ini",
 			profileName: "frank@concerts",
-			expected: Opts{
+			expected: AssumeCfg{
 				ProfileName:     "frank@concerts",
 				MfaSerial:       "arn:aws:iam::111111111111:mfa/FrankSinatra",
 				YubikeyLabel:    "arn:aws:iam::111111111111:mfa/FrankSinatra",
@@ -34,7 +34,7 @@ func TestNewAssumable(t *testing.T) {
 			name:        "invalid-missing-source",
 			datasource:  "./testdata/invalid-missing-source.ini",
 			profileName: "frank@concerts",
-			expected:    Opts{},
+			expected:    AssumeCfg{},
 			err:         errors.New("Profile \"frank@concerts\" does not contain \"vegas_source_profile\""),
 		},
 	}

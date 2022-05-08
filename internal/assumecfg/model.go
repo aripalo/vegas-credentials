@@ -1,6 +1,6 @@
-package assumable
+package assumecfg
 
-type Opts struct {
+type AssumeCfg struct {
 	// ProfileName of the profile in AWS Configuration file.
 	//  "frank@concerts"
 	ProfileName string

@@ -4,7 +4,7 @@ import (
 	_ "embed"
 	"fmt"
 
-	"github.com/aripalo/vegas-credentials/internal/assumable"
+	"github.com/aripalo/vegas-credentials/internal/assumecfg"
 	"github.com/aripalo/vegas-credentials/internal/config/locations"
 	"github.com/aripalo/vegas-credentials/internal/msg"
 	"github.com/aripalo/vegas-credentials/internal/tmpl"
@@ -39,12 +39,12 @@ func (app *App) ConfigList() error {
 
 func (app *App) ConfigShowProfile(flags AssumeFlags) error {
 
-	opts, err := assumable.New(locations.AwsConfig, flags.Profile)
+	cfg, err := assumecfg.New(locations.AwsConfig, flags.Profile)
 	if err != nil {
 		msg.Fatal(fmt.Sprintf("Credentials: Error: %s", err))
 	}
 
-	fmt.Println(opts)
+	fmt.Println(cfg)
 
-	return tmpl.Write(app.dest, "config-show-profile", ConfigShowProfileTmpl, opts)
+	return tmpl.Write(app.dest, "config-show-profile", ConfigShowProfileTmpl, cfg)
 }

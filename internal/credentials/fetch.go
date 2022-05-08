@@ -42,9 +42,9 @@ func (c *Credentials) FetchFromCache() error {
 func (c *Credentials) FetchFromAWS(provider sts.Provider) error {
 
 	r, err := sts.GetCredentials(sts.Request{
-		Profile:  c.opts.SourceProfile,
-		Region:   c.opts.Region,
-		RoleArn:  c.opts.RoleArn,
+		Profile:  c.cfg.SourceProfile,
+		Region:   c.cfg.Region,
+		RoleArn:  c.cfg.RoleArn,
 		Provider: provider,
 	})
 

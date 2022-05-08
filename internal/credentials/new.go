@@ -3,16 +3,16 @@ package credentials
 import (
 	"os"
 
-	"github.com/aripalo/vegas-credentials/internal/assumable"
+	"github.com/aripalo/vegas-credentials/internal/assumecfg"
 )
 
 // AWS_CREDENTIAL_PROCESS_VERSION defines the supported AWS credential_process version
 const AWS_CREDENTIAL_PROCESS_VERSION int = 1
 
 // New defines a response waiting to be fulfilled
-func New(opts assumable.Opts) *Credentials {
+func New(cfg assumecfg.AssumeCfg) *Credentials {
 	r := &Credentials{
-		opts:    opts,
+		cfg:     cfg,
 		output:  os.Stdout,
 		cache:   NewCredentialCache(),
 		Version: AWS_CREDENTIAL_PROCESS_VERSION,
