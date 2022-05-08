@@ -32,7 +32,7 @@ func (a *App) Assume(flags AssumeFlags) error {
 	creds := credentials.New(cfg)
 
 	if err = creds.Load(); err != nil {
-		msg.Debug("ℹ️", fmt.Sprintf("Credentials: Cached: %s", err))
+		msg.Debug("ℹ️", fmt.Sprintf("Credentials: Cache: %s", err))
 		msg.Debug("ℹ️", fmt.Sprintf("MFA: Serial: %s", cfg.MfaSerial))
 
 		code, err := totp.GetCode(context.Background(), totp.Options{
@@ -53,12 +53,11 @@ func (a *App) Assume(flags AssumeFlags) error {
 			}
 			msg.Fatal(fmt.Sprintf("Credentials: STS: %s", err))
 		} else {
-			msg.Success("✅", fmt.Sprintf("Credentials: STS: Received fresh credentials"))
-			msg.Info("⏳", fmt.Sprintf("Credentials: STS: Expiration in %s", humanize.Time(creds.Expiration)))
+			msg.Success("⏳", fmt.Sprintf("Credentials: New from STS, expiration in %s", humanize.Time(creds.Expiration)))
 		}
 	} else {
-		msg.Success("✅", "Credentials: Cached: Received")
-		msg.Info("⏳", fmt.Sprintf("Credentials: Cached: Expiration in %s", humanize.Time(creds.Expiration)))
+
+		msg.Success("⏳", fmt.Sprintf("Credentials: Loaded from cache, expiration in %s", humanize.Time(creds.Expiration)))
 	}
 
 	// TODO same for passwd cache
