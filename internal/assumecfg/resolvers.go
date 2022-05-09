@@ -54,16 +54,10 @@ func getSessionIdentifier() string {
 	// Let's first try getting user info
 	if u, err := user.Current(); err == nil {
 
-		if u2, err := user.Lookup(u.Username); err == nil {
-
-			msg.Debug("🔴", "uFullname:"+u.Name)
-			msg.Debug("🔴", "u2Fullname:"+u2.Name)
-			// Return user full name if meaningful
-			if len(u2.Name) >= minLength {
-				msg.Trace("", "Fallback: Fullname")
-				return u2.Name
-			}
-
+		// Return user full name if meaningful
+		if len(u.Name) >= minLength {
+			msg.Trace("", "Fallback: Fullname")
+			return u.Name
 		}
 
 		// Return user (system) name if meaningful
