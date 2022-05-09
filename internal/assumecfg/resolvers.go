@@ -54,6 +54,8 @@ func getSessionIdentifier() string {
 	// Let's first try getting user info
 	if u, err := user.Current(); err == nil {
 
+		msg.Debug("🔴", "Fullname:"+u.Name)
+
 		// Return user full name if meaningful
 		if len(u.Name) >= minLength {
 			msg.Trace("", "Fallback: Fullname")
