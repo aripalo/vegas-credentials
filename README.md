@@ -1,6 +1,6 @@
 | **🚧 Work-in-Progress** | 🚀 ⁉️ Publish Plan |
 | :--------------------- | :--- |
-| Since version `v0.13.x` this tool is considered "mostly stable": Breaking changes may occur if absolutely needed but not arbitrarily. | I'm hoping to release `v1.0.0` during May 2022. No commitments though! See [`v1` Roadmap](https://github.com/aripalo/vegas-credentials/projects/1). |
+| Since version `v0.13.x` this tool is considered _"mostly stable"_: Breaking changes may occur if really needed but not arbitrarily. | I'm hoping to release `v1.0.0` during May 2022. No commitments though! |
 ---
 
 # ![Vegas Credentials](/assets/vegas-credentials.svg "Vegas Credentials - AWS credential_process utility with optional Yubikey MFA support and smooth user experience to fetch, cache and refresh assumed temporary session credentials")
