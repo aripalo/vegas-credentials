@@ -8,11 +8,18 @@ This section covers how you can configure and use Yubikeys as one of the MFA aut
 
 ## Prerequsites
 
+:::tip
+You can skip steps **2** & **3** if you use Homebrew and run:
+```sh
+brew install ykman yubico-authenticator
+```
+:::
+
 1. You MUST have at least one [Yubikey Touch device](https://www.yubico.com/products/yubikey-5-overview/) with [OATH TOTP](https://en.wikipedia.org/wiki/Time-based_One-Time_Password) support (Yubikey 5 or 5C recommended).
 
 2. You MUST have Yubikey Manager CLI [`ykman` CLI](https://developers.yubico.com/yubikey-manager/) installed in your machine and available in your `$PATH`.
 
-3. You MAY also install the [Yubico Authenticator](https://www.yubico.com/products/yubico-authenticator/) GUI which helps you when you're setting up new OATH accounts into your Yubikey.
+3. You SHOULD also install the [Yubico Authenticator](https://www.yubico.com/products/yubico-authenticator/) GUI which helps you when you're setting up new OATH accounts into your Yubikey.
 
 4. You SHOULD consider password protecting OATH application on your Yubikey device. You can do that with `ykman`:
     ```sh
