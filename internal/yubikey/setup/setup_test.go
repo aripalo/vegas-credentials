@@ -44,9 +44,12 @@ func TestStateMachine(t *testing.T) {
 			expected: State{Name: CHECK_DEVICE_PASSWORD_PROTECTED},
 		},
 		{
-			name:     "device not password protected",
-			input:    State{Name: CHECK_DEVICE_PASSWORD_PROTECTED},
-			op:       Operation{IsPasswordProtected: func() bool { return false }},
+			name:  "device not password protected",
+			input: State{Name: CHECK_DEVICE_PASSWORD_PROTECTED},
+			op: Operation{
+				IsPasswordProtected: func() bool { return false },
+				SetPassword:         func(string) error { return nil },
+			},
 			expected: State{Name: CHECK_DEVICE_HAS_ACCOUNT},
 		},
 		{
