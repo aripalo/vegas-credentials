@@ -60,6 +60,8 @@ func GetCode(ctx context.Context, options Options) (string, error) {
 
 	code := result.Value
 
+	msg.Debug("ℹ️", fmt.Sprintf("MFA: Token received: \"%s\"", result.Value))
+
 	if !isValidToken(code) {
 		return code, errors.New("invalid mfa code") // TODO
 	}

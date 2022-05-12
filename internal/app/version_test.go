@@ -38,7 +38,7 @@ func TestVersion(t *testing.T) {
 			a := &App{dest: &output}
 			err := a.Version(test.input)
 			require.NoError(t, err)
-			actual := string(output.Bytes())
+			actual := output.String()
 			assert.Equal(t, test.expected, actual)
 		})
 	}

@@ -65,13 +65,3 @@ func (c *Credentials) readFromCache() error {
 
 	return nil
 }
-
-// DeleteFromCache deletes the cached response cache database
-func (c *Credentials) deleteFromCache() error {
-	key, err := resolveKey(c.cfg.ProfileName, c.cfg.Checksum)
-	if err != nil {
-		return err
-	}
-
-	return c.repo.Delete(key)
-}

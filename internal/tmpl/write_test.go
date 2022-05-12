@@ -63,7 +63,7 @@ func TestWrite(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			var output bytes.Buffer
 			err := Write(&output, "test", test.template, test.input)
-			actual := string(output.Bytes())
+			actual := output.String()
 			assert.Equal(t, test.err, err)
 			assert.Equal(t, test.expected, actual)
 		})
