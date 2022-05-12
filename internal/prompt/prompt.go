@@ -1,12 +1,12 @@
 package prompt
 
 import (
-	"bufio"
 	"context"
-	"os"
 	"strings"
+	"syscall"
 
 	"github.com/ncruces/zenity"
+	"golang.org/x/term"
 )
 
 func Password(ctx context.Context, title string, text string) (string, error) {
@@ -37,12 +37,11 @@ func Dialog(ctx context.Context, title string, text string) (string, error) {
 }
 
 func Cli(ctx context.Context, text string) (string, error) {
-	reader := bufio.NewReader(os.Stdin)
 
-	value, err := reader.ReadString('\n')
+	value, err := term.ReadPassword(int(syscall.Stdin))
 	if err != nil {
 		return "", err
 	}
 
-	return strings.TrimSpace(value), nil
+	return strings.TrimSpace(string(value)), nil
 }
