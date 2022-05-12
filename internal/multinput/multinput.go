@@ -2,7 +2,6 @@ package multinput
 
 import (
 	"context"
-	"time"
 )
 
 // Identifier for a single resolver.
@@ -17,7 +16,6 @@ type Result struct {
 
 // Multinput models the configuration/state.
 type Multinput struct {
-	timeout   time.Duration
 	results   chan *Result
 	resolvers []InputResolver
 }
@@ -33,8 +31,8 @@ func New(resolvers []InputResolver) Multinput {
 	}
 }
 
-// Provide runs the given resolvers and will keep waitig for first
-// non-empty value until timeout reached.
+// Provide runs the given resolvers and will keep waiting for first
+// non-empty value until timeout (defined by ctx) reached.
 func (m *Multinput) Provide(ctx context.Context) (*Result, error) {
 
 	// loop through all given resolvers, run them as goroutines and

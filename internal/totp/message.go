@@ -26,5 +26,5 @@ func formatInputMessage(enableGui bool, enableYubikey bool) string {
 	if err != nil {
 		msg.Fatal(err.Error())
 	}
-	return string(message.Bytes())
+	return message.String()
 }

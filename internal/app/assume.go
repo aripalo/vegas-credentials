@@ -58,7 +58,7 @@ func (a *App) Assume(flags AssumeFlags) error {
 	// Catch timeout error and return a cleaner error message.
 	if err != nil {
 		if errors.Is(err, context.DeadlineExceeded) {
-			msg.Fatal(fmt.Sprintf("Operation Timeout"))
+			msg.Fatal("Operation Timeout")
 		}
 		msg.Fatal(fmt.Sprintf("Credentials: STS: %s", err))
 	}
