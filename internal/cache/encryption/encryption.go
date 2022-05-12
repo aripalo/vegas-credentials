@@ -4,7 +4,6 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
-	"fmt"
 	"io"
 	"os"
 	"os/user"
@@ -12,7 +11,6 @@ import (
 
 	"github.com/aripalo/vegas-credentials/internal/cache/encryption/boottime"
 	"github.com/aripalo/vegas-credentials/internal/checksum"
-	"github.com/aripalo/vegas-credentials/internal/msg"
 )
 
 // Encrypt data with AES-256-CTR
@@ -100,7 +98,7 @@ func getPassphrase() ([]byte, error) {
 	control := buildControlValue(hostname, user.Uid, bootTime)
 
 	// Print out control value for debugging purposes, but don't write it to log.
-	msg.DebugNoLog("ℹ️", fmt.Sprintf("Control Value: %s", control))
+	//msg.DebugNoLog("ℹ️", fmt.Sprintf("Control Value: %s", control))
 
 	// Create a SHA1 hash out of the joined strings
 	passphrase, err := checksum.Generate([]byte(control))
