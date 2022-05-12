@@ -67,7 +67,7 @@ func Error(prefix emoji.Emoji, message string) {
 }
 
 func Prompt(prefix emoji.Emoji, message string) {
-	d.Prompt(prefix, message)
+	d.Promptln(prefix, message)
 }
 
 func Fatal(message string) {

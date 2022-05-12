@@ -9,7 +9,7 @@ import (
 )
 
 // Assign CLI Prompt to variable (useful for testing).
-var cliPrompt = prompt.Cli
+var cliPrompt = prompt.CliPassword
 
 // Assign GUI Prompt to variable (useful for testing).
 var guiPrompt = prompt.Password

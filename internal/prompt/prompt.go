@@ -1,7 +1,9 @@
 package prompt
 
 import (
+	"bufio"
 	"context"
+	"os"
 	"strings"
 	"syscall"
 
@@ -36,7 +38,7 @@ func Dialog(ctx context.Context, title string, text string) (string, error) {
 	return strings.TrimSpace(value), nil
 }
 
-func Cli(ctx context.Context, text string) (string, error) {
+func CliPassword(ctx context.Context, text string) (string, error) {
 
 	value, err := term.ReadPassword(int(syscall.Stdin))
 	if err != nil {
@@ -44,4 +46,16 @@ func Cli(ctx context.Context, text string) (string, error) {
 	}
 
 	return strings.TrimSpace(string(value)), nil
+}
+
+func Cli(ctx context.Context, text string) (string, error) {
+
+	reader := bufio.NewReader(os.Stdin)
+
+	value, err := reader.ReadString('\n')
+	if err != nil {
+		return "", err
+	}
+
+	return strings.TrimSpace(value), nil
 }

@@ -3,6 +3,7 @@ package totp
 import (
 	"bytes"
 	_ "embed"
+	"strings"
 
 	"github.com/aripalo/vegas-credentials/internal/msg"
 	"github.com/aripalo/vegas-credentials/internal/tmpl"
@@ -26,5 +27,5 @@ func formatInputMessage(enableGui bool, enableYubikey bool) string {
 	if err != nil {
 		msg.Fatal(err.Error())
 	}
-	return message.String()
+	return strings.TrimSpace(message.String())
 }
