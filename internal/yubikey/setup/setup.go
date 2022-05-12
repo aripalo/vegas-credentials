@@ -39,6 +39,9 @@ func Setup(options Options, store PasswordStore) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
+	msg.Debug("🔧", fmt.Sprintf("Yubikey: Device Serial: %s", options.Device))
+	msg.Debug("🔧", fmt.Sprintf("Yubikey: OATH Account: %s", options.Account))
+
 	oathAccounts, err := ykmangoath.New(ctx, options.Device)
 	if err != nil {
 		return fmt.Errorf("ykmangoat init: %w", err)
@@ -135,6 +138,16 @@ func stateMachine(state State, op Operation) State {
 			}
 		}
 		msg.Debug("🔓", "Yubikey: OATH application not password protected")
+
+		err := op.SetPassword("")
+		if err != nil {
+			msg.Warn("⚠️", fmt.Sprintf("Yubikey: Could not configure empty password: %s", err))
+			return State{
+				Name:  ERROR,
+				Error: errors.New("yubikey: could not configure empty password"),
+			}
+		}
+
 		return State{
 			Name: CHECK_DEVICE_HAS_ACCOUNT,
 		}
@@ -258,6 +271,7 @@ func stateMachine(state State, op Operation) State {
 	case CHECK_DEVICE_HAS_ACCOUNT:
 		has, err := op.HasAccount()
 		if err != nil {
+			msg.Debug("ℹ️", fmt.Sprintf("Yubikey: Failed to acquire account: %s", err))
 			return State{
 				Name:  ERROR,
 				Error: errors.New("yubikey: could not read accounts"),
@@ -270,6 +284,7 @@ func stateMachine(state State, op Operation) State {
 				Error: errors.New("yubikey: account not found"),
 			}
 		}
+		msg.Debug("ℹ️", "Yubikey: Account found")
 		return State{
 			Name: DONE,
 		}
