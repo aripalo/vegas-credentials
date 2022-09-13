@@ -6,7 +6,7 @@ require (
 	github.com/adrg/xdg v0.4.0
 	github.com/alexflint/go-filemutex v1.2.0
 	github.com/aripalo/go-delightful v0.2.15
-	github.com/aripalo/ykmangoath v0.3.6
+	github.com/aripalo/ykmangoath v0.4.0
 	github.com/aws/aws-sdk-go-v2 v1.16.3
 	github.com/aws/aws-sdk-go-v2/config v1.15.4
 	github.com/aws/aws-sdk-go-v2/service/sts v1.16.4
