@@ -44,6 +44,8 @@ const config = {
     ({
       metadata: [
         {name: 'author', content: 'Ari Palo'},
+        {name: 'twitter:site', content: '@aripalo'},
+
         {name: 'description', content: socialDescription},
         {property: 'og:description', content: socialDescription},
         {name: 'twitter:description', content: socialDescription},
