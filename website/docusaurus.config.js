@@ -7,7 +7,7 @@ const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 
 const socialImageUrl = 'https://credentials.vegas/img/vegas-credentials-hero.jpg';
 const socialTitle = 'vegas-credentials';
-const socialDescription = 'AWS credential_process utility to request STS Temporary Security Credentials by assuming an IAM role with TOTP MFA via either Yubikey Touch or Authenticator Apps.';
+const socialDescription = 'AWS credential_process utility to for assuming an IAM role with TOTP MFA via either Yubikey Touch or Authenticator Apps.';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -43,6 +43,7 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       metadata: [
+        {name: 'author', content: 'Ari Palo'},
         {name: 'description', content: socialDescription},
         {property: 'og:description', content: socialDescription},
         {name: 'twitter:description', content: socialDescription},
