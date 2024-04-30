@@ -59,7 +59,17 @@ func TestValidate(t *testing.T) {
 				MfaSerial:     "arn:aws:iam::111111111111:mfa/FrankSinatra",
 				RoleArn:       "invalid",
 			},
-			expected: errors.New("Profile \"frank@concerts\" contains invalid vegas_role_arn \"invalid\". Must satisty ^arn:aws:iam:\\d*:\\d{12}:role\\/[a-zA-Z0-9_+=,.@-]{1,64}$"),
+			expected: errors.New("Profile \"frank@concerts\" contains invalid vegas_role_arn \"invalid\". Must satisty ^arn:aws:iam:\\d*:\\d{12}:role\\/[a-zA-Z0-9_+=,./@-]{1,64}$"),
+		},
+		{
+			name: "vegas_role_arn may contain slash",
+			input: AssumeCfg{
+				ProfileName:   "frank@concerts",
+				SourceProfile: "default",
+				MfaSerial:     "arn:aws:iam::111111111111:mfa/FrankSinatra",
+				RoleArn:       "arn:aws:iam::111111111111:role/FrankSinatra/WithASlash",
+			},
+			expected: nil,
 		},
 		{
 			name: "role_session_name invalid",
@@ -68,9 +78,9 @@ func TestValidate(t *testing.T) {
 				SourceProfile:   "default",
 				MfaSerial:       "arn:aws:iam::111111111111:mfa/FrankSinatra",
 				RoleArn:         "arn:aws:iam::222222222222:role/SingerRole",
-				RoleSessionName: "invalid//",
+				RoleSessionName: "invalid€",
 			},
-			expected: errors.New("Profile \"frank@concerts\" contains invalid role_session_name \"invalid//\". Must satisfy ^[a-zA-Z0-9_+=,.@-]{1,64}$"),
+			expected: errors.New("Profile \"frank@concerts\" contains invalid role_session_name \"invalid€\". Must satisfy ^[a-zA-Z0-9_+=,./@-]{1,64}$"),
 		},
 		{
 			name: "external_id invalid",
