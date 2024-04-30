@@ -46,7 +46,7 @@ User, Role or Role Session Names can be maximum 64 characters.
 Names of users, groups, roles, policies, instance profiles, and server certificates must be alphanumeric, including the following common characters: plus (+), equal (=), comma (,), period (.), at (@), underscore (_), and hyphen (-).
 https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-quotas.html#reference_iam-quotas-entity-length
 */
-var iamResourceNamePatternBase = `[a-zA-Z0-9_+=,.@-]{1,64}`
+var iamResourceNamePatternBase = `[a-zA-Z0-9_+=,./@-]{1,64}`
 var iamResourceNamePAtternFull = fmt.Sprintf("^%s$", iamResourceNamePatternBase)
 var iamResourceNamePattern = regexp.MustCompile(iamResourceNamePAtternFull)
 
