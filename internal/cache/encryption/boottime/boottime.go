@@ -1,7 +1,9 @@
 package boottime
 
 import (
+	"os"
 	"runtime"
+	"strings"
 	"time"
 
 	"github.com/shirou/gopsutil/v3/host"
@@ -10,10 +12,10 @@ import (
 // Return the system boot time or fallback to previous day 4AM.
 func Get() time.Time {
 
-	// Since Windows boot time can not be trusted (due to +1s drift)
+	// Since Windows and WSL2 boot time can not be trusted (due to drift)
 	// just use the previous day 4AM for now. It's okay for our cache
 	// control purposes.
-	if runtime.GOOS == "windows" {
+	if runtime.GOOS == "windows" || isWSL2() {
 		return getPreviousDay4AM()
 	}
 
@@ -34,6 +36,16 @@ func getRealBootTime() (time.Time, error) {
 	}
 
 	return time.Unix(int64(bootEpochSeconds), 0), nil
+}
+
+// isWSL2 checks if the OS is running in Windows Subsystem for Linux 2.
+func isWSL2() bool {
+	data, err := os.ReadFile("/proc/version")
+	if err != nil {
+		return false
+	}
+	lower := strings.ToLower(string(data))
+	return strings.Contains(lower, "microsoft") || strings.Contains(lower, "wsl")
 }
 
 // Return time for previous day 4AM.
