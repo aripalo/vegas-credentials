@@ -62,6 +62,14 @@ const config = {
         {name: 'twitter:card', content: 'summary_large_image'},
         {itemprop: 'image', content: socialImageUrl},
       ],
+      announcementBar: {
+        id: 'deprecated',
+        content:
+          '⚠️ <strong>Deprecated:</strong> vegas-credentials is no longer maintained. Use <a target="_blank" rel="noopener noreferrer" href="https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html">aws sso login</a> (IAM Identity Center) or <a target="_blank" rel="noopener noreferrer" href="https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sign-in.html">aws login</a> instead. <a target="_blank" rel="noopener noreferrer" href="https://github.com/aripalo/vegas-credentials#deprecated">Read more</a>',
+        backgroundColor: '#fde68a',
+        textColor: '#1c1917',
+        isCloseable: false,
+      },
       colorMode: {
         defaultMode: 'dark',
         disableSwitch: false,
