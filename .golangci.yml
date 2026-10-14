@@ -1,7 +1,27 @@
-# This file contains all available configuration options
+version: "2"
 
-# output configuration options
-output:
-  # sorts results by: filepath, line and column
-  sort-results: true
-
+linters:
+  settings:
+    govet:
+      disable:
+        # New in golangci-lint v2; suggests inlining deprecated ioutil calls.
+        - inline
+    staticcheck:
+      checks:
+        - all
+        # Stylecheck rules merged into staticcheck in golangci-lint v2,
+        # disabled to keep parity with the previous v1 lint setup.
+        - -ST1000
+        - -ST1003
+        - -ST1005
+        - -ST1012
+        - -ST1016
+        - -ST1020
+        - -ST1021
+        - -ST1022
+  exclusions:
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling

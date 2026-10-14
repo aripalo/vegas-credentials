@@ -5,7 +5,7 @@
 BIN_FOLDER="bin"
 
 build: clean ## Build binaries
-	@(goreleaser release --snapshot --rm-dist)
+	@(goreleaser release --snapshot --clean)
 
 all: test build ## Build and run tests
 

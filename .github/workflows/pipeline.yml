@@ -2,6 +2,16 @@ name: build
 
 on:
   push:
+    # Documentation-only changes are deployed by website.yml.
+    # Path filters are not evaluated for tag pushes, so releases always run.
+    paths-ignore:
+      - "website/**"
+      - "docs/**"
+      - "**.md"
+      - ".github/workflows/website.yml"
+
+permissions:
+  contents: read
 
 jobs:
 
@@ -10,32 +20,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-      - uses: actions/setup-go@v2
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version: "^1.18.0"
       - name: Lint
-        uses: golangci/golangci-lint-action@v3.1.0
+        uses: golangci/golangci-lint-action@ba0d7d2ec06a0ea1cb5fa41b2e4a3ab91d21278a # v9.3.0
         with:
-          # Optional: version of golangci-lint to use in form of v1.2 or v1.2.3 or `latest` to use the latest version
-          version: v1.45.2
-
-          # Optional: golangci-lint command line arguments.
-          #args: --issues-exit-code=0
-
-          # Save report output so that Sonar picks it up
-          #args: --out-format checkstyle > golint-report.out
-
-          # Optional: show only new issues if it's a pull request. The default value is `false`.
-          # only-new-issues: true
-
-          # Optional: if set to true then the action don't cache or restore ~/go/pkg.
-          # skip-pkg-cache: true
-
-          # Optional: if set to true then the action don't cache or restore ~/.cache/go-build.
-          # skip-build-cache: true
+          version: v2.14.0
       - name: Test
         run: make test
       - name: Test Build
@@ -45,9 +39,8 @@ jobs:
       - name: Test Build Cleanup
         run: rm main
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: SonarSource/sonarqube-scan-action@d209202bc7d53ff1cc128f7f907dac145c9d6ae9 # v8.3.0
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   release:
@@ -55,57 +48,23 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/')
     name: Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-      - uses: actions/setup-go@v2
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version: "^1.18.0"
       - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v2
-        if: startsWith(github.ref, 'refs/tags/')
+        uses: goreleaser/goreleaser-action@a4f02ab5355a589de60d917a659ce617ed19b3de # v7.3.0
         with:
-          version: latest
-          args: release --rm-dist
+          version: "~> v2"
+          args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           HOMEBREW_TAP_GITHUB_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
           SCOOP_BUCKET_GITHUB_TOKEN: ${{ secrets.SCOOP_BUCKET_GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-#  website:
-#    needs: release
-#    name: Deploy Website
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v2
-#      - uses: actions/setup-node@v3
-#        with:
-#          node-version: 16.x
-#          cache: npm
-#          cache-dependency-path: website/package-lock.json
-#      - name: Install dependencies
-#        working-directory: website
-#        run: npm ci
-#      - name: Build website
-#        working-directory: website
-#        run: npm run build
-#
-#      # Popular action to deploy to GitHub Pages:
-#      # Docs: https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-docusaurus
-#      - name: Deploy to GitHub Pages
-#        uses: peaceiris/actions-gh-pages@v3
-#        with:
-#          github_token: ${{ secrets.GITHUB_TOKEN }}
-#          # Build output to publish to the `gh-pages` branch:
-#          publish_dir: ./website/build
-#          # The following lines assign commit authorship to the official
-#          # GH-Actions bot for deploys to `gh-pages` branch:
-#          # https://github.com/actions/checkout/issues/13#issuecomment-724415212
-#          # The GH actions bot is used by default if you didn't specify the two fields.
-#          # You can swap them out with your own user credentials.
-#          user_name: github-actions[bot]
-#          user_email: 41898282+github-actions[bot]@users.noreply.github.com
-#

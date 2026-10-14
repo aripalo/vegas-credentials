@@ -1,6 +1,13 @@
-| **🚧 Work-in-Progress** | 🚀 ⁉️ Publish Plan |
-| :--------------------- | :--- |
-| Since version `v0.13.x` this tool is considered _"mostly stable"_: Breaking changes may occur if really needed but not arbitrarily. | I'm hoping to release `v1.0.0` during H2/2022. No commitments though! |
+> [!CAUTION]
+> ## Deprecated
+>
+> This project is no longer maintained. AWS CLI now provides built-in alternatives:
+>
+> - **If your organization uses [IAM Identity Center](https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html)** (formerly AWS SSO), use [`aws sso login`](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html).
+> - **Otherwise**, use [`aws login`](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sign-in.html) to get temporary credentials with your console sign-in (AWS CLI `v2.32.0` or newer).
+>
+> **Timeline:** No new versions will be published. The latest version stays available via Homebrew and Scoop for the foreseeable future. The [credentials.vegas](https://credentials.vegas) website stays up for now but may be shut down at some point.
+
 ---
 
 # ![Vegas Credentials](/assets/vegas-credentials.svg "Vegas Credentials - AWS credential_process utility with optional Yubikey MFA support and smooth user experience to fetch, cache and refresh assumed temporary session credentials")
