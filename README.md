@@ -5,6 +5,8 @@
 >
 > - **If your organization uses [IAM Identity Center](https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html)** (formerly AWS SSO), use [`aws sso login`](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html).
 > - **Otherwise**, use [`aws login`](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sign-in.html) to get temporary credentials with your console sign-in (AWS CLI `v2.32.0` or newer).
+>
+> **Timeline:** No new versions will be published. The latest version stays available via Homebrew and Scoop for the foreseeable future. The [credentials.vegas](https://credentials.vegas) website stays up for now but may be shut down at some point.
 
 ---
 
